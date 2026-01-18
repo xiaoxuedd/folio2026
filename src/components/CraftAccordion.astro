@@ -1,0 +1,189 @@
+---
+import type { ExpertiseArea } from '../data/expertise';
+
+interface Props {
+  expertiseAreas: ExpertiseArea[];
+}
+
+const { expertiseAreas } = Astro.props;
+---
+
+<div class="craft-accordion">
+  {expertiseAreas.map((area, index) => (
+    <div class="accordion-item" data-accordion-item>
+      <button
+        class="accordion-header"
+        data-accordion-trigger
+        aria-expanded={index === 0 ? "true" : "false"}
+      >
+        {area.title}
+        <svg
+          class="accordion-arrow"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </button>
+      <div
+        class="accordion-content"
+        data-accordion-content
+        class:list={[{ 'is-open': index === 0 }]}
+      >
+        <div class="accordion-panel">
+          <p>{area.description}</p>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .craft-accordion {
+    width: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .craft-accordion {
+      margin-top: 0;
+    }
+  }
+
+  .accordion-item {
+    border-bottom: var(--border-divider);
+    transition: border-color 0.3s ease;
+  }
+
+  .accordion-item:first-child .accordion-header {
+    padding-top: 0;
+  }
+
+  .accordion-item:last-child {
+    border-bottom: none;
+  }
+
+  .accordion-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease, color 0.3s ease;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: var(--font-size-body-0);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text);
+    text-align: left;
+  }
+
+  .accordion-header:hover {
+    opacity: 0.7;
+  }
+
+  .accordion-arrow {
+    flex-shrink: 0;
+    color: var(--color-text);
+    transition: transform var(--transition-normal), color 0.3s ease;
+  }
+
+  .accordion-header[aria-expanded="true"] .accordion-arrow {
+    transform: rotate(180deg);
+  }
+
+  .accordion-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+    transition: grid-template-rows 0.3s ease-in-out;
+  }
+
+  .accordion-content.is-open {
+    grid-template-rows: 1fr;
+  }
+
+  .accordion-panel {
+    min-height: 0;
+    overflow: hidden;
+    padding-bottom: 0;
+    padding-top: 0;
+    opacity: 0;
+    transition: opacity 0.25s ease-in-out, padding 0.3s ease-in-out;
+  }
+
+  .accordion-content.is-open .accordion-panel {
+    opacity: 1;
+    padding-bottom: var(--spacing-sm);
+  }
+
+  .accordion-panel p {
+    font-size: var(--font-size-body-0);
+    line-height: var(--line-height-body);
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text-light);
+    margin: 0;
+    max-width: var(--text-width-single);
+    transition: color 0.3s ease;
+  }
+
+  @media (max-width: 768px) {
+    .accordion-header {
+      padding: var(--spacing-sm) 0;
+    }
+
+    .accordion-header h3 {
+      font-size: var(--font-size-body-0);
+    }
+
+    .accordion-content.is-open .accordion-panel {
+      padding-bottom: var(--spacing-sm);
+    }
+
+    .accordion-panel p {
+      font-size: var(--font-size-body-1);
+    }
+  }
+</style>
+
+<script>
+  // Simple accordion functionality
+  const accordionItems = document.querySelectorAll('[data-accordion-item]');
+
+  accordionItems.forEach((item) => {
+    const trigger = item.querySelector('[data-accordion-trigger]') as HTMLButtonElement;
+    const content = item.querySelector('[data-accordion-content]') as HTMLElement;
+
+    if (!trigger || !content) return;
+
+    trigger.addEventListener('click', () => {
+      const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+
+      // Close all other accordions
+      accordionItems.forEach((otherItem) => {
+        const otherTrigger = otherItem.querySelector('[data-accordion-trigger]') as HTMLButtonElement;
+        const otherContent = otherItem.querySelector('[data-accordion-content]') as HTMLElement;
+
+        if (otherItem !== item && otherTrigger && otherContent) {
+          otherTrigger.setAttribute('aria-expanded', 'false');
+          otherContent.classList.remove('is-open');
+        }
+      });
+
+      // Toggle current accordion
+      if (isOpen) {
+        trigger.setAttribute('aria-expanded', 'false');
+        content.classList.remove('is-open');
+      } else {
+        trigger.setAttribute('aria-expanded', 'true');
+        content.classList.add('is-open');
+      }
+    });
+  });
+</script>

@@ -1,0 +1,26 @@
+---
+interface Props {
+  width?: number;
+  height?: number;
+  class?: string;
+}
+
+const { width = 64, height = 64, class: className } = Astro.props;
+---
+
+<svg
+  width={width}
+  height={height}
+  viewBox="64 16 65 64"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  class={className}
+>
+  <circle cx="96.5" cy="48" r="32" fill="var(--color-icon-bg)"/>
+  <path d="M104.669 37.3335H88.6686C87.1959 37.3335 86.002 38.5274 86.002 40.0002V56.0002C86.002 57.4729 87.1959 58.6668 88.6686 58.6668H104.669C106.141 58.6668 107.335 57.4729 107.335 56.0002V40.0002C107.335 38.5274 106.141 37.3335 104.669 37.3335Z" stroke="var(--color-icon-stroke)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M91.334 46.6665V53.3332" stroke="var(--color-icon-stroke)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M91.334 42.6665V43.3332" stroke="var(--color-icon-stroke)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M96.668 46.6665V53.3332" stroke="var(--color-icon-stroke)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M102.002 50V53.3333" stroke="var(--color-icon-stroke)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M96.668 49.3332C96.668 47.3332 98.0013 46.6665 99.3346 46.6665C100.668 46.6665 102.001 47.3332 102.001 49.3332" stroke="var(--color-icon-stroke)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

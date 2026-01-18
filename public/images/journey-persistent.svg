@@ -1,0 +1,74 @@
+<svg width="2878" height="2088" viewBox="0 0 2878 2088" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="paint0_linear_1_498" x1="835.413" y1="437.248" x2="1413.9" y2="437.248" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#271968"/>
+      <stop offset="1" stop-color="#5A189A"/>
+    </linearGradient>
+    <linearGradient id="paint1_linear_1_498" x1="835.413" y1="1044.26" x2="1413.9" y2="1044.26" gradientUnits="userSpaceOnUse">
+      <stop offset="1" stop-color="#6443FE"/>
+    </linearGradient>
+    <linearGradient id="paint2_linear_1_498" x1="1444.77" y1="437.248" x2="2023.26" y2="437.248" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5A189A"/>
+      <stop offset="1" stop-color="#7B2CBF"/>
+    </linearGradient>
+    <linearGradient id="paint3_linear_1_498" x1="1444.77" y1="1044.26" x2="2023.26" y2="1044.26" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6443FE"/>
+      <stop offset="1" stop-color="#6443FE"/>
+    </linearGradient>
+    <linearGradient id="paint4_linear_1_498" x1="1444.77" y1="1649.32" x2="2023.26" y2="1649.32" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#271968"/>
+      <stop offset="1" stop-color="#271968"/>
+    </linearGradient>
+    <linearGradient id="paint5_linear_1_498" x1="834.495" y1="1649.32" x2="1412.98" y2="1649.32" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5A189A"/>
+      <stop offset="1" stop-color="#271968"/>
+    </linearGradient>
+    <linearGradient id="paint6_linear_1_498" x1="2392.7" y1="437.248" x2="2392.7" y2="1043.75" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7B2CBF"/>
+      <stop offset="1" stop-color="#6443FE"/>
+    </linearGradient>
+    <linearGradient id="paint7_linear_1_498" x1="473.324" y1="1043.75" x2="473.324" y2="1650.24" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6443FE"/>
+      <stop offset="1" stop-color="#5A189A"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Horizontal connecting tubes between icons -->
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M1413.9 408.866C1366.9 433.751 882.412 433.751 835.413 408.866V465.629C882.412 440.744 1366.9 440.744 1413.9 465.629V408.866Z" fill="url(#paint0_linear_1_498)"/>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M1413.9 1015.88C1366.9 1040.76 882.412 1040.76 835.413 1015.88V1072.64C882.412 1047.75 1366.9 1047.75 1413.9 1072.64V1015.88Z" fill="url(#paint1_linear_1_498)"/>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M2023.26 408.866C1976.26 433.751 1491.77 433.751 1444.77 408.866V465.629C1491.77 440.744 1976.26 440.744 2023.26 465.629V408.866Z" fill="url(#paint2_linear_1_498)"/>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M2023.26 1015.88C1976.26 1040.76 1491.77 1040.76 1444.77 1015.88V1072.64C1491.77 1047.75 1976.26 1047.75 2023.26 1072.64V1015.88Z" fill="url(#paint3_linear_1_498)"/>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M2023.26 1620.94C1976.26 1645.83 1491.77 1645.83 1444.77 1620.94V1677.71C1491.77 1652.82 1976.26 1652.82 2023.26 1677.71V1620.94Z" fill="url(#paint4_linear_1_498)"/>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M1412.98 1620.94C1365.98 1645.83 881.495 1645.83 834.495 1620.94V1677.71C881.495 1652.82 1365.98 1652.82 1412.98 1677.71V1620.94Z" fill="url(#paint5_linear_1_498)"/>
+
+  <!-- Curved connecting paths -->
+  <path d="M2241.3 1043.75C2408.53 1043.75 2544.09 907.976 2544.09 740.497C2544.09 573.017 2408.53 437.248 2241.3 437.248" stroke="url(#paint6_linear_1_498)" stroke-width="18.3509"/>
+  <path d="M625.177 1650.24C457.444 1650.24 321.47 1514.47 321.47 1346.99C321.47 1179.51 457.444 1043.75 625.177 1043.75" stroke="url(#paint7_linear_1_498)" stroke-width="18.3509"/>
+  <line x1="2241.3" y1="437.248" x2="2037.61" y2="437.248" stroke="#7B2CBF" stroke-width="18.3509"/>
+
+  <!-- Decorative arrows near curves -->
+  <path d="M2547.44 680.567C2548.3 692.256 2554.23 703.689 2565.52 719.763L2515.26 723.297C2524.97 706.37 2529.62 694.351 2529.28 682.808L2547.44 680.567Z" fill="#7336D8"/>
+  <path d="M327.259 1250.82C318.737 1283.56 307.059 1313.61 296.568 1327.24L348.082 1328.96C336.532 1305.04 337.051 1278.37 345.631 1253.9L327.259 1250.82Z" fill="#7126B3"/>
+  <path d="M327.259 1443.1C318.737 1410.35 307.059 1380.31 296.568 1366.67L348.082 1364.95C336.532 1388.88 337.051 1415.54 345.631 1440.01L327.259 1443.1Z" fill="#651FA7"/>
+  <path d="M2529.77 796.516C2530.48 784.817 2526.12 772.696 2517.07 755.261L2567.35 758.454C2556 774.123 2549.82 785.38 2548.45 796.718L2529.77 796.516Z" fill="#6D3AE5"/>
+
+  <!-- Connector tubes between circles and paths -->
+  <path d="M2055 411C2075.77 424.453 2158.51 431.151 2241 431.097V443.902C2158.51 443.848 2075.77 450.547 2055 464V411Z" fill="#7B2CBF"/>
+  <path d="M2055.19 1017.18C2075.62 1031.07 2159.54 1036.53 2241.3 1034.86V1052.63C2159.54 1050.96 2075.62 1056.42 2055.19 1070.31V1017.18Z" fill="#6443FE"/>
+  <path d="M804.745 1071.81C784.241 1057.88 699.292 1051.86 616.765 1053.04L616.765 1034.65C698.533 1036.43 782.452 1031.07 802.883 1017.18L804.745 1071.81Z" fill="#6443FE"/>
+  <path d="M799.263 1675.89C779.346 1662.35 700.532 1657.52 622.18 1659.49L622.18 1640.93C701.005 1641.86 779.584 1636.14 799.263 1622.76L799.263 1675.89Z" fill="#5A189A"/>
+
+  <!-- Icon circles -->
+  <circle cx="1428.93" cy="437.248" r="27.5264" fill="#002067" stroke="#6DB3E0" stroke-width="9.17545"/>
+  <circle cx="820.385" cy="437.248" r="27.5264" fill="#271968" stroke="#271968" stroke-width="9.17545"/>
+  <circle cx="1428.93" cy="437.248" r="27.5264" fill="#5A189A" stroke="#5A189A" stroke-width="9.17545"/>
+  <circle cx="2037.27" cy="437.248" r="27.5264" fill="#7B2CBF" stroke="#7B2CBF" stroke-width="9.17545"/>
+  <circle cx="2541.8" cy="740.496" r="27.5264" fill="#7336D8" stroke="#7336D8" stroke-width="9.17545"/>
+  <circle cx="2037.27" cy="1043.74" r="27.5264" fill="#5A189A" stroke="#5A189A" stroke-width="9.17545"/>
+  <circle cx="820.388" cy="1044.26" r="27.5264" fill="#5A189A" stroke="#5A189A" stroke-width="9.17545"/>
+  <circle cx="1428.93" cy="1044.26" r="27.5264" fill="#5A189A" stroke="#5A189A" stroke-width="9.17545"/>
+  <circle cx="1428.93" cy="1649.32" r="27.5264" fill="#271968" stroke="#5A189A" stroke-width="9.17545"/>
+  <circle cx="819.075" cy="1649.32" r="27.5264" fill="#271968" stroke="#5A189A" stroke-width="9.17545"/>
+  <circle cx="2037.27" cy="1649.32" r="27.5264" fill="#271968" stroke="#271968" stroke-width="9.17545"/>
+  <circle cx="321.47" cy="1346.99" r="27.5264" fill="#5A189A" stroke="#5A189A" stroke-width="9.17545"/>
+</svg>

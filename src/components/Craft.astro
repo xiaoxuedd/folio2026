@@ -1,0 +1,68 @@
+---
+import { expertiseAreas } from '../data/expertise';
+import CraftAccordion from './CraftAccordion.astro';
+---
+
+<section id="craft" class="craft">
+  <div class="container">
+    <div data-aos="fade-up">
+      <h1>My design ingredients</h1>
+    </div>
+
+    <div class="craft-grid">
+      <div class="craft-left" data-aos="fade-right">
+        <p class="craft-intro">
+          A decade ago, people asked me, "What is service design?" These days, I ask myself, "What kind of service designer have I become?"
+        </p>
+        <p class="craft-intro">
+          I've moved between consultancy and in-house roles across various industries, driven by the same passion: design that creates meaningful change in people's everyday lives.
+        </p>
+        <p class="craft-intro">
+          As a food enthusiast, I view service design less like following a recipe and more like cooking in your own kitchen. You assess what you're working with, understand what your guests actually need, collaborate with your team, and combine the right ingredients at the right moment.
+        </p>
+      </div>
+
+      <div class="craft-right" data-aos="fade-left">
+        <CraftAccordion expertiseAreas={expertiseAreas} />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .craft {
+    background: var(--color-bg);
+    padding: var(--spacing-md) 0 var(--spacing-lg) 0;
+    transition: background-color 0.3s ease;
+  }
+
+  .craft h1 {
+    margin-bottom: var(--spacing-md);
+    transition: color 0.3s ease;
+  }
+
+  .craft-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+
+  .craft-intro {
+    max-width: var(--text-width-single);
+    color: var(--color-text-light);
+    transition: color 0.3s ease;
+  }
+
+  .craft-intro:not(:last-child) {
+    margin-bottom: var(--spacing-sm);
+  }
+
+  @media (min-width: 768px) {
+    .craft-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-xl);
+      align-items: start;
+    }
+  }
+</style>

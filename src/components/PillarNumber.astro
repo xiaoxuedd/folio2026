@@ -1,0 +1,124 @@
+---
+interface Props {
+  number: number;
+}
+
+const { number } = Astro.props;
+---
+
+<span class="pillar-number" data-pillar={number}>
+  <svg viewBox="0 0 89 40" class="pillar-svg">
+    <path class="pillar-path" d="M24.65,37.75 C 44.846000000000004,39.73 89,37.3 89,18.400000000000002 C 89,2.4250000000000007 59.89399999999999,0 39.104,0 S -9.01,2.4250000000000007 -9.01,17.86 S 13.858999999999998,41.754999999999995 63.260000000000005,39.73" vector-effect="non-scaling-stroke"></path>
+  </svg>
+  <span class="pillar-text">Pillar {number}</span>
+</span>
+
+<script>
+  // Animate pillar number paths on scroll
+  function setupPillarAnimations() {
+    const pillars = document.querySelectorAll('.pillar-number[data-pillar]');
+
+    pillars.forEach((pillar) => {
+      const path = pillar.querySelector('.pillar-path') as SVGPathElement;
+      if (!path) return;
+
+      const pathLength = 268; // Approximate path length
+      path.style.strokeDasharray = `${pathLength}`;
+      path.style.strokeDashoffset = `${pathLength}`;
+
+      const pillarNumber = pillar.getAttribute('data-pillar');
+
+      const handleScroll = () => {
+        const rect = pillar.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+
+        // Trigger when pillar header is between 85% and 50% of viewport
+        const startTrigger = windowHeight * 0.85;
+        const endTrigger = windowHeight * 0.5;
+
+        let progress = 0;
+
+        if (rect.top <= startTrigger && rect.top >= endTrigger) {
+          const totalDistance = startTrigger - endTrigger;
+          const currentDistance = startTrigger - rect.top;
+          progress = Math.max(0, Math.min(1, currentDistance / totalDistance));
+        } else if (rect.top > startTrigger) {
+          progress = 0;
+        } else {
+          progress = 1;
+        }
+
+        // Draw from full offset to 0 (fully drawn)
+        const offset = pathLength * (1 - progress);
+        path.style.strokeDashoffset = `${offset}`;
+        path.style.transition = 'stroke-dashoffset 0.3s ease-out';
+      };
+
+      // Initial check
+      handleScroll();
+
+      // Throttled scroll handler
+      let ticking = false;
+      const scrollHandler = () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            handleScroll();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      };
+
+      window.addEventListener('scroll', scrollHandler, { passive: true });
+      window.addEventListener('resize', handleScroll);
+    });
+  }
+
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupPillarAnimations);
+  } else {
+    setupPillarAnimations();
+  }
+
+  // Also try again after a delay to catch dynamically loaded content
+  setTimeout(setupPillarAnimations, 500);
+  setTimeout(setupPillarAnimations, 1000);
+  setTimeout(setupPillarAnimations, 2000);
+</script>
+
+<style>
+  .pillar-number {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1rem;
+  }
+
+  .pillar-svg {
+    position: absolute;
+    top: 50%;
+    left: 52%;
+    transform: translate(-50%, -50%);
+    width: 105px;
+    height: 40px;
+    overflow: visible;
+  }
+
+  .pillar-svg path {
+    fill: none;
+    stroke: var(--color-primary);
+    stroke-width: 2;
+  }
+
+  .pillar-text {
+    position: relative;
+    display: inline-block;
+    padding: 0 var(--spacing-sm);
+    font-size: var(--font-size-h3);
+    font-weight: 600;
+    color: var(--color-primary);
+    z-index: 1;
+    line-height: 1;
+    white-space: nowrap;
+  }
+</style>

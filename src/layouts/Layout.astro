@@ -1,0 +1,465 @@
+---
+import 'aos/dist/aos.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Service designer & strategist based in London. Driving positive change through strategic design across healthcare, finance, retail, and social services." } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=0"/>
+
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
+
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="nav-fade-overlay"></div>
+    <slot />
+    <script>
+      import AOS from 'aos';
+      import { aosConfig } from '../config/aos';
+      AOS.init(aosConfig);
+    </script>
+    <script is:inline>
+      // Theme switching logic
+      const getThemePreference = () => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+          return localStorage.getItem('theme');
+        }
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      };
+
+      const setTheme = (theme) => {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+      };
+
+      // Set theme immediately to avoid flash
+      setTheme(getThemePreference());
+
+      // Listen for theme toggle events
+      document.addEventListener('DOMContentLoaded', () => {
+        window.toggleTheme = () => {
+          const currentTheme = document.documentElement.getAttribute('data-theme');
+          const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+          setTheme(newTheme);
+        };
+      });
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    /* ============================================
+       COLOR TOKENS
+       ============================================ */
+    --color-primary: #6443fe;        /* Light Purple */
+    --color-secondary: #4B32C8;      /* Mid Purple */
+    --color-accent: #271968;         /* Dark Purple */
+    --color-bg: #ffffff;             /* White */
+    --color-bg-secondary: #f6f6f6;   /* Light grey */
+    --color-text: #271968;           /* Dark Purple - headings */
+    --color-text-secondary: #666666; /* Dark grey - body text */
+    --color-text-light: #000000;     /* Black */
+    --color-border: #e5e5e5;
+    --color-border-alpha: rgba(228, 228, 231, 0.6);
+    --color-hover-bg: rgba(0, 0, 0, 0.03);
+
+    /* Icon colors */
+    --color-icon-bg: #F3F4F6;        /* Icon circle backgrounds */
+    --color-icon-stroke: #364153;     /* Dark icon strokes */
+
+    /* Icon sizes */
+    --icon-xs: 16px;                  /* Extra small icons (navigation links) */
+    --icon-sm: 20px;                  /* Small icons (arrows) */
+    --icon-md: 24px;                  /* Medium icons (chevrons, menu items) */
+    --icon-lg: 32px;                  /* Large icons (button icons) */
+    --icon-xl: 40px;                  /* Extra large icons (avatars) */
+    --icon-2xl: 48px;                 /* 2XL icons (contact buttons) */
+    --icon-3xl: 64px;                 /* 3XL icons (hero/feature icons) */
+
+    /* ============================================
+       LAYOUT TOKENS
+       ============================================ */
+    --max-width: 1200px;
+
+    /* Text width constraints for readability */
+    --text-width-single: 900px;  /* Single column max-width */
+    --text-width-column: 500px;  /* Two-column text max-width */
+
+    /* Content width constraints */
+    --content-width-narrow: 800px;   /* Single column narrow content */
+    --content-width-reading: 900px;  /* Optimal reading width */
+    --content-width-wide: 1400px;    /* Wide content areas */
+
+    /* ============================================
+       SPACING TOKENS
+       ============================================ */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 2rem;
+    --spacing-lg: 4rem;
+    --spacing-xl: 8rem;
+    --spacing-2xl: 12rem;
+
+    /* Gap tokens for flexbox/grid layouts */
+    --gap-tight: 0.125rem;    /* 2px - Very tight spacing */
+    --gap-xs: 0.5rem;         /* 8px - Extra small */
+    --gap-sm: 0.75rem;        /* 12px - Small */
+    --gap-md: 1rem;           /* 16px - Medium */
+    --gap-lg: 1.5rem;         /* 24px - Large */
+    --gap-xl: 2rem;           /* 32px - Extra large */
+    --gap-2xl: 3rem;          /* 48px - 2XL */
+    --gap-3xl: 5rem;          /* 80px - 3XL (for large section gaps) */
+
+    /* ============================================
+       OPACITY LEVELS
+       ============================================ */
+    --opacity-subtle: 0.1;        /* Very faint overlays */
+    --opacity-light: 0.2;         /* Light overlays */
+    --opacity-medium: 0.4;        /* Medium emphasis */
+    --opacity-visible: 0.6;       /* Clearly visible but muted */
+    --opacity-strong: 0.7;        /* Strong visibility */
+
+    /* ============================================
+       TYPOGRAPHY - FONT SIZES
+       Usage: Apply to specific text elements
+       ============================================ */
+    /* H0 - Hero display text */
+    --font-size-h0: 4rem;                                /* 64px: Hero headlines */
+
+    /* Heading sizes */
+    --font-size-h1: 2.5rem;                              /* 40px: Section titles */
+    --font-size-h2: 2rem;                                /* 32px: Project titles */
+    --font-size-h3: 1.5rem;                              /* 24px: Accordion headers, card titles */
+    --font-size-h4: clamp(1.5rem, 3vw, 2rem);           /* 24-32px: Minor headings */
+    --font-size-h5: 1.5rem;                              /* 24px: Small heading */
+    --font-size-h6: 1.25rem;                             /* 20px: Tiny heading */
+
+    /* Body text sizes */
+    --font-size-body-0: 1.13rem;                         /* 18px: Large body, intro text */
+    --font-size-body-1: 1rem;                            /* 16px: Default body text */
+    --font-size-body-lg: 1.25rem;                        /* 20px: Legacy - use body-0 */
+    --font-size-body: 1.125rem;                          /* 18px: Legacy */
+    --font-size-body-sm: 1rem;                           /* 16px: Legacy - use body-1 */
+    --font-size-body-xs: 0.9375rem;                      /* 15px: Extra small body, mobile */
+
+    /* UI element sizes */
+    --font-size-ui-lg: 1rem;                             /* 16px: Large button */
+    --font-size-ui: 0.95rem;                             /* 15.2px: Default button, badge */
+    --font-size-ui-sm: 0.875rem;                         /* 14px: Small button, tag */
+    --font-size-ui-xs: 0.85rem;                          /* 13.6px: Tiny UI text, caption */
+
+    /* Display sizes (legacy - keeping for compatibility) */
+    --font-size-display-lg: clamp(2.5rem, 5vw, 4rem);   /* 40-64px: Main hero headings */
+    --font-size-display-md: clamp(2rem, 4vw, 3.5rem);   /* 32-56px: Case study hero */
+    --font-size-display-sm: clamp(2rem, 4vw, 3rem);     /* 32-48px: Section headings */
+
+    /* ============================================
+       TYPOGRAPHY - FONT WEIGHTS
+       ============================================ */
+    --font-weight-regular: 400;      /* Regular text */
+    --font-weight-medium: 500;       /* Medium emphasis */
+    --font-weight-semibold: 600;     /* Buttons, labels, subheadings */
+    --font-weight-bold: 700;         /* Headings, strong emphasis */
+
+    /* ============================================
+       TYPOGRAPHY - LINE HEIGHTS
+       ============================================ */
+    --line-height-hero: 1.2;         /* H0 hero text */
+    --line-height-headings: 1.4;     /* H1, H2, H3 */
+    --line-height-body: 1.4;         /* B0, B1 body text */
+    --line-height-tight: 1.2;        /* Legacy - use hero */
+    --line-height-normal: 1.6;       /* UI elements, compact text */
+    --line-height-relaxed: 1.7;      /* Legacy */
+    --line-height-loose: 1.8;        /* Very spacious reading */
+
+    /* ============================================
+       TYPOGRAPHY - LETTER SPACING
+       ============================================ */
+    --letter-spacing-tight: -0.02em; /* Large headings */
+    --letter-spacing-normal: 0;      /* Default */
+    --letter-spacing-wide: 0.02em;   /* Small caps, labels */
+
+    /* ============================================
+       BORDER RADIUS
+       ============================================ */
+    --radius-xs: 2px;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-2xl: 20px;
+    --radius-3xl: 24px;
+    --radius-pill: 50px;
+    --radius-full: 9999px;
+
+    /* ============================================
+       BORDERS
+       ============================================ */
+    --border-divider: 1px solid var(--color-border);
+
+    /* ============================================
+       TRANSITIONS
+       ============================================ */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+
+    /* ============================================
+       SHADOW ELEVATION SYSTEM
+       ============================================ */
+    --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.06);         /* Subtle card elevation */
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);         /* Medium card elevation */
+    --shadow-lg: 0 8px 32px rgba(100, 67, 254, 0.1);     /* Large card with brand color */
+    --shadow-hover: 0 10px 30px rgba(100, 67, 254, 0.3); /* Button hover state */
+
+    /* ============================================
+       BLUR EFFECTS
+       ============================================ */
+    --blur-glass: 12px;       /* Glassmorphism blur for navigation */
+    --blur-menu: 10px;        /* Mobile menu blur */
+    --blur-overlay: 10px;     /* Card/overlay backdrop blur */
+  }
+
+  [data-theme="dark"] {
+    --color-primary: #7c5cff;
+    --color-secondary: #0ea5e9;
+    --color-accent: #1f0e3d;
+    --color-bg: #1a0f2e;
+    --color-bg-secondary: #2d1b4e;
+    --color-text: #f1f5f9;
+    --color-text-secondary: #f1f5f9;  /* Same as main text in dark mode */
+    --color-text-light: #cbd5e1;
+    --color-border: #3d2d5f;
+    --color-border-alpha: rgba(61, 45, 95, 0.6);
+    --color-hover-bg: rgba(255, 255, 255, 0.05);
+
+    /* Shadow elevation system - adjusted for dark mode */
+    --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.25);         /* More pronounced in dark mode */
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 8px 32px rgba(124, 92, 255, 0.2);     /* Brand color adjusted */
+    --shadow-hover: 0 10px 30px rgba(124, 92, 255, 0.4);
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .nav-fade-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(to bottom, var(--color-bg) 0%, var(--color-bg) 30%, transparent 100%);
+    pointer-events: none;
+    z-index: 998;
+    transition: background 0.3s ease;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    height: 100%;
+    scroll-padding-top: 100px;
+  }
+
+  /* Respect users' motion preferences */
+  @media screen and (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--color-text-secondary);
+    background: var(--color-bg);
+    line-height: var(--line-height-body);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: color 0.3s ease, background-color 0.3s ease;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-headings);
+    color: var(--color-text);
+    transition: color 0.3s ease;
+  }
+
+  h1 {
+    font-size: var(--font-size-h1);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  h2 {
+    font-size: var(--font-size-h2);
+    margin-bottom: var(--spacing-md);
+    font-weight: var(--font-weight-medium);
+  }
+
+  h3 {
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-medium);
+  }
+
+  h4 {
+    font-size: var(--font-size-h4);
+  }
+
+  h5 {
+    font-size: var(--font-size-h5);
+  }
+
+  h6 {
+    font-size: var(--font-size-h6);
+  }
+
+  p {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-0);
+    line-height: var(--line-height-body);
+    transition: color 0.3s ease;
+  }
+
+  ul, ol {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-0);
+    line-height: var(--line-height-body);
+    transition: color 0.3s ease;
+  }
+
+  li {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-0);
+    line-height: var(--line-height-body);
+    transition: color 0.3s ease;
+  }
+
+  a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  a:hover {
+    color: var(--color-secondary);
+  }
+
+  .container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+  }
+
+  section {
+    padding: var(--spacing-md) 0;
+    transition: background-color 0.3s ease;
+  }
+
+  [data-aos] {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+
+  /* Custom AOS fade-up with larger upward movement */
+  [data-aos="fade-up"] {
+    transform: translate3d(0, 50px, 0);
+  }
+
+  [data-aos="fade-up"].aos-animate {
+    transform: translate3d(0, 0, 0);
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: var(--color-primary);
+    color: white;
+    border-radius: var(--radius-md);
+    font-weight: var(--font-weight-semibold);
+    transition: all var(--transition-normal);
+    border: none;
+    cursor: pointer;
+    font-size: var(--font-size-ui-lg);
+  }
+
+  .btn:hover {
+    background: var(--color-accent);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+    color: white;
+  }
+
+  .btn:active {
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+  }
+
+  .btn-secondary:hover {
+    background: var(--color-primary);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+
+  .float-animation {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @media (max-width: 768px) {
+    section {
+      padding: var(--spacing-lg) 0;
+    }
+
+    .container {
+      padding: 0 var(--spacing-sm);
+    }
+  }
+</style>

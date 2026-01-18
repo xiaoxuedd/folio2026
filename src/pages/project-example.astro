@@ -1,0 +1,874 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProjectNavigation from '../components/ProjectNavigation';
+import { ChallengeDiagram } from '../components/ChallengeDiagram';
+import { ImpactMetrics } from '../components/ImpactMetrics';
+import PillarNumber from '../components/PillarNumber.astro';
+import Footer from '../components/Footer.astro';
+import JourneyAnimation from '../components/JourneyAnimation';
+import ImageCarousel from '../components/ImageCarousel';
+import TestimonialCarousel from '../components/TestimonialCarousel';
+import { Image, getImage } from 'astro:assets';
+
+// Import images
+import challengeImage from '../images/healthcare-challenge.png';
+import pillar1Diagram1 from '../images/healthcare-pillar-1-diagram-1.png';
+import pillar1Diagram2 from '../images/healthcare-pillar-1-diagram-2.png';
+import pillar2Image1 from '../images/healthcare-pillar-2-1.png';
+import pillar2Image2 from '../images/healthcare-pillar-2-2.png';
+import pillar3Localization from '../images/healthcare-pillar-3-localization.png';
+import pillar4Toolkit1 from '../images/healthcare-pillar-4-toolkit-1.png';
+import pillar4Toolkit2 from '../images/healthcare-pillar-4-toolkit-2.png';
+
+// Process images for carousels
+const pillar1Images = await Promise.all([
+  getImage({ src: pillar1Diagram1, format: 'webp' }),
+  getImage({ src: pillar1Diagram2, format: 'webp' })
+]);
+
+const pillar2Images = await Promise.all([
+  getImage({ src: pillar2Image1, format: 'webp' }),
+  getImage({ src: pillar2Image2, format: 'webp' })
+]);
+
+const pillar4Images = await Promise.all([
+  getImage({ src: pillar4Toolkit1, format: 'webp' }),
+  getImage({ src: pillar4Toolkit2, format: 'webp' })
+]);
+
+// Impact metrics data
+const deliveryMetrics = [
+  { value: "One", description: "unified end-to-end service model as the organisational standard for advanced therapies" },
+  { number: 6, description: "cross-functional strategy and alignment workshops" },
+  { number: 10, suffix: "+", description: "deep-dive country engagements" },
+  { number: 50, suffix: "+", description: "designed and validated service touchpoints & features" },
+  { number: 100, suffix: "+", description: "stakeholder and clinician interviews" }
+];
+
+const impactMetrics = [
+  { number: 30, suffix: "%", description: "increase in reach to eligible patients in priority markets" },
+  { number: 12, suffix: "%", description: "faster expansion of treatment centre and referral network capacity" },
+  { number: 25, suffix: "%", description: "reduction in time-to-treatment across key geographies" },
+  { number: 98, suffix: "%+", description: "satisfaction from HCPs on clarity, reliability, readiness" },
+  { number: 8, suffix: "+", description: "global life sciences conferences featured" }
+];
+
+// Testimonials data
+const testimonials = [
+  {
+    quote: "We are genuinely raising the bar within the business. I'm honestly proud of what we've done here together.",
+    author: "Senior Leader, Commercial Excellence"
+  },
+  {
+    quote: "This should be the new standard for our business.",
+    author: "Global Leading Pharma, CEO"
+  }
+];
+---
+
+<Layout title="Project Example - Component Showcase">
+  <ProjectNavigation client:load />
+
+  <div class="project-page">
+    <div class="container">
+
+      <!-- 1. Hero Section -->
+      <section id="hero" class="hero-section" data-aos="fade-up">
+        <div class="category-badge">Healthcare / Service Design</div>
+        <h1>Designing for care delivery</h1>
+        <p class="lead">Pioneering a service model to deliver precision medicine from lab to patients</p>
+      </section>
+
+      <!-- 2. Background Section -->
+      <section id="background" class="challenge-section" data-aos="fade-up">
+        <div class="challenge-content">
+          <div class="challenge-text">
+            <h2>Background</h2>
+            <p>Healthcare transformation is accelerating. Advances in precision medicine, particularly radioligand, cell, and gene therapies, are rapidly reshaping what "treatment" means to both individuals and healthcare industries. Instead of manufacturing drugs at scale, pharmaceutical companies are expected to deliver <strong>highly orchestrated, end-to-end treatment experiences for</strong> individual patients.</p>
+            <p>However, most pharma companies are not ready for the challenge with their infrastructure today. This wasn't a marketing problem or a logistics puzzle. It was a service design challenge disguised as a product launch. And the clock was ticking.</p>
+
+            <div class="quote-card">
+              <blockquote>
+                "Gilead's CAR-T therapy, Yescarta, experienced significant adoption delays caused by a lack of coordinated infrastructure and service readiness—despite its proven clinical success."
+                <footer>— Pharmaphorum, 2023</footer>
+              </blockquote>
+            </div>
+          </div>
+          <div class="challenge-image">
+            <ChallengeDiagram client:load />
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. The Challenge Section -->
+      <section id="challenge" class="challenge-section" data-aos="fade-up">
+        <div class="challenge-content">
+          <div class="challenge-text">
+            <h2>The challenge</h2>
+            <p>A leading pharmaceutical company asked us to launch their breakthrough radioligand therapy (RLT). The brief seemed straightforward <em>"We need an ordering platform for the successful delivery of this therapy"</em></p>
+            <p>But a rapid discovery phase revealed a deeper challenge. I'm not tasked with designing an ordering tool, but designing for the real need: an end-to-end service ecosystem required to deliver it successfully and sustainably across global markets.</p>
+            <p>Here's what made it truly complex: <strong>the organisation didn't think this way.</strong> Teams were siloed by function. "Customer experience" meant sales support, not patient outcomes. No one had ever designed a service where the entire treatment journey was the product.</p>
+            <p>My job was to make them see it, and then build it.</p>
+          </div>
+          <div class="challenge-image">
+            <Image src={challengeImage} alt="The challenge visualization" />
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Role & Context -->
+      <section id="context" class="info-section" data-aos="fade-up">
+        <div class="info-column">
+          <h4>Role & Context</h4>
+          <p><strong>Engagement length:</strong> 14 months</p>
+          <p><strong>Role & Responsibility:</strong> Leading Service Design & Strategic Localisation</p>
+          <p><strong>Team:</strong> Global CX strategy team & cross-functional design, research, product, tech, and medical SMEs</p>
+          <p><strong>Client:</strong> Leading pharmaceutical company</p>
+        </div>
+        <div class="info-column">
+          <h4>My Mandate</h4>
+          <ul>
+            <li>Define the global RLT service model—vision, experience principles, end-to-end blueprint</li>
+            <li>Align the organisation around a shared understanding and readiness for change</li>
+            <li>Enable global → local scaling across 5+ priority markets</li>
+            <li>Create the operational ecosystem, roadmaps, and toolkits required for sustained delivery</li>
+            <li>Building internal capability so teams could continue scaling the service independently</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 5. Section Divider -->
+      <div class="section-divider divider-1">
+        <svg viewBox="0 0 1200 30" preserveAspectRatio="none">
+          <path class="divider-path" d="M0,15 Q300,0 600,15 T1200,15 L1200,30 L0,30 Z" fill="var(--color-bg-secondary)" style="opacity: 0;"/>
+        </svg>
+      </div>
+
+      <!-- 6. Approach Header -->
+      <section id="approach" class="approach-wrapper" data-aos="fade-up">
+        <div class="approach-header">
+          <h2>Approach</h2>
+          <p class="section-intro">Service design orchestrated the program across multiple layers: global vision, product roadmap, market localisation, and operational readiness.</p>
+        </div>
+
+      <!-- 7. Pillar 1: Make the invisible visible -->
+      <section class="pillar-section pillar-1-special">
+        <div class="pillar-header">
+          <PillarNumber number={1} />
+          <div class="pillar-titles">
+            <h3>Make the invisible visible</h3>
+            <h4>Bring clarity and alignment into the complex treatment landscape</h4>
+          </div>
+        </div>
+        <div class="pillar-text-full">
+          <p>Everyone agreed the therapy was critical. No one agreed on what "successful delivery" meant. Through multi-market research, cross-team workshops, and strategic synthesis and journey mapping, we created the <strong>first shared understanding</strong> of how RLT must operate as a service.</p>
+          <p>Medical cared about clinical protocols. Commercial wanted market metrics. Supply chain obsessed over timelines. IT thought this was a portal project. As one Health Care System team member said "I had no idea supply chain was dealing with this…"</p>
+          <p>The clarity convinced leadership and teams across medical, CX, supply chain, IT, and commercial to finally saw the same system and rally around one unified vision.</p>
+          <p>The alignment didn't happen overnight, It took several rounds of working sessions to build a strategy and vision that honored each domain's expertise, gave leadership the full picture, and reflected what HCPs and patients actually needed.</p>
+        </div>
+        <div class="pillar-images-double">
+          <div class="pillar-image">
+            <ImageCarousel
+              images={pillar1Images.map((img, i) => ({
+                src: img.src,
+                srcset: img.srcSet.attribute,
+                alt: i === 0 ? "Service mapping framework" : "Service mapping framework variation",
+                width: img.attributes.width,
+                height: img.attributes.height
+              }))}
+              client:load
+            />
+          </div>
+          <div class="pillar-image">
+            <JourneyAnimation client:load />
+          </div>
+        </div>
+      </section>
+
+      <!-- Section Divider -->
+      <div class="section-divider divider-2">
+        <svg viewBox="0 0 1200 30" preserveAspectRatio="none">
+          <path class="divider-path" d="M0,15 Q300,0 600,15 T1200,15 L1200,30 L0,30 Z" fill="var(--color-bg-secondary)" style="opacity: 0;"/>
+        </svg>
+      </div>
+
+      <!-- 8. Pillar 2: From vision to life -->
+      <section class="pillar-section">
+        <div class="pillar-header">
+          <PillarNumber number={2} />
+          <div class="pillar-titles">
+            <h3>From vision to life</h3>
+            <h4>Turning a beautiful blueprint into an actionable product roadmap</h4>
+          </div>
+        </div>
+        <div class="pillar-content">
+          <div class="pillar-text">
+            <p>A compelling vision is far from enough, it must be executable. I partnered with product designers to translate service moments into concrete product requirements, outlining:</p>
+            <ul>
+              <li>Features backlog</li>
+              <li>Global vs. local archetypes</li>
+              <li>RACI, Sequencing and dependencies</li>
+              <li>Experience flows and service interactions</li>
+            </ul>
+            <p>This became a <strong>prioritised product roadmap</strong> with a clear view of not just <em>what</em> we'd build, but also <em>why it mattered to the service.</em></p>
+          </div>
+          <div class="pillar-image">
+            <ImageCarousel
+              images={pillar2Images.map((img, i) => ({
+                src: img.src,
+                srcset: img.srcSet.attribute,
+                alt: i === 0 ? "Product roadmap and feature prioritization" : "Product implementation details",
+                width: img.attributes.width,
+                height: img.attributes.height
+              }))}
+              client:load
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Section Divider -->
+      <div class="section-divider divider-3">
+        <svg viewBox="0 0 1200 30" preserveAspectRatio="none">
+          <path class="divider-path" d="M0,15 Q300,0 600,15 T1200,15 L1200,30 L0,30 Z" fill="var(--color-bg-secondary)" style="opacity: 0;"/>
+        </svg>
+      </div>
+
+      <!-- 9. Pillar 3: Design for reality -->
+      <section class="pillar-section">
+        <div class="pillar-header">
+          <PillarNumber number={3} />
+          <div class="pillar-titles">
+            <h3>Design for reality</h3>
+            <h4>Localising the service for market nuances</h4>
+          </div>
+        </div>
+        <div class="pillar-content">
+          <div class="pillar-image">
+            <Image src={pillar3Localization} alt="Market localization framework and regional adaptations" />
+          </div>
+          <div class="pillar-text">
+            <p>RLT delivery varies dramatically by geography. Regulations, clinical pathways, patient expectations, and infrastructure differ across markets. For instance, the referral network that works in Brazil simply won't work in Germany.</p>
+            <p>I developed a structured localisation methodology: a flexible framework with core principles and adaptable components. I ran workshops with top five priority markets, tested and evolved the approach. This <strong>accelerated readiness, reduced ambiguity,</strong> and ensured the service was culturally, clinically, and operationally relevant in each market.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section Divider -->
+      <div class="section-divider divider-4">
+        <svg viewBox="0 0 1200 30" preserveAspectRatio="none">
+          <path class="divider-path" d="M0,15 Q300,0 600,15 T1200,15 L1200,30 L0,30 Z" fill="var(--color-bg-secondary)" style="opacity: 0;"/>
+        </svg>
+      </div>
+
+      <!-- 10. Pillar 4: Empower within -->
+      <section class="pillar-section">
+        <div class="pillar-header">
+          <PillarNumber number={4} />
+          <div class="pillar-titles">
+            <h3>Empower within</h3>
+            <h4>Operationalising and scaling the service</h4>
+          </div>
+        </div>
+        <div class="pillar-content">
+          <div class="pillar-text">
+            <p>A service of this scale requires more than design. It requires the capability to sustain it.</p>
+            <p>Working with the central RLT teams, I built the <strong>operational backbone</strong> for long-term success. It includes prioritisation and governance framework, a repeatable implementation toolkit and a comprehensive package to onboard new markets rapidly.</p>
+            <p>This transformed the organisation's readiness from theoretical to operational, establishing the people, processes, and tools required to scale RLT consistently across the globe.</p>
+          </div>
+          <div class="pillar-image">
+            <ImageCarousel
+              images={pillar4Images.map((img, i) => ({
+                src: img.src,
+                srcset: img.srcSet.attribute,
+                alt: i === 0 ? "Operational toolkits" : "Capability building frameworks",
+                width: img.attributes.width,
+                height: img.attributes.height
+              }))}
+              client:load
+            />
+          </div>
+        </div>
+      </section>
+
+      </section><!-- End approach wrapper -->
+
+      <!-- Section Divider -->
+      <div class="section-divider divider-5">
+        <svg viewBox="0 0 1200 30" preserveAspectRatio="none">
+          <path class="divider-path" d="M0,15 Q300,0 600,15 T1200,15 L1200,30 L0,30 Z" fill="var(--color-bg-secondary)" style="opacity: 0;"/>
+        </svg>
+      </div>
+
+      <!-- 11. Impact Metrics -->
+      <section id="impact" class="impact-section" data-aos="fade-up">
+        <h2>Impact</h2>
+        <div class="impact-container">
+          <ImpactMetrics title="Delivery" metrics={deliveryMetrics} client:load />
+          <ImpactMetrics title="Impact" metrics={impactMetrics} client:load />
+        </div>
+      </section>
+
+      <!-- 12. Testimonial Slideshow -->
+      <section id="testimonials" class="testimonial-section" data-aos="fade-up">
+        <TestimonialCarousel testimonials={testimonials} client:load />
+      </section>
+
+      <!-- 13. Reflections Section -->
+      <section id="reflections" class="reflections-section" data-aos="fade-up">
+        <h2>Key Learnings & Reflections</h2>
+        <div class="reflection-content">
+          <p>Insights and learnings from the 14-month transformation initiative.</p>
+          <ul>
+            <li><strong>Balancing bottom-up insights with top-down sponsorship.</strong> Markets know the reality. Leadership controls the levers. We often sat in the middle, getting both sides to move in the same direction.</li>
+            <li><strong>Change feels uncomfortable.</strong> We asked compliance-driven pharma to try creative ways of thinking, while requiring design team to learn clinical terminologies. Everyone had to stretch. Trust made that stretch possible.</li>
+            <li><strong>It could be done differently now.</strong> With today's AI and agentic capabilities, many of the workflows we built could now be further accelerated or reimagined.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 13. Section Divider (Alternative Style) -->
+      <div class="section-divider scalloped" data-aos="fade">
+        <svg viewBox="0 0 1200 30" preserveAspectRatio="none">
+          <path d="M0,0 Q50,30 100,0 T200,0 T300,0 T400,0 T500,0 T600,0 T700,0 T800,0 T900,0 T1000,0 T1100,0 T1200,0 L1200,30 L0,30 Z" fill="var(--color-bg-secondary)"/>
+        </svg>
+      </div>
+
+      <!-- Footer CTA -->
+      <section class="footer-cta" data-aos="fade-up">
+        <a href="/" class="btn">← Back to Portfolio</a>
+      </section>
+
+    </div>
+  </div>
+
+  <Footer />
+</Layout>
+
+<style>
+  .project-page {
+    background: var(--color-bg);
+    padding-top: 80px;
+  }
+
+  .container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+  }
+
+  section {
+    margin-bottom: var(--spacing-sm);
+  }
+
+  /* 1. Hero Section */
+  .hero-section {
+    text-align: center;
+    padding: var(--spacing-md) 0;
+  }
+
+  .category-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: var(--color-primary);
+    color: white;
+    border-radius: var(--radius-2xl);
+    font-size: var(--font-size-body-sm);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .hero-section h1 {
+    margin-bottom: var(--spacing-md);
+    max-width: var(--content-width-reading);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .lead {
+    font-size: var(--font-size-h4);
+    max-width: var(--content-width-narrow);
+    margin: 0 auto;
+    color: var(--color-text-light);
+  }
+
+  /* 2. Background/Challenge Section */
+  .challenge-section {
+    margin: var(--spacing-md) 0;
+  }
+
+  .challenge-section h2 {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .challenge-section h3 {
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: 1rem;
+  }
+
+  .challenge-content {
+    display: grid;
+    grid-template-columns: 3fr 3.5fr;
+    gap: var(--spacing-md);
+    align-items: start;
+  }
+
+  .challenge-text p {
+    font-size: var(--font-size-ui-lg);
+    line-height: var(--line-height-loose);
+    margin-bottom: 1rem;
+  }
+
+  .challenge-text .quote-card {
+    background: rgba(100, 67, 254, 0.05);
+    backdrop-filter: blur(var(--blur-overlay));
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+    border: 2px solid rgba(100, 67, 254, 0.1);
+    margin-top: var(--spacing-md);
+  }
+
+  .challenge-text .quote-card blockquote {
+    margin: 0;
+    font-size: var(--font-size-body);
+    font-style: italic;
+    color: var(--color-text);
+  }
+
+  .challenge-text .quote-card footer {
+    margin-top: 0.75rem;
+    font-size: var(--font-size-body-sm);
+    font-style: normal;
+    color: var(--color-text-light);
+  }
+
+  .challenge-image {
+    width: 100%;
+  }
+
+  .challenge-image img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: var(--radius-lg);
+    display: block;
+  }
+
+  /* 4. Two-Column Layout */
+  .two-column-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+    align-items: center;
+  }
+
+  .two-column-section .column ul {
+    margin-top: 1rem;
+  }
+
+  .two-column-section .column ul li {
+    margin-bottom: 0.75rem;
+  }
+
+  .image-placeholder {
+    background: var(--color-bg-secondary);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-light);
+    font-style: italic;
+    text-align: center;
+    padding: var(--spacing-md);
+  }
+
+  /* 5. Info Section */
+  .info-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .info-column h4 {
+    margin-bottom: 1rem;
+    color: var(--color-primary);
+    font-size: var(--font-size-h4);
+  }
+
+  .info-column p {
+    margin-bottom: 0.75rem;
+  }
+
+  /* 6. Section Divider */
+  .section-divider {
+    width: 100%;
+    height: 30px;
+    margin: var(--spacing-sm) 0;
+  }
+
+  .section-divider svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* 6. Approach Section */
+  .approach-wrapper {
+    margin: var(--spacing-md) 0;
+  }
+
+  .approach-header {
+    text-align: left;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .section-intro {
+    font-size: var(--font-size-ui-lg);
+    color: var(--color-text-light);
+    max-width: 100%;
+    margin: 0;
+  }
+
+  /* 7. Pillar Sections */
+  .pillar-section {
+    margin: var(--spacing-md) 0;
+  }
+
+  .pillar-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .pillar-titles {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .pillar-header h3 {
+    margin: 0;
+    font-size: var(--font-size-h3);
+    line-height: 1;
+  }
+
+  .pillar-header h4 {
+    margin: 0;
+    font-size: var(--font-size-body-0);
+    color: var(--color-text-light);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-hero);
+  }
+
+  /* Pillar 1 special layout: Text on top, two images below */
+  .pillar-1-special .pillar-text-full {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .pillar-images-double {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .pillar-content {
+    display: grid;
+    grid-template-columns: 1fr 0.9fr;
+    gap: var(--spacing-lg);
+    align-items: center;
+  }
+
+  .pillar-text,
+  .pillar-text-full {
+    align-self: start;
+  }
+
+  .pillar-text {
+    max-width: var(--text-width-column);
+  }
+
+  .pillar-text-full {
+    max-width: var(--text-width-single);
+  }
+
+  .pillar-image {
+    max-width: var(--text-width-column);
+  }
+
+  /* Pillar 4 specific: limit height */
+  .pillar-section:nth-of-type(5) .pillar-image {
+    max-height: 400px;
+  }
+
+  /* Alternating layout: Pillars 3 has reversed order */
+  .pillar-section.reverse .pillar-content {
+    direction: rtl; /* Reverses grid order */
+  }
+
+  .pillar-section.reverse .pillar-text,
+  .pillar-section.reverse .pillar-image {
+    direction: ltr; /* Reset text direction */
+  }
+
+  .pillar-text h3,
+  .pillar-text-full h3 {
+    font-size: var(--font-size-h3);
+    margin-bottom: 0.5rem;
+  }
+
+  .pillar-text p,
+  .pillar-text-full p {
+    line-height: var(--line-height-loose);
+    margin-bottom: 1rem;
+  }
+
+  .pillar-text ul,
+  .pillar-text-full ul {
+    margin: 1rem 0 1rem 1.5rem;
+    line-height: var(--line-height-loose);
+  }
+
+  .pillar-text ul li,
+  .pillar-text-full ul li {
+    margin-bottom: 0.5rem;
+  }
+
+  .pillar-image .image-placeholder {
+    height: 400px;
+  }
+
+  .pillar-image {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .pillar-image img,
+  .pillar-image picture img,
+  .pillar-image picture {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: var(--radius-lg);
+    display: block;
+  }
+
+  .pillar-images-double .pillar-image img {
+    height: 400px;
+  }
+
+  /* 8. Animated Background Section */
+  .animated-bg-section {
+    position: relative;
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    min-height: 300px;
+  }
+
+  .animated-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    opacity: 0.1;
+  }
+
+  .bg-canvas {
+    width: 100%;
+    height: 100%;
+    /* Placeholder for animated canvas */
+  }
+
+  .content-overlay {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+  }
+
+  .content-overlay h2 {
+    color: var(--color-text);
+  }
+
+  /* 9. Impact Metrics */
+  .impact-section {
+    margin: var(--spacing-md) 0;
+  }
+
+  .impact-section h2 {
+    text-align: center;
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-size-h1);
+  }
+
+  .impact-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+  }
+
+  @media (max-width: 968px) {
+    .impact-container {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* 10. Image Grid */
+  .image-grid-section h2 {
+    text-align: center;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .image-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+  }
+
+  .grid-item {
+    background: var(--color-bg-secondary);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-light);
+    font-style: italic;
+  }
+
+  /* 11. Testimonial Section */
+  .testimonial-section {
+    margin: var(--spacing-md) 0;
+  }
+
+  /* 12. Reflections Section */
+  .reflections-section {
+    background: var(--color-bg-secondary);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-xl);
+    border: 2px solid var(--color-border);
+  }
+
+  .reflections-section h2 {
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .reflection-content ul {
+    margin-top: 1rem;
+  }
+
+  .reflection-content ul li {
+    margin-bottom: 0.75rem;
+  }
+
+  /* 13. Footer CTA */
+  .footer-cta {
+    text-align: center;
+    padding: var(--spacing-md) 0;
+  }
+
+  /* Responsive */
+  @media (max-width: 968px) {
+    .challenge-content,
+    .two-column-section,
+    .info-section {
+      grid-template-columns: 1fr;
+    }
+
+    .pillar-content {
+      grid-template-columns: 1fr;
+      direction: ltr; /* Reset to normal on mobile */
+    }
+
+    .pillar-images-double {
+      grid-template-columns: 1fr;
+    }
+
+    .image-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    section {
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .hero-section {
+      padding: var(--spacing-md) 0;
+    }
+  }
+</style>
+
+<script>
+  // Animate section dividers on scroll using IntersectionObserver
+  function setupDividerAnimations() {
+    const dividers = document.querySelectorAll('.section-divider[class*="divider-"]');
+
+    console.log('🎨 Setting up divider animations. Found', dividers.length, 'dividers');
+
+    // Create an observer for each divider
+    dividers.forEach((divider, index) => {
+      const path = divider.querySelector('.divider-path');
+      if (!path) return;
+
+      const dividerClass = divider.className;
+      console.log(`📍 Initializing divider ${index + 1}:`, dividerClass);
+
+      // Store scroll handler for this specific divider
+      const handleScroll = () => {
+        const rect = divider.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+
+        // Start animation earlier - trigger when divider is still lower on screen
+        const startTrigger = windowHeight * 0.85;
+        const endTrigger = windowHeight * 0.75;
+
+        let progress = 0;
+
+        if (rect.top <= startTrigger && rect.top >= endTrigger) {
+          const totalDistance = startTrigger - endTrigger;
+          const currentDistance = startTrigger - rect.top;
+          progress = Math.max(0, Math.min(1, currentDistance / totalDistance));
+        } else if (rect.top > startTrigger) {
+          progress = 0;
+        } else {
+          progress = 1;
+        }
+
+        (path as SVGPathElement).style.opacity = progress.toString();
+        (path as SVGPathElement).style.transition = 'opacity 0.15s ease-out';
+      };
+
+      // Initial check
+      handleScroll();
+
+      // Throttled scroll handler for this divider
+      let ticking = false;
+      const scrollHandler = () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            handleScroll();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      };
+
+      // Attach listeners
+      window.addEventListener('scroll', scrollHandler, { passive: true });
+      window.addEventListener('resize', handleScroll);
+    });
+  }
+
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupDividerAnimations);
+  } else {
+    setupDividerAnimations();
+  }
+</script>

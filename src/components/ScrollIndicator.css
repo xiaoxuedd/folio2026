@@ -1,0 +1,29 @@
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text);
+  opacity: 0.4;
+  cursor: pointer;
+  transition: opacity var(--transition-normal);
+  text-decoration: none;
+}
+
+.scroll-indicator:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .scroll-indicator {
+    bottom: 1.5rem;
+  }
+
+  .scroll-indicator svg {
+    width: 28px;
+    height: 28px;
+  }
+}

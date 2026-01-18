@@ -1,0 +1,94 @@
+---
+import HeroCTA from './HeroCTA';
+import HeroCTAAlternative from './HeroCTAAlternative';
+import ShinyText from './ShinyText';
+import HeroText from './HeroText';
+---
+
+<section id="hero" class="hero">
+  <div class="container hero-content">
+    <HeroText client:load />
+  </div>
+
+  <div class="hero-cta-centered" data-aos="fade-up" data-aos-delay="400">
+    <HeroCTAAlternative client:load />
+  </div>
+</section>
+
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-lg) 0;
+    background: var(--color-bg);
+  }
+
+  .hero-content {
+    position: relative;
+    margin: 0 auto;
+    max-width: var(--max-width);
+    width: 100%;
+    padding: 0 var(--spacing-md);
+  }
+
+  .hero-overline {
+    font-size: var(--font-size-body-1);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.02em;
+    margin-bottom: var(--spacing-md);
+    text-transform: uppercase;
+  }
+
+  .hero .hero-h0 {
+    font-size: var(--font-size-h0);
+    line-height: var(--line-height-hero);
+    margin-bottom: var(--spacing-xs);
+    max-width: var(--text-width-single);
+  }
+
+  .hero .hero-h1 {
+    font-size: var(--font-size-h1);
+    line-height: var(--line-height-hero);
+    margin-bottom: var(--spacing-lg);
+    max-width: var(--text-width-single);
+  }
+
+  .hero h1 .hero-subtitle {
+    opacity: var(--opacity-medium);
+    font-weight: var(--font-weight-regular);
+  }
+
+  .hero-cta-centered {
+    position: absolute;
+    bottom: var(--spacing-lg);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 10;
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      min-height: 90vh;
+    }
+
+    .hero-content {
+      padding: 0 var(--spacing-sm);
+    }
+
+    .hero .hero-h0 {
+      font-size: clamp(2.5rem, 10vw, 3.5rem);
+    }
+
+    .hero .hero-h1 {
+      font-size: clamp(1.75rem, 7vw, 2.5rem);
+    }
+
+    .hero-cta-centered {
+      bottom: var(--spacing-md);
+    }
+  }
+</style>

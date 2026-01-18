@@ -1,0 +1,88 @@
+.journey-animation-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.journey-animation {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  height: 325px;
+  margin: -1.5rem auto 0; /* Shift down by reducing negative margin */
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+}
+
+.journey-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  z-index: 1;
+  transform: translateY(20px);
+}
+
+.journey-persistent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  z-index: 10; /* Above the changing content */
+  pointer-events: none; /* Allow clicks to pass through */
+  transform: translateY(20px);
+}
+
+/* Stage indicator dots - matching carousel style */
+.journey-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+}
+
+.journey-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background: var(--color-border);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  padding: 0;
+}
+
+.journey-dot:hover {
+  background: var(--color-text-light);
+  transform: scale(1.2);
+}
+
+.journey-dot.active {
+  background: var(--color-primary);
+  transform: scale(1.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .journey-animation {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .journey-animation * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

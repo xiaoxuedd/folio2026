@@ -1,0 +1,291 @@
+.challenge-diagram-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin-top: var(--spacing-md);
+}
+
+.challenge-diagram-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 550px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Center text */
+.challenge-center-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.challenge-delivery,
+.challenge-access {
+  font-size: var(--font-size-body-xs);
+  color: var(--color-text-light);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-normal);
+  pointer-events: none;
+  position: relative;
+}
+
+.challenge-delivery.highlighted,
+.challenge-access.highlighted {
+  color: var(--color-primary);
+  transform: scale(1.05);
+}
+
+.challenge-title {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin: 0.5rem 0;
+}
+
+/* Circle SVG */
+.challenge-circle-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.challenge-circle-path {
+  color: var(--color-border);
+  opacity: 1;
+  transition: stroke-dashoffset 1s ease-out;
+}
+
+/* Connection lines */
+.challenge-connection-line {
+  color: var(--color-primary);
+  opacity: 0;
+  transition: stroke-dashoffset 0.4s ease, opacity var(--transition-normal);
+  pointer-events: none;
+}
+
+.challenge-connection-line.visible {
+  opacity: 0.3;
+  stroke-dashoffset: 0 !important;
+}
+
+/* Challenge point groups */
+.challenge-points-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Icon wrapper positioning */
+.challenge-icon-wrapper {
+  position: absolute;
+  transform: translate(-50%, -50%) scale(0.2);
+  transition: transform var(--transition-normal), opacity var(--transition-normal);
+}
+
+.challenge-icon-wrapper.ready {
+  animation: expandIcon 0.4s ease-out forwards;
+  animation-delay: var(--animation-delay, 0s);
+}
+
+.challenge-icon-wrapper.ready .challenge-icon-circle-overlay {
+  animation: fadeOverlay 0.3s ease-out forwards;
+  animation-delay: var(--animation-delay, 0s);
+}
+
+.challenge-icon-wrapper.ready .challenge-icon {
+  animation: fadeInIcon 0.3s ease-out forwards;
+  animation-delay: var(--animation-delay, 0s);
+}
+
+@keyframes expandIcon {
+  from {
+    transform: translate(-50%, -50%) scale(0.2);
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes fadeOverlay {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInIcon {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.challenge-icon-wrapper.highlighted .challenge-icon-circle {
+  background: var(--color-primary);
+  transition: background var(--transition-normal), transform var(--transition-normal);
+}
+
+.challenge-icon-wrapper.highlighted .challenge-icon {
+  color: white;
+  transition: color 0.1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.challenge-icon-wrapper.dimmed {
+  /* Don't apply opacity to wrapper */
+}
+
+.challenge-icon-wrapper.dimmed .challenge-icon {
+  opacity: 0.3 !important;
+  transition: all 0.2s ease;
+}
+
+.challenge-icon-wrapper.dimmed .challenge-icon-circle {
+  /* No additional dimming */
+}
+
+/* Icon circle */
+.challenge-icon-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition-normal), transform var(--transition-normal);
+  position: relative;
+}
+
+.challenge-icon-circle-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-secondary);
+  opacity: 1;
+  pointer-events: none;
+}
+
+.challenge-icon {
+  opacity: 0;
+  width: 36px;
+  height: 36px;
+  color: var(--color-text);
+  transition: color var(--transition-normal);
+  position: relative;
+  z-index: 1;
+}
+
+.challenge-icon-wrapper:hover .challenge-icon-circle {
+  transform: scale(1.05);
+  background: var(--color-primary);
+}
+
+.challenge-icon-wrapper:hover .challenge-icon {
+  color: white;
+}
+
+.challenge-icon-wrapper.highlighted .challenge-icon-circle {
+  background: var(--color-primary);
+  transition: background var(--transition-normal), transform var(--transition-normal);
+}
+
+.challenge-icon-wrapper.highlighted .challenge-icon {
+  color: white;
+  transition: color 0.1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* Labels */
+.challenge-label {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: var(--color-text);
+  line-height: var(--line-height-normal);
+  white-space: pre-line;
+  max-width: 140px;
+  font-size: clamp(0.75rem, 1.2vw, 0.875rem);
+  font-weight: var(--font-weight-medium);
+  transition: opacity var(--transition-normal), transform var(--transition-normal), color var(--transition-normal);
+}
+
+.challenge-label.ready {
+  /* Ready for animation */
+}
+
+.challenge-label.highlighted {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.challenge-label.dimmed {
+  opacity: 0.5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .challenge-diagram-wrapper {
+    max-width: 100%;
+  }
+
+  .challenge-icon-circle {
+    width: 45px;
+    height: 45px;
+  }
+
+  .challenge-icon {
+    width: 27px;
+    height: 27px;
+  }
+
+  .challenge-label {
+    max-width: 100px;
+    font-size: clamp(0.6rem, 2vw, 0.875rem);
+  }
+
+  .challenge-delivery,
+  .challenge-access {
+    font-size: clamp(0.75rem, 2.2vw, var(--font-size-body-xs));
+  }
+
+  .challenge-title {
+    font-size: clamp(1.25rem, 4vw, var(--font-size-h3));
+  }
+}
+
+@media (max-width: 480px) {
+  .challenge-icon-circle {
+    width: 38px;
+    height: 38px;
+  }
+
+  .challenge-icon {
+    width: 21px;
+    height: 21px;
+  }
+
+  .challenge-label {
+    max-width: 80px;
+    font-size: clamp(0.55rem, 1.8vw, var(--font-size-ui-xs));
+  }
+}

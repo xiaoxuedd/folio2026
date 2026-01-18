@@ -1,0 +1,63 @@
+---
+interface Props {
+  text: string;
+  circleId: string;
+}
+
+const { text, circleId } = Astro.props;
+---
+
+<h4 class="circle-title" data-circle-id={circleId}>
+  <svg viewBox="0 0 220 60" class="circle-svg" preserveAspectRatio="none">
+    <path
+      d="M 110,46
+         C 85,48 60,45 45,38
+         C 35,33 32,26 35,20
+         C 40,12 65,8 110,8
+         C 155,8 180,12 185,20
+         C 188,26 185,33 175,38
+         C 165,43 140,47 115,46
+         C 112,46 108,46 104,46
+         C 98,46 92,46 86,46"
+      class="circle-path"
+      vector-effect="non-scaling-stroke"
+    ></path>
+  </svg>
+  <span class="circle-text">{text}</span>
+</h4>
+
+<style>
+  .circle-title {
+    position: relative;
+    display: inline-block;
+    color: var(--color-primary);
+    font-size: var(--font-size-h6);
+    margin: 0 0 1rem;
+    padding: 0;
+  }
+
+  .circle-svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scaleX(1.1);
+    width: calc(100% + 40px);
+    min-width: 200px;
+    height: 60px;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .circle-svg .circle-path {
+    fill: none;
+    stroke: var(--color-primary);
+    stroke-width: 2;
+  }
+
+  .circle-text {
+    position: relative;
+    display: inline-block;
+    padding: 0 1.5rem;
+    z-index: 1;
+  }
+</style>

@@ -1,0 +1,169 @@
+---
+import { testimonials, clientLogos } from '../data/testimonials';
+import QuoteIcon from './icons/QuoteIcon.astro';
+---
+
+<section id="testimonials" class="testimonials">
+  <div class="container">
+    <div data-aos="fade-up">
+      <h2>What Clients Say</h2>
+    </div>
+
+    <div class="testimonials-grid">
+      {testimonials.map((testimonial, index) => (
+        <div
+          class="testimonial-card"
+          data-aos="fade-up"
+          data-aos-delay={100 * index}
+        >
+          <div class="quote-icon">
+            <QuoteIcon width={40} height={40} />
+          </div>
+          <blockquote>
+            <p>"{testimonial.quote}"</p>
+          </blockquote>
+          <div class="author-info">
+            <p class="author-name">{testimonial.author}</p>
+            <p class="author-role">{testimonial.role}, {testimonial.company}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="client-logos" data-aos="fade-up">
+      <p class="logos-label">Trusted by leading organizations</p>
+      <div class="logos-grid">
+        {clientLogos.map((logo) => (
+          <div class="logo-placeholder">
+            <p>Client Logo</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .testimonials {
+    background: var(--color-bg-secondary);
+  }
+
+  .testimonials h2 {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .testimonial-card {
+    background: white;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all var(--transition-normal);
+    position: relative;
+  }
+
+  .testimonial-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(100, 67, 254, 0.15);
+  }
+
+  .quote-icon {
+    color: var(--color-primary);
+    opacity: 0.2;
+    margin-bottom: 1rem;
+  }
+
+  .testimonial-card blockquote {
+    margin: 0 0 1.5rem 0;
+  }
+
+  .testimonial-card blockquote p {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-loose);
+    color: var(--color-text);
+    font-style: italic;
+    margin: 0;
+  }
+
+  .author-info {
+    padding-top: 1rem;
+    border-top: 2px solid var(--color-bg-secondary);
+  }
+
+  .author-name {
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-body);
+    color: var(--color-text);
+    margin-bottom: 0.25rem;
+  }
+
+  .author-role {
+    font-size: var(--font-size-body-sm);
+    color: var(--color-text-light);
+    margin: 0;
+  }
+
+  .client-logos {
+    text-align: center;
+  }
+
+  .logos-label {
+    font-size: var(--font-size-body-sm);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .logos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--spacing-md);
+    align-items: center;
+  }
+
+  .logo-placeholder {
+    height: 80px;
+    background: white;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed var(--color-border);
+    transition: all var(--transition-normal);
+  }
+
+  .logo-placeholder:hover {
+    border-color: var(--color-primary);
+    transform: scale(1.05);
+  }
+
+  .logo-placeholder p {
+    font-size: var(--font-size-body-xs);
+    color: var(--color-text-light);
+    margin: 0;
+    font-weight: var(--font-weight-medium);
+  }
+
+  @media (max-width: 768px) {
+    .testimonials-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .logos-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .testimonial-card {
+      padding: 1.5rem;
+    }
+  }
+</style>

@@ -1,0 +1,67 @@
+---
+import type { Project } from '../data/projects';
+import ProjectCard from './ProjectCard.astro';
+
+interface Props {
+  projects: Project[];
+}
+
+const { projects } = Astro.props;
+const heroProject = projects[0];
+const remainingProjects = projects.slice(1);
+---
+
+<section id="projects" class="projects-section">
+  <div class="container">
+    <div data-aos="fade-up">
+      <h1>Selected works</h1>
+    </div>
+
+    <div class="projects-showcase">
+      {heroProject && (
+        <div class="hero-project">
+          <ProjectCard project={heroProject} index={0} />
+        </div>
+      )}
+
+      <div class="projects-grid">
+        {remainingProjects.map((project, index) => (
+          <ProjectCard project={project} index={index + 1} />
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .projects-section {
+    background: var(--color-bg);
+    padding: var(--spacing-md) 0 var(--spacing-lg) 0;
+  }
+
+  .projects-section h1 {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .projects-showcase {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .hero-project {
+    width: 100%;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-sm);
+  }
+
+  @media (max-width: 768px) {
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,240 @@
+---
+// Import client logos - light versions
+import logo01 from '../images/clients/Logo-01.png';
+import logo02 from '../images/clients/Logo-02.png';
+import logo03 from '../images/clients/Logo-03.png';
+import logo04 from '../images/clients/Logo-04.png';
+import logo05 from '../images/clients/Logo-05.png';
+import logo06 from '../images/clients/Logo-06.png';
+import logo07 from '../images/clients/Logo-07.png';
+import logo08 from '../images/clients/Logo-08.png';
+import logo09 from '../images/clients/Logo-09.png';
+import logo10 from '../images/clients/Logo-10.png';
+import logo11 from '../images/clients/Logo-11.png';
+import logo12 from '../images/clients/Logo-12.png';
+import logo13 from '../images/clients/Logo-13.png';
+import logo14 from '../images/clients/Logo-14.png';
+import logo16 from '../images/clients/Logo-16.png';
+import logo17 from '../images/clients/Logo-17.png';
+import logo19 from '../images/clients/Logo-19.png';
+import logo20 from '../images/clients/Logo-20.png';
+import logo21 from '../images/clients/Logo-21.png';
+import logo22 from '../images/clients/Logo-22.png';
+
+// Import client logos - dark versions
+import logo01Dark from '../images/clients/Logo-01-dark.png';
+import logo02Dark from '../images/clients/Logo-02-dark.png';
+import logo03Dark from '../images/clients/Logo-03-dark.png';
+import logo04Dark from '../images/clients/Logo-04-dark.png';
+import logo05Dark from '../images/clients/Logo-05-dark.png';
+import logo06Dark from '../images/clients/Logo-06-dark.png';
+import logo07Dark from '../images/clients/Logo-07-dark.png';
+import logo08Dark from '../images/clients/Logo-08-dark.png';
+import logo09Dark from '../images/clients/Logo-09-dark.png';
+import logo10Dark from '../images/clients/Logo-10-dark.png';
+import logo11Dark from '../images/clients/Logo-11-dark.png';
+import logo12Dark from '../images/clients/Logo-12-dark.png';
+import logo13Dark from '../images/clients/Logo-13-dark.png';
+import logo14Dark from '../images/clients/Logo-14-dark.png';
+import logo16Dark from '../images/clients/Logo-16-dark.png';
+import logo17Dark from '../images/clients/Logo-17-dark.png';
+import logo19Dark from '../images/clients/Logo-19-dark.png';
+import logo20Dark from '../images/clients/Logo-20-dark.png';
+import logo21Dark from '../images/clients/Logo-21-dark.png';
+import logo22Dark from '../images/clients/Logo-22-dark.png';
+
+export interface ClientLogo {
+  light: ImageMetadata;
+  dark: ImageMetadata;
+}
+
+// All logos as a continuous list for auto-wrapping
+const logos: ClientLogo[] = [
+  { light: logo01, dark: logo01Dark },   // Pfizer
+  { light: logo12, dark: logo12Dark },   // Novartis
+  { light: logo02, dark: logo02Dark },   // GenesisCare
+  { light: logo14, dark: logo14Dark },   // GSK
+  { light: logo19, dark: logo19Dark },   // Kingfisher
+  { light: logo06, dark: logo06Dark },   // NatWest
+  { light: logo03, dark: logo03Dark },   // HSBC
+  { light: logo21, dark: logo21Dark },   // Google
+  { light: logo20, dark: logo20Dark },   // JLR
+  { light: logo09, dark: logo09Dark },   // Vodafone
+  { light: logo11, dark: logo11Dark },   // NET-A-PORTER
+  { light: logo10, dark: logo10Dark },   // MR PORTER
+  { light: logo13, dark: logo13Dark },   // PANDORA
+  { light: logo04, dark: logo04Dark },   // VOLVO
+  { light: logo07, dark: logo07Dark },   // H&M
+  { light: logo16, dark: logo16Dark },   // Ministry of Justice
+  { light: logo17, dark: logo17Dark },   // West Midlands Combined Authority
+  { light: logo22, dark: logo22Dark },   // BBC
+  { light: logo08, dark: logo08Dark },   // Shell
+  { light: logo05, dark: logo05Dark }    // Unilever
+];
+---
+
+<section id="about" class="about">
+  <div class="container">
+    <!-- <div class="about-content" data-aos="fade-up">
+      <h1>About</h1>
+      <div class="about-text">
+        <p>
+          A service designer and strategist based in London, I bring over a decade of experience
+          transforming complex challenges into meaningful solutions. My work spans healthcare,
+          finance, retail, and social services—always focused on creating measurable impact
+          through strategic design.
+        </p>
+      </div>
+    </div> -->
+
+    <div class="clients-section" data-aos="fade-up" data-aos-delay="100">
+      <h2>Selected clients</h2>
+      <div class="clients-grid">
+        {logos.map((logo, index) => (
+          <div class="client-logo">
+            <img
+              src={logo.light.src}
+              alt="Client logo"
+              loading="lazy"
+              class={`client-logo-img client-logo-${index}`}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script define:vars={{ logos }}>
+  // Update logo images based on current theme
+  function updateLogos() {
+    const theme = document.documentElement.getAttribute('data-theme');
+    const isDark = theme === 'dark';
+
+    logos.forEach((logo, index) => {
+      const img = document.querySelector(`.client-logo-${index}`);
+      if (img instanceof HTMLImageElement) {
+        img.src = isDark ? logo.dark.src : logo.light.src;
+      }
+    });
+  }
+
+  // Initial update
+  updateLogos();
+
+  // Listen for theme changes
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+        updateLogos();
+      }
+    });
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme']
+  });
+</script>
+
+<style>
+  .about {
+    background: var(--color-bg);
+    padding: var(--spacing-md) 0 var(--spacing-lg) 0;
+  }
+
+  .about-content {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    text-align: left;
+  }
+
+  .about-content h1 {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .about-text {
+    margin-top: var(--spacing-md);
+    max-width: var(--text-width-single);
+  }
+
+  .about-text p {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .clients-section {
+    text-align: left;
+  }
+
+  .clients-section h2 {
+    font-size: var(--font-size-h1);
+    font-weight: var(--font-weight-semibold);
+    margin: 0 0 var(--spacing-sm);
+  }
+
+  .clients-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+  }
+
+  .client-logo {
+    width: clamp(140px, 15vw, 200px);
+    height: clamp(70px, 7.5vw, 100px);
+    background: transparent;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    transition: all var(--transition-normal);
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .client-logo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    opacity: 1;
+    transition: transform var(--transition-normal);
+  }
+
+  .client-logo:hover :global(img) {
+    transform: scale(1.05);
+  }
+
+  /* Dark mode: keep same opacity */
+  :global([data-theme="dark"]) .client-logo :global(img) {
+    opacity: 1;
+  }
+
+  .client-logo:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Tablet: wrap to multiple rows naturally */
+  @media (max-width: 1024px) {
+    .client-logo {
+      width: clamp(120px, 18vw, 180px);
+      height: clamp(60px, 9vw, 90px);
+    }
+  }
+
+  /* Mobile: 3 per row */
+  @media (max-width: 768px) {
+    .clients-grid {
+      gap: var(--spacing-sm);
+    }
+
+    .client-logo {
+      width: calc((100% - (2 * var(--spacing-sm))) / 3);
+      height: auto;
+      aspect-ratio: 2 / 1;
+      padding: 0.375rem;
+    }
+  }
+</style>

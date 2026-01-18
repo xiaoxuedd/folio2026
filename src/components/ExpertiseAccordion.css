@@ -1,0 +1,101 @@
+.expertise-accordion {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--spacing-lg);
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.accordion-item {
+  background: white;
+  border: none;
+  border-bottom: var(--border-divider);
+  transition: all 0.3s ease;
+}
+
+.accordion-item:last-child {
+  border-bottom: none;
+}
+
+.accordion-item:hover {
+  background: var(--color-bg-secondary);
+}
+
+.accordion-header {
+  width: 100%;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--transition-normal);
+  font-size: var(--font-size-body-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.accordion-header.is-open {
+  color: var(--color-primary);
+}
+
+.accordion-header::after {
+  content: '';
+  width: 24px;
+  height: 24px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23898887' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  flex-shrink: 0;
+  transition: transform 0.25s ease-in-out;
+}
+
+.accordion-header.is-open::after {
+  transform: rotate(180deg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236443fe' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+.accordion-panel {
+  padding: 0 1.5rem 1.5rem 1.5rem;
+  color: var(--color-text-light);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-normal);
+}
+
+/* Library's transition classes */
+.szh-accordion__item-content {
+  transition: height 0.25s ease-in-out;
+  overflow: hidden;
+}
+
+.accordion-content {
+  transition: opacity 0.25s ease-in-out;
+}
+
+.szh-accordion__item--status-exiting .accordion-content,
+.szh-accordion__item--status-exited .accordion-content {
+  opacity: 0;
+}
+
+.szh-accordion__item--status-entering .accordion-content,
+.szh-accordion__item--status-entered .accordion-content {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .accordion-header {
+    padding: 1rem;
+    min-height: 44px;
+    font-size: var(--font-size-body);
+  }
+
+  .accordion-panel {
+    padding: 0 1rem 1rem 1rem;
+    font-size: var(--font-size-body-xs);
+  }
+}

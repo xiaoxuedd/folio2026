@@ -1,0 +1,25 @@
+---
+interface Props {
+  width?: number;
+  height?: number;
+  class?: string;
+  rotate?: number;
+}
+
+const { width = 24, height = 24, class: className, rotate } = Astro.props;
+const style = rotate !== undefined ? `transform: rotate(${rotate}deg);` : undefined;
+---
+
+<svg
+  width={width}
+  height={height}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  class={className}
+  style={style}
+>
+  <line x1="7" y1="17" x2="17" y2="7"></line>
+  <polyline points="7 7 17 7 17 17"></polyline>
+</svg>

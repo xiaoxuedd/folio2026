@@ -1,0 +1,97 @@
+.glass-icon-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.glass-icon-container {
+  background-color: transparent;
+  outline: none;
+  position: relative;
+  perspective: 24em;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.83, 0, 0.17, 1);
+}
+
+.glass-icon-back,
+.glass-icon-front {
+  border-radius: var(--radius-2xl);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition:
+    opacity 0.3s cubic-bezier(0.83, 0, 0.17, 1),
+    transform 0.3s cubic-bezier(0.83, 0, 0.17, 1);
+}
+
+.glass-icon-back {
+  box-shadow: 0.5em -0.5em 0.75em hsla(223, 10%, 10%, 0.15);
+  display: block;
+  transform: rotate(15deg);
+  transform-origin: 100% 100%;
+  will-change: transform;
+}
+
+.glass-icon-front {
+  background-color: hsla(0, 0%, 100%, 0.15);
+  box-shadow: 0 0 0 0.1em hsla(0, 0%, 100%, 0.3) inset;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  transform-origin: 80% 50%;
+  will-change: transform;
+}
+
+.glass-icon-content {
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.glass-icon-content svg {
+  width: 1em;
+  height: 1em;
+}
+
+.glass-icon-label {
+  font-size: var(--font-size-ui-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    opacity 0.3s cubic-bezier(0.83, 0, 0.17, 1),
+    transform 0.3s cubic-bezier(0.83, 0, 0.17, 1);
+}
+
+.glass-icon-wrapper:hover .glass-icon-back {
+  transform: rotate(25deg) translate3d(-0.5em, -0.5em, 0.5em);
+}
+
+.glass-icon-wrapper:hover .glass-icon-front {
+  transform: translate3d(0, 0, 2em);
+}
+
+.glass-icon-wrapper:hover .glass-icon-label {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Dark mode adjustments */
+:global([data-theme="dark"]) .glass-icon-front {
+  background-color: hsla(0, 0%, 100%, 0.1);
+  box-shadow: 0 0 0 0.1em hsla(0, 0%, 100%, 0.2) inset;
+}
+
+:global([data-theme="dark"]) .glass-icon-back {
+  box-shadow: 0.5em -0.5em 0.75em hsla(223, 10%, 5%, 0.3);
+}

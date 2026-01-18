@@ -1,0 +1,294 @@
+.scroll-projects-section {
+  background: var(--color-bg);
+  padding: var(--spacing-xl) 0;
+}
+
+.scroll-projects-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+}
+
+/* Left side - Images */
+.scroll-projects-images {
+  height: 600px;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background: var(--color-bg-secondary);
+}
+
+.scroll-projects-images-track {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+}
+
+.scroll-project-image {
+  height: 600px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: var(--color-bg-secondary);
+}
+
+.scroll-project-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Right side - Accordion */
+.scroll-projects-content {
+  position: relative;
+}
+
+.scroll-projects-accordion-wrapper {
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.scroll-accordion-item {
+  background: white;
+  border: none;
+  border-bottom: var(--border-divider);
+  transition: all var(--transition-normal);
+}
+
+.scroll-accordion-item:last-child {
+  border-bottom: none;
+}
+
+.scroll-accordion-item:hover {
+  background: var(--color-bg-secondary);
+}
+
+.scroll-accordion-header {
+  width: 100%;
+  padding: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  background: transparent;
+  border: none;
+  text-align: left;
+  color: var(--color-text);
+  transition: color var(--transition-normal);
+}
+
+.scroll-accordion-header.is-active {
+  color: var(--color-primary);
+}
+
+.scroll-accordion-header-content {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  flex: 1;
+}
+
+.scroll-project-number {
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-medium);
+  color: rgb(135, 135, 135);
+  flex-shrink: 0;
+  padding-top: 0.25rem;
+  transition: color var(--transition-normal);
+}
+
+.scroll-accordion-header-content h4 {
+  font-size: var(--font-size-ui-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin: 0;
+  line-height: var(--line-height-normal);
+  transition: color var(--transition-normal);
+}
+
+.scroll-accordion-header.is-active .scroll-accordion-header-content h4 {
+  color: var(--color-primary);
+}
+
+.scroll-accordion-header.is-active .scroll-project-number {
+  color: var(--color-primary);
+}
+
+.scroll-accordion-chevron {
+  flex-shrink: 0;
+  width: var(--icon-md);
+  height: var(--icon-md);
+  transition: transform var(--transition-normal);
+}
+
+.scroll-accordion-chevron svg {
+  display: block;
+  stroke: rgb(135, 135, 135);
+  transition: stroke var(--transition-normal);
+}
+
+.scroll-accordion-header.is-active .scroll-accordion-chevron {
+  transform: rotate(180deg);
+}
+
+.scroll-accordion-header.is-active .scroll-accordion-chevron svg {
+  stroke: var(--color-primary);
+}
+
+.scroll-accordion-content {
+  height: 0;
+  will-change: height;
+}
+
+.scroll-accordion-panel {
+  padding: 0 1.5rem 1.5rem 1.5rem;
+}
+
+.scroll-project-meta {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.scroll-project-category {
+  display: inline-block;
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+  padding: 0.375rem 0.875rem;
+  background: rgba(100, 67, 254, 0.1);
+  border-radius: var(--radius-2xl);
+}
+
+.scroll-project-scope {
+  display: inline-block;
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-medium);
+  color: rgb(135, 135, 135);
+  padding: 0.375rem 0.875rem;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-2xl);
+}
+
+.scroll-project-section {
+  margin-bottom: 1.5rem;
+}
+
+.scroll-project-section:last-of-type {
+  margin-bottom: 1rem;
+}
+
+.scroll-project-section h5 {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.75rem;
+}
+
+.scroll-project-section p {
+  color: var(--color-text-light);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-normal);
+  margin: 0;
+}
+
+.scroll-project-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.scroll-project-section ul li {
+  color: var(--color-text-light);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-normal);
+  padding-left: 1.5rem;
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.scroll-project-section ul li:last-child {
+  margin-bottom: 0;
+}
+
+.scroll-project-section ul li::before {
+  content: '•';
+  position: absolute;
+  left: 0.5rem;
+  color: var(--color-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+.scroll-project-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: linear-gradient(180deg, rgb(37, 88, 235) 0%, rgb(59, 107, 246) 100%);
+  color: white;
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-pill);
+  border: 1px solid rgb(37, 88, 235);
+  box-shadow: rgba(0, 0, 0, 0.17) 0px 0.27px 0.47px 0px,
+              rgba(0, 0, 0, 0.1) 0px 0.89px 1.56px 0px,
+              rgba(0, 0, 0, 0.07) 0px 4px 7px 0px;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.scroll-project-link:hover {
+  transform: translateY(-1px);
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 0.27px 0.47px 0px,
+              rgba(0, 0, 0, 0.15) 0px 0.89px 1.56px 0px,
+              rgba(0, 0, 0, 0.1) 0px 6px 10px 0px;
+  color: white;
+}
+
+@media (max-width: 1024px) {
+  .scroll-projects-wrapper {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .scroll-projects-images {
+    height: 500px;
+  }
+
+  .scroll-project-image {
+    height: 500px;
+  }
+}
+
+@media (max-width: 768px) {
+  .scroll-projects-images {
+    height: 400px;
+  }
+
+  .scroll-project-image {
+    height: 400px;
+  }
+
+  .scroll-accordion-header {
+    padding: 1rem;
+  }
+
+  .scroll-accordion-header-content h4 {
+    font-size: var(--font-size-body);
+  }
+
+  .scroll-project-number {
+    font-size: var(--font-size-body-sm);
+  }
+
+  .scroll-accordion-panel {
+    padding: 0 1rem 1rem 1rem;
+  }
+
+  .scroll-project-section p,
+  .scroll-project-section ul li {
+    font-size: var(--font-size-body-sm);
+  }
+}

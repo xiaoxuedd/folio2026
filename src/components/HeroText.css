@@ -1,0 +1,113 @@
+.hero-text-wrapper {
+  width: 100%;
+}
+
+.hero-text-section {
+  margin-bottom: var(--gap-md);
+}
+
+.hero-overline {
+  font-size: var(--font-size-body-1);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.02em;
+  margin-bottom: var(--spacing-md);
+  text-transform: uppercase;
+}
+
+.hero-text-wrapper .hero-h0 {
+  font-size: calc(var(--font-size-h0) * 1.2);
+  line-height: var(--line-height-hero);
+  margin-bottom: var(--spacing-xs);
+  max-width: var(--text-width-single);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.hero-text-wrapper .hero-h1 {
+  font-size: var(--font-size-h1);
+  line-height: var(--line-height-hero);
+  max-width: var(--text-width-single);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.hero-subtitle-text {
+  display: block;
+}
+
+.hero-faint {
+  opacity: var(--opacity-medium);
+  font-weight: var(--font-weight-regular);
+}
+
+.hero-emphasis {
+  font-weight: var(--font-weight-bold);
+  position: relative;
+  display: inline;
+  color: var(--color-text);
+}
+
+.hero-thinking {
+  position: relative;
+  display: inline-block;
+}
+
+.hero-strikethrough {
+  position: absolute;
+  top: 54%;
+  left: -2%;
+  height: 6px;
+  width: 104%;
+  background: var(--color-text);
+  opacity: 0.7;
+  transform: translateY(-50%) rotate(-2deg);
+  border-radius: 50% / 100%;
+  filter: blur(0.3px);
+}
+
+/* Add organic pen brush texture with pseudo-elements */
+.hero-strikethrough::before,
+.hero-strikethrough::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--color-text);
+  border-radius: inherit;
+}
+
+.hero-strikethrough::before {
+  transform: scaleY(0.8) translateX(1px);
+  opacity: 0.3;
+}
+
+.hero-strikethrough::after {
+  transform: scaleY(1.2) translateX(-1px);
+  opacity: 0.2;
+}
+
+.hero-doing {
+  display: inline-block;
+  transform-origin: center;
+}
+
+/* Dark mode adjustments */
+:global([data-theme="dark"]) .hero-strikethrough {
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .hero-text-wrapper .hero-h0 {
+    font-size: calc(clamp(2.5rem, 10vw, 3.5rem) * 1.2);
+  }
+
+  .hero-text-wrapper .hero-h1 {
+    font-size: clamp(1.75rem, 7vw, 2.5rem);
+  }
+
+  .hero-strikethrough {
+    height: 5px;
+  }
+}

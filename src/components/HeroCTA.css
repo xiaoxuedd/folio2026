@@ -1,0 +1,27 @@
+.hero-cta-button {
+  background: var(--color-text);
+  color: var(--color-bg);
+  padding: 1rem 2.5rem;
+  font-size: var(--font-size-body-0);
+  font-weight: var(--font-weight-regular);
+  font-family: 'Inter', sans-serif;
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.hero-cta-button svg {
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .hero-cta-button {
+    width: 100%;
+    max-width: 100%;
+    justify-content: center;
+  }
+}
