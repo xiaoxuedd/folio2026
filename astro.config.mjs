@@ -3,8 +3,8 @@ import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://www.designdoings.com',
-  base: '/',
+  site: 'https://xiaoxuedd.github.io',
+  base: '/folio2026/',
   integrations: [react()],
   output: 'static',
   build: {

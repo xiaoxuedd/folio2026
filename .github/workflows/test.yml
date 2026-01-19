@@ -1,0 +1,27 @@
+name: SEO & Performance Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install and build
+        uses: withastro/action@v5
+        with:
+          package-manager: pnpm@latest
+
+      - name: Run SEO tests
+        run: pnpm run test:seo
+
+      - name: Run performance tests
+        run: pnpm run test:performance
+        continue-on-error: true
