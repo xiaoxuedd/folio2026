@@ -7,12 +7,13 @@ interface Props {
 }
 
 const { compact = false } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL;
 ---
 
 <header class={`site-header ${compact ? '' : 'at-top'}`} data-compact={compact}>
   <nav class="nav-pill" aria-label="Main navigation">
     <div class="nav-left">
-      <a href="/" class="branding" aria-label="Home">
+      <a href={baseUrl} class="branding" aria-label="Home">
         <div class="logo-container">
           <img src={logo.src} alt="Logo" class="logo-img" />
         </div>
@@ -25,8 +26,8 @@ const { compact = false } = Astro.props;
 
     <div class="nav-right">
       <div class="nav-links">
-        <a href="/#projects" class="nav-link">Work</a>
-        <a href="/about" class="nav-link">About</a>
+        <a href={`${baseUrl}#projects`} class="nav-link">Work</a>
+        <a href={`${baseUrl}about`} class="nav-link">About</a>
       </div>
 
       <button class="theme-toggle" aria-label="Toggle theme" onclick="window.toggleTheme()">
@@ -63,8 +64,8 @@ const { compact = false } = Astro.props;
 
   <div class="mobile-menu">
     <div class="mobile-menu-content">
-      <a href="/#projects" class="mobile-nav-link">Work</a>
-      <a href="/about" class="mobile-nav-link">About</a>
+      <a href={`${baseUrl}#projects`} class="mobile-nav-link">Work</a>
+      <a href={`${baseUrl}about`} class="mobile-nav-link">About</a>
       <button class="mobile-theme-toggle" aria-label="Toggle theme" onclick="window.toggleTheme()">
         <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="5"></circle>

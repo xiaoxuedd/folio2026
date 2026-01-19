@@ -22,23 +22,25 @@ import pillar3Localization from '../images/healthcare-pillar-3-localization.png'
 import pillar4Toolkit1 from '../images/healthcare-pillar-4-toolkit-1.png';
 import pillar4Toolkit2 from '../images/healthcare-pillar-4-toolkit-2.png';
 
+const baseUrl = import.meta.env.BASE_URL;
+
 // Process images for carousels
 const pillar1Images = await Promise.all([
-  getImage({ src: pillar1Diagram1, format: 'webp' }),
-  getImage({ src: pillar1Diagram2, format: 'webp' })
+  getImage({ src: pillar1Diagram1, format: "webp" }),
+  getImage({ src: pillar1Diagram2, format: "webp" })
 ]);
 
-const pillar2Image2DayProcessed = await getImage({ src: pillar2Image2Day, format: 'webp' });
-const pillar2Image2NightProcessed = await getImage({ src: pillar2Image2Night, format: 'webp' });
+const pillar2Image2DayProcessed = await getImage({ src: pillar2Image2Day, format: "webp" });
+const pillar2Image2NightProcessed = await getImage({ src: pillar2Image2Night, format: "webp" });
 
 const pillar2Images = await Promise.all([
-  getImage({ src: pillar2Image1, format: 'webp' }),
-  Promise.resolve(pillar2Image2DayProcessed) // First load with day version
+  getImage({ src: pillar2Image1, format: "webp" }),
+  Promise.resolve(pillar2Image2DayProcessed)
 ]);
 
 const pillar4Images = await Promise.all([
-  getImage({ src: pillar4Toolkit1, format: 'webp' }),
-  getImage({ src: pillar4Toolkit2, format: 'webp' })
+  getImage({ src: pillar4Toolkit1, format: "webp" }),
+  getImage({ src: pillar4Toolkit2, format: "webp" })
 ]);
 
 // Impact metrics data
@@ -322,7 +324,7 @@ const testimonials = [
 
         <!-- Footer CTA -->
         <section class="footer-cta" data-aos="fade-up">
-          <a href="/" class="btn">← Back to Home</a>
+          <a href={baseUrl} class="btn">← Back to Home</a>
         </section>
 
       </div>
