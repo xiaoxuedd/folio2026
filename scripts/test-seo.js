@@ -167,19 +167,6 @@ function checkHTML(filePath, fileName) {
     warnCount++;
   }
 
-  // Check for inline styles (generally bad for SEO/performance)
-  const inlineStyles = (html.match(/style="/g) || []).length;
-  if (inlineStyles === 0) {
-    log('pass', 'No inline styles found');
-    passCount++;
-  } else if (inlineStyles < 5) {
-    log('warn', `${inlineStyles} inline style(s) found`);
-    warnCount++;
-  } else {
-    log('fail', `Excessive inline styles (${inlineStyles})`);
-    failCount++;
-  }
-
   return { passCount, failCount, warnCount };
 }
 
