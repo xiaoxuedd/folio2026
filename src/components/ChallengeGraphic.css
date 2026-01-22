@@ -1,0 +1,100 @@
+.challenge-graphic-container {
+  position: relative;
+  width: 75%;
+  margin: 0 auto;
+  container-type: inline-size;
+  --color-diagram-bg: #ffffff;
+  --color-diagram-text: #000000;
+  --color-diagram-border: #e0e0e0;
+}
+
+/* Maintain aspect ratio - 1169/857 = 136.4% */
+.challenge-graphic-container::before {
+  content: '';
+  display: block;
+  padding-top: 136.4%;
+}
+
+.challenge-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.challenge-back svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+}
+
+.challenge-labels {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.challenge-circle-title {
+  position: absolute;
+  font-size: clamp(10px, 3.2cqw, 13px);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-diagram-text);
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+  letter-spacing: 0.5px;
+  pointer-events: none;
+}
+
+.challenge-graphic-container .challenge-label {
+  position: absolute;
+  background: var(--color-diagram-bg);
+  border: 1px solid var(--color-diagram-border);
+  border-radius: 2px;
+  padding: 2px 4px;
+  font-size: clamp(8px, 2.7cqw, 11px);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-diagram-text);
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+  transition: all 0.25s ease;
+  pointer-events: auto;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+@media (max-width: 768px) {
+  .challenge-circle-title {
+    font-size: clamp(10px, 3cqw, 13px);
+  }
+
+  .challenge-graphic-container .challenge-label {
+    font-size: clamp(8px, 2.5cqw, 11px);
+  }
+}
+
+.challenge-graphic-container .challenge-label:hover {
+  transform: translate(-50%, -50%) scale(1.12);
+  box-shadow: 0 4px 16px rgba(100, 67, 254, 0.2);
+  border-color: var(--color-primary);
+  z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .challenge-graphic-container .challenge-label:hover {
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+}
+

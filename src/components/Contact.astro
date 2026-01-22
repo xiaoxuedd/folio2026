@@ -35,7 +35,7 @@ import DownloadIcon from './icons/DownloadIcon.astro';
               <span class="icon-label">LinkedIn</span>
             </a>
 
-            <a href="/cv.pdf" class="contact-icon-link" download aria-label="Download CV">
+            <a href="/resume-xiaoxue.pdf" target="_blank" rel="noopener noreferrer" class="contact-icon-link" aria-label="View Resume">
               <DownloadIcon />
               <span class="icon-label">Resume</span>
             </a>
@@ -45,34 +45,43 @@ import DownloadIcon from './icons/DownloadIcon.astro';
 
       <!-- Right: Bento Box Metrics -->
       <div class="metrics-bento">
-        <div class="metric-card slide-from-left" style="animation-delay: 0.1s;">
-          <span class="metric-number">10+ products</span>
-          <span class="metric-label">delivered from concept to live operation and scaled adoption</span>
+        <!-- Row 1: Two side by side -->
+        <div class="metric-card slide-from-top" style="animation-delay: 0.1s;">
+          <span class="metric-number">10+</span>
+          <span class="metric-title">products</span>
+          <span class="metric-description">delivered from concept to live operation and scaled adoption</span>
         </div>
 
-        <div class="metric-card slide-from-top" style="animation-delay: 0.15s;">
-          <span class="metric-number">15+ international markets</span>
-          <span class="metric-label">balancing global consistency with localised execution</span>
+        <div class="metric-card slide-from-right" style="animation-delay: 0.15s;">
+          <span class="metric-number">15+</span>
+          <span class="metric-title">international markets</span>
+          <span class="metric-description">balancing global consistency with localised execution</span>
         </div>
 
-        <div class="metric-card slide-from-right" style="animation-delay: 0.2s;">
-          <span class="metric-number">10M+ users and teams</span>
-          <span class="metric-label">with measurable improvements in conversion, satisfaction, and efficiency</span>
+        <!-- Row 2: Full width -->
+        <div class="metric-card metric-wide zoom-fade" style="animation-delay: 0.2s;">
+          <span class="metric-number">10+</span>
+          <span class="metric-title">years experience</span>
+          <span class="metric-description">designing E2E products and services across consultancy and in-house teams</span>
         </div>
 
-        <div class="metric-card metric-wide zoom-fade" style="animation-delay: 0.25s;">
-          <span class="metric-number">10+ years experience</span>
-          <span class="metric-label">designing E2E products and services across consultancy and in-house teams</span>
+        <!-- Row 3-4: Two on left, one tall on right -->
+        <div class="metric-card slide-from-left" style="animation-delay: 0.25s;">
+          <span class="metric-number">5+</span>
+          <span class="metric-title">organisational transformation</span>
+          <span class="metric-description">coordinating teams across commercials, data, operations, legal & compliance, and support</span>
         </div>
 
-        <div class="metric-card metric-tall slide-from-bottom" style="animation-delay: 0.35s;">
-          <span class="metric-number">£30M+ in revenue and efficiency gains</span>
-          <span class="metric-label">driven through systemic service innovations</span>
+        <div class="metric-card metric-tall slide-from-right" style="animation-delay: 0.3s;">
+          <span class="metric-number">10M+</span>
+          <span class="metric-title">users and teams</span>
+          <span class="metric-description">with measurable improvements in conversion, satisfaction, and efficiency</span>
         </div>
 
-        <div class="metric-card metric-wide slide-from-left" style="animation-delay: 0.3s;">
-          <span class="metric-number">5+ organisational transformation</span>
-          <span class="metric-label">coordinating teams across commercials, data, operations, legal & compliance, and support</span>
+        <div class="metric-card slide-from-bottom" style="animation-delay: 0.35s;">
+          <span class="metric-number">£30M+</span>
+          <span class="metric-title">in revenue and efficiency gains</span>
+          <span class="metric-description">driven through systemic service innovations</span>
         </div>
       </div>
     </div>
@@ -82,16 +91,15 @@ import DownloadIcon from './icons/DownloadIcon.astro';
 <style>
   .contact {
     background: var(--color-bg);
-    height: 100vh;
+    padding: var(--spacing-xl) var(--spacing-md);
+    transition: background-color 0.3s ease;
+    min-height: 100vh;
     display: flex;
     align-items: center;
-    padding: 0 var(--spacing-md);
-    transition: background-color 0.3s ease;
-    overflow: hidden;
   }
 
   .contact .container {
-    padding: var(--spacing-xl) 0 var(--spacing-md) 0;
+    width: 100%;
   }
 
   .contact-grid {
@@ -99,7 +107,6 @@ import DownloadIcon from './icons/DownloadIcon.astro';
     grid-template-columns: 1fr 1fr;
     gap: var(--spacing-xl);
     align-items: center;
-    height: calc(100vh - var(--spacing-xl) - var(--spacing-md));
   }
 
   /* Left Side - Contact Info */
@@ -107,9 +114,6 @@ import DownloadIcon from './icons/DownloadIcon.astro';
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 100%;
-    overflow-y: auto;
-    padding-right: var(--spacing-sm);
   }
 
   .contact-content h2 {
@@ -118,24 +122,6 @@ import DownloadIcon from './icons/DownloadIcon.astro';
     color: var(--color-text);
     margin: 0 0 var(--spacing-md) 0;
     transition: color 0.3s ease;
-  }
-
-  /* Custom scrollbar */
-  .contact-left::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  .contact-left::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .contact-left::-webkit-scrollbar-thumb {
-    background: var(--color-border);
-    border-radius: 3px;
-  }
-
-  .contact-left::-webkit-scrollbar-thumb:hover {
-    background: var(--color-primary);
   }
 
   .contact-intro {
@@ -197,24 +183,21 @@ import DownloadIcon from './icons/DownloadIcon.astro';
   /* Right Side - Bento Box Metrics */
   .metrics-bento {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-sm);
-    height: 85%;
-    max-height: 600px;
   }
 
   .metric-card {
     background: var(--color-bg-secondary);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    padding: var(--spacing-md);
+    padding: var(--spacing-sm);
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-start;
     gap: var(--spacing-xs);
-    text-align: center;
+    text-align: left;
     transition: all 0.3s ease;
   }
 
@@ -230,20 +213,29 @@ import DownloadIcon from './icons/DownloadIcon.astro';
 
   .metric-tall {
     grid-row: span 2;
+    grid-column: 2;
   }
 
   .metric-number {
-    font-size: var(--font-size-h3);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text);
-    line-height: var(--line-height-hero);
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-regular);
+    color: var(--color-primary);
+    line-height: 1.2;
     transition: color 0.3s ease;
   }
 
-  .metric-label {
+  .metric-title {
+    font-size: var(--font-size-body-0);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text);
+    line-height: var(--line-height-body);
+    transition: color 0.3s ease;
+  }
+
+  .metric-description {
     font-size: var(--font-size-ui-xs);
     color: var(--color-text-secondary);
-    font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-regular);
     line-height: var(--line-height-body);
     transition: color 0.3s ease;
   }
@@ -330,6 +322,11 @@ import DownloadIcon from './icons/DownloadIcon.astro';
   }
 
   @media (max-width: 968px) {
+    .contact {
+      min-height: auto;
+      display: block;
+    }
+
     .contact-grid {
       grid-template-columns: 1fr;
       gap: var(--spacing-lg);

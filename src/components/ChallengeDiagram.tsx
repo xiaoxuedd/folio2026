@@ -71,7 +71,7 @@ export function ChallengeDiagram() {
     // Trigger icon animations after circle is mostly drawn
     const iconAnimationTimer = setTimeout(() => {
       setAnimationReady(true);
-    }, 800);
+    }, 400);
 
     // Calculate actual text positions
     const updateTextPositions = () => {
@@ -208,6 +208,7 @@ export function ChallengeDiagram() {
                   style={{
                     left: `${(labelX / 800) * 100}%`,
                     top: `${(labelY / 800) * 100}%`,
+                    ['--animation-delay' as any]: `${point.animationOrder * 0.1}s`,
                   }}
                   data-index={index}
                 >

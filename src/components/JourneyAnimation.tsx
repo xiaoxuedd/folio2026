@@ -6,6 +6,8 @@ import JourneyLabelsAnimated from './JourneyLabelsAnimated';
 import JourneyCornerIcons from './JourneyCornerIcons';
 import './JourneyAnimation.css';
 
+const baseUrl = import.meta.env.BASE_URL;
+
 const STAGE_DURATIONS = {
   1: 3500, // Stage 1: 3.5s
   2: 3500, // Stage 2: 3.5s
@@ -56,7 +58,7 @@ const JourneyAnimation = () => {
           {showPersistentLayer && (
             <motion.img
               key="persistent-layer"
-              src="/images/journey-persistent.svg"
+              src={`${baseUrl}images/journey-persistent.svg`}
               alt="Journey icons and connecting path"
               className="journey-persistent"
               initial={{ opacity: 0 }}
@@ -136,7 +138,7 @@ const JourneyAnimation = () => {
           {stage === 3 && (
             <motion.img
               key="journey-3"
-              src="/images/journey-wavey-lines.svg"
+              src={`${baseUrl}images/journey-wavey-lines.svg`}
               alt="Customer journey visualization - Complete"
               variants={fadeVariants}
               initial="enter"

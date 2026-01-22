@@ -1,5 +1,6 @@
 ---
 import type { Project } from '../data/projects';
+import { getImage } from 'astro:assets';
 import LockIcon from './icons/LockIcon.astro';
 import ArrowIcon from './icons/ArrowIcon.astro';
 
@@ -13,6 +14,36 @@ const isFeatured = index === 0;
 const description = index === 0 ? project.description : (project.shortDescription || project.description);
 const CardWrapper = project.link ? 'a' : 'div';
 const baseUrl = import.meta.env.BASE_URL;
+
+// Process image if it's ImageMetadata, otherwise use string path
+let imageSrc: string;
+let imageSrcset: string | undefined;
+let imageWidth: number | undefined;
+let imageHeight: number | undefined;
+
+if (typeof project.image === 'string') {
+  // Legacy string path handling
+  imageSrc = `${baseUrl}${project.image}`.replace(/\/\//g, '/');
+} else {
+  // ImageMetadata handling - generate responsive WebP images
+  const sizes = isFeatured
+    ? [{ width: 800 }, { width: 600 }, { width: 400 }]
+    : [{ width: 665 }, { width: 500 }, { width: 400 }];
+
+  const processedImages = await Promise.all(
+    sizes.map(size => getImage({
+      src: project.image,
+      format: 'webp',
+      quality: 80,
+      width: size.width
+    }))
+  );
+
+  imageSrc = processedImages[0].src;
+  imageSrcset = processedImages.map((img, i) => `${img.src} ${sizes[i].width}w`).join(', ');
+  imageWidth = processedImages[0].attributes.width;
+  imageHeight = processedImages[0].attributes.height;
+}
 ---
 
 <CardWrapper
@@ -21,7 +52,15 @@ const baseUrl = import.meta.env.BASE_URL;
   data-aos="fade-up"
 >
   <div class="project-image-wrapper">
-    <img src={`${baseUrl}${project.image}`.replace(/\/\//g, '/')} alt={project.title} loading="lazy" />
+    <img
+      src={imageSrc}
+      srcset={imageSrcset}
+      sizes={isFeatured ? "(max-width: 768px) 100vw, 800px" : "(max-width: 768px) 100vw, 665px"}
+      alt={project.title}
+      loading="lazy"
+      width={imageWidth}
+      height={imageHeight}
+    />
     {project.isProtected && (
       <div class="protected-badge">
         <LockIcon width={12} height={12} />
@@ -174,7 +213,7 @@ const baseUrl = import.meta.env.BASE_URL;
   }
 
   .overlay-subtitle {
-    font-size: var(--font-size-body-1);
+    font-size: var(--font-size-body-0);
     font-weight: var(--font-weight-medium);
     font-style: italic;
     line-height: var(--line-height-body);
@@ -329,7 +368,7 @@ const baseUrl = import.meta.env.BASE_URL;
     }
 
     .overlay-subtitle {
-      font-size: var(--font-size-body-1);
+      font-size: var(--font-size-body-0);
       margin-bottom: var(--spacing-xs);
     }
 

@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import ProjectNavigation from '../components/ProjectNavigation';
 import { ChallengeDiagram } from '../components/ChallengeDiagram';
+import { ChallengeGraphic } from '../components/ChallengeGraphic';
 import { ImpactMetrics } from '../components/ImpactMetrics';
 import PillarNumber from '../components/PillarNumber.astro';
 import CircleTitle from '../components/CircleTitle.astro';
@@ -141,7 +142,7 @@ const testimonials = [
               <p>My job was to make them see it, and then build it.</p>
             </div>
             <div class="challenge-image">
-              <Image src={challengeImage} alt="The challenge visualization" />
+              <ChallengeGraphic client:load />
             </div>
           </div>
         </section>
@@ -562,7 +563,7 @@ const testimonials = [
   }
 
   .info-column ul {
-    margin-top: var(--spacing-xs);
+    margin-top: 0;
     padding-left: var(--spacing-xs);
     max-width: var(--text-width-column);
   }

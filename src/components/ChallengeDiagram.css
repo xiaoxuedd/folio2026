@@ -188,8 +188,8 @@
 
 .challenge-icon {
   opacity: 0;
-  width: 36px;
-  height: 36px;
+  width: 29px;
+  height: 29px;
   color: var(--color-text);
   transition: color var(--transition-normal);
   position: relative;
@@ -216,29 +216,39 @@
 }
 
 /* Labels */
-.challenge-label {
+.challenge-diagram-container .challenge-label {
   position: absolute;
   transform: translate(-50%, -50%);
   text-align: center;
   color: var(--color-text);
   line-height: var(--line-height-normal);
   white-space: pre-line;
-  max-width: 140px;
   font-size: clamp(0.75rem, 1.2vw, 0.875rem);
   font-weight: var(--font-weight-medium);
-  transition: opacity var(--transition-normal), transform var(--transition-normal), color var(--transition-normal);
+  opacity: 0;
+  transition: transform var(--transition-normal), color var(--transition-normal);
 }
 
-.challenge-label.ready {
-  /* Ready for animation */
+.challenge-diagram-container .challenge-label.ready {
+  animation: fadeInLabel 0.3s ease-out forwards;
+  animation-delay: var(--animation-delay, 0s);
 }
 
-.challenge-label.highlighted {
+@keyframes fadeInLabel {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.challenge-diagram-container .challenge-label.highlighted {
   color: var(--color-primary);
   font-weight: var(--font-weight-semibold);
 }
 
-.challenge-label.dimmed {
+.challenge-diagram-container .challenge-label.dimmed {
   opacity: 0.5;
 }
 
@@ -254,11 +264,11 @@
   }
 
   .challenge-icon {
-    width: 27px;
-    height: 27px;
+    width: 22px;
+    height: 22px;
   }
 
-  .challenge-label {
+  .challenge-diagram-container .challenge-label {
     max-width: 100px;
     font-size: clamp(0.6rem, 2vw, 0.875rem);
   }
@@ -280,11 +290,11 @@
   }
 
   .challenge-icon {
-    width: 21px;
-    height: 21px;
+    width: 17px;
+    height: 17px;
   }
 
-  .challenge-label {
+  .challenge-diagram-container .challenge-label {
     max-width: 80px;
     font-size: clamp(0.55rem, 1.8vw, var(--font-size-ui-xs));
   }

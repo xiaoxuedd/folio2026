@@ -123,7 +123,11 @@ export default function ScrollProjectsShowcase({ projects }: ScrollProjectsShowc
             <div ref={imagesTrackRef} className="scroll-projects-images-track">
               {projects.map((project) => (
                 <div key={project.id} className="scroll-project-image">
-                  <img src={project.image} alt={project.title} loading="lazy" />
+                  <img
+                    src={typeof project.image === 'string' ? project.image : project.image.src}
+                    alt={project.title}
+                    loading="lazy"
+                  />
                 </div>
               ))}
             </div>

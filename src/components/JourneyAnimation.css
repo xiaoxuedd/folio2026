@@ -55,14 +55,9 @@
   border-radius: var(--radius-full);
   background: var(--color-border);
   border: none;
-  cursor: pointer;
+  cursor: default;
   transition: all var(--transition-normal);
   padding: 0;
-}
-
-.journey-dot:hover {
-  background: var(--color-text-light);
-  transform: scale(1.2);
 }
 
 .journey-dot.active {

@@ -1,10 +1,19 @@
+import type { ImageMetadata } from 'astro';
+
+// Import project images
+import healthcarePrecisionMedicine from '../images/projects/healthcare-precision-medicine.jpg';
+import ecommerceReturns from '../images/projects/ecommerce-returns.jpg';
+import automobileDealership from '../images/projects/automobile-dealership.jpg';
+import financeLending from '../images/projects/finance-lending.jpg';
+import strategyCapability from '../images/projects/strategy-capability.jpg';
+
 export interface Project {
   id: number;
   title: string;
   description: string;
   shortDescription?: string;
   category: string;
-  image: string;
+  image: ImageMetadata | string;
   tags: string[];
   link?: string;
   isProtected?: boolean;
@@ -25,7 +34,7 @@ export const projects: Project[] = [
     title: "Designing for care delivery",
     description: "Pharmaceutical companies had breakthrough cancer treatments but lacked the operational infrastructure to deliver them. I led a business transformation from product-led to service-led, designing an end-to-end service ecosystem that enabled the commercial launch and scale of a life-saving advanced therapy across 10+ global markets.",
     category: "Healthcare",
-    image: "/images/projects/healthcare-precision-medicine.jpg",
+    image: healthcarePrecisionMedicine,
     tags: ["Service Design", "Strategy", "Product / UX", "Research"],
     link: "/healthcare",
     isProtected: false,
@@ -52,7 +61,7 @@ export const projects: Project[] = [
     description: "Driven by 'buy-to-try' behaviour, high return rates cost a luxury fashion business £20M+ annually in logistics and waste. I led a 6-month multidisciplinary programme across product, operations, and finance, designing integrated solutions from purchase guidance to warehouse operations to reduce returns.",
     shortDescription: "Led a multidisciplinary programme to reduce £20M+ annual return costs for a luxury fashion brand through integrated design solutions.",
     category: "E-commerce",
-    image: "/images/projects/ecommerce-returns.jpg",
+    image: ecommerceReturns,
     tags: ["Service Design", "Research", "Data Strategy", "Product / UX"],
     industry: "E-commerce",
     duration: "6 months",
@@ -77,7 +86,7 @@ export const projects: Project[] = [
     description: "A world-leading automobile brand struggled to convert dealership leads due to fragmented processes and poor visibility across the sales journey. I led the design of an intelligent lead management system, combining scoring algorithms, automated workflows, and unified dashboards, to improve conversion while delivering a consistent customer experience.",
     shortDescription: "Designed an intelligent lead management system for a global automobile brand to improve conversion and customer experience.",
     category: "Automobile",
-    image: "/images/projects/automobile-dealership.jpg",
+    image: automobileDealership,
     tags: ["Service Design", "Research", "Product / UX"],
     industry: "Automobile",
     duration: "12 months",
@@ -102,7 +111,7 @@ export const projects: Project[] = [
     description: "A corporate bank's lending process was slow and complex due to manual compliance and dynamic workflows, frustrating corporate clients and creating competitive disadvantage. I led discovery across lending operations, mapping key decision points and evaluating AI applications against regulatory constraints to define clear opportunities to reduce manual burden, minimise human error, and accelerate decision-making.",
     shortDescription: "Led discovery across corporate lending operations to identify AI opportunities within regulatory constraints and accelerate decision-making.",
     category: "Finance",
-    image: "/images/projects/finance-lending.jpg",
+    image: financeLending,
     tags: ["Service Design", "Product Strategy"],
     industry: "Finance",
     duration: "3 months",
@@ -127,7 +136,7 @@ export const projects: Project[] = [
     description: "Design was seen as execution, not strategy, limiting its impact on business outcomes. I designed and delivered capability programs for various organisations across industries that demonstrated design's business value through tailored methodologies and case-driven training.",
     shortDescription: "Designed capability programs that shifted design from delivery to strategic decision-making.",
     category: "Strategy",
-    image: "/images/projects/strategy-capability.jpg",
+    image: strategyCapability,
     tags: ["Design Strategy", "Capability Building", "Leadership"],
     industry: "Cross-Industry",
     duration: "Ongoing",
