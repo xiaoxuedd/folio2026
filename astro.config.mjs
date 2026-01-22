@@ -14,6 +14,18 @@ export default defineConfig({
     assets: 'assets',
     inlineStylesheets: 'always'
   },
+  vite: {
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'react-vendor': ['react', 'react-dom', 'react/jsx-runtime'],
+            'framer': ['framer-motion'],
+          }
+        }
+      }
+    }
+  },
   image: {
     service: { entrypoint: 'astro/assets/services/sharp' },
     domains: ['xiaoxuedd.github.io'],

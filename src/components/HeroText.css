@@ -49,7 +49,7 @@
 }
 
 .hero-faint {
-  color: color-mix(in srgb, var(--color-text) 40%, transparent);
+  color: color-mix(in srgb, var(--color-text) 60%, transparent);
   font-weight: var(--font-weight-regular);
 }
 

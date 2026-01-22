@@ -7,7 +7,7 @@ interface Props {
 const { text, circleId } = Astro.props;
 ---
 
-<h3 class="circle-title" data-circle-id={circleId}>
+<h4 class="circle-title" data-circle-id={circleId}>
   <svg viewBox="0 0 220 60" class="circle-svg" preserveAspectRatio="none">
     <path
       d="M 110,46
@@ -24,7 +24,7 @@ const { text, circleId } = Astro.props;
     ></path>
   </svg>
   <span class="circle-text">{text}</span>
-</h3>
+</h4>
 
 <style>
   .circle-title {

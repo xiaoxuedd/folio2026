@@ -1,0 +1,25 @@
+# Cache static assets for 1 week (immutable since they have hashed filenames)
+/assets/*
+  Cache-Control: public, max-age=604800, immutable
+
+# Cache fonts for 1 week
+*.woff2
+  Cache-Control: public, max-age=604800, immutable
+
+# Cache images for 1 week (they have hashed filenames in assets)
+*.webp
+  Cache-Control: public, max-age=604800, immutable
+*.png
+  Cache-Control: public, max-age=604800, immutable
+*.jpg
+  Cache-Control: public, max-age=604800, immutable
+*.svg
+  Cache-Control: public, max-age=604800, immutable
+
+# Cache HTML files for 1 hour (so updates propagate quickly)
+/*.html
+  Cache-Control: public, max-age=3600, must-revalidate
+
+# Cache root index
+/
+  Cache-Control: public, max-age=3600, must-revalidate
