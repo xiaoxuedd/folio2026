@@ -225,6 +225,11 @@ if (typeof project.image === 'string') {
     line-height: var(--line-height-body);
     margin: 0 0 var(--spacing-sm);
     color: rgba(255, 255, 255, 0.95);
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .overlay-disciplines {
@@ -374,6 +379,7 @@ if (typeof project.image === 'string') {
     .overlay-body {
       font-size: var(--font-size-body-1);
       margin-bottom: var(--spacing-sm);
+      -webkit-line-clamp: 4;
     }
 
     .disciplines-list li {

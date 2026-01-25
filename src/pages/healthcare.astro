@@ -899,7 +899,6 @@ const testimonials = [
     background: radial-gradient(
       circle at center,
       var(--color-primary-alpha-medium) 0%,
-      var(--color-icterine-alpha-light) 30%,
       transparent 50%
     );
     opacity: 0.3;
@@ -964,12 +963,12 @@ const testimonials = [
 
   .reflection-card:hover::before {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(0.75);
   }
 
   /* Third card - slightly larger scale on hover */
   .reflection-card:nth-child(3):hover::before {
-    transform: scale(1.1);
+    transform: scale(0.8);
   }
 
   .reflection-card:hover::after {
