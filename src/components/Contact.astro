@@ -558,14 +558,54 @@ const metrics = [
     });
   }
 
+  function setupAnalytics() {
+    // Track contact link clicks
+    const emailLink = document.querySelector('a[href^="mailto:"]');
+    const linkedinLink = document.querySelector('a[href*="linkedin.com"]');
+    const resumeLink = document.querySelector('a[href*="resume"]');
+
+    if (emailLink) {
+      emailLink.addEventListener('click', () => {
+        if (window.gtag) {
+          window.gtag('event', 'contact_click', {
+            contact_method: 'email'
+          });
+        }
+      });
+    }
+
+    if (linkedinLink) {
+      linkedinLink.addEventListener('click', () => {
+        if (window.gtag) {
+          window.gtag('event', 'contact_click', {
+            contact_method: 'linkedin'
+          });
+        }
+      });
+    }
+
+    if (resumeLink) {
+      resumeLink.addEventListener('click', () => {
+        if (window.gtag) {
+          window.gtag('event', 'file_download', {
+            file_name: 'resume-xiaoxue.pdf',
+            link_text: 'Resume'
+          });
+        }
+      });
+    }
+  }
+
   // Run on page load
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       setupCTAHiding();
       setupIconHoverEffect();
+      setupAnalytics();
     });
   } else {
     setupCTAHiding();
     setupIconHoverEffect();
+    setupAnalytics();
   }
 </script>
