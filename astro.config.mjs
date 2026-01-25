@@ -1,13 +1,10 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 
-// Use base path only in production (GitHub Pages)
-const base = process.env.NODE_ENV === 'production' ? '/folio2026/' : '/';
-
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://xiaoxuedd.github.io',
-  base: base,
+  site: 'https://designdoings.com',
+  base: '/',
   integrations: [react()],
   output: 'static',
   build: {
@@ -28,7 +25,7 @@ export default defineConfig({
   },
   image: {
     service: { entrypoint: 'astro/assets/services/sharp' },
-    domains: ['xiaoxuedd.github.io'],
+    domains: ['designdoings.com'],
     formats: ['webp', 'avif'],
     quality: 80
   }
