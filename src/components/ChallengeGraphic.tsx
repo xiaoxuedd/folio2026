@@ -1,5 +1,5 @@
 import './ChallengeGraphic.css';
-import challengeBackImg from '../images/challenge-back.svg';
+import challengeBackImg from '../images/challenge-back.webp';
 
 // Label data extracted from the diagram
 const labels = [

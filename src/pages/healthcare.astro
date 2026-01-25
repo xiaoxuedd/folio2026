@@ -11,17 +11,17 @@ import JourneyAnimation from '../components/JourneyAnimation';
 import ImageCarousel from '../components/ImageCarousel';
 import TestimonialCarousel from '../components/TestimonialCarousel';
 import { Image, getImage } from 'astro:assets';
+import { Scale, ArrowRightLeft, Sparkles } from 'lucide-react';
 
 // Import images
-import challengeImage from '../images/healthcare-challenge.png';
-import pillar1Diagram1 from '../images/healthcare-pillar-1-diagram-1.png';
-import pillar1Diagram2 from '../images/healthcare-pillar-1-diagram-2.png';
-import pillar2Image1 from '../images/healthcare-pillar-2-1.png';
-import pillar2Image2Day from '../images/healthcare-pillar-2-2-day.png';
-import pillar2Image2Night from '../images/healthcare-pillar-2-2-night.png';
-import pillar3Localization from '../images/healthcare-pillar-3-localization.png';
-import pillar4Toolkit1 from '../images/healthcare-pillar-4-toolkit-1.png';
-import pillar4Toolkit2 from '../images/healthcare-pillar-4-toolkit-2.png';
+import pillar1Diagram1 from '../images/healthcare-pillar-1-diagram-1.webp';
+import pillar1Diagram2 from '../images/healthcare-pillar-1-diagram-2.webp';
+import pillar2Image1 from '../images/healthcare-pillar-2-1.webp';
+import pillar2Image2Day from '../images/healthcare-pillar-2-2-day.webp';
+import pillar2Image2Night from '../images/healthcare-pillar-2-2-night.webp';
+import pillar3Localization from '../images/healthcare-pillar-3-localization.webp';
+import pillar4Toolkit1 from '../images/healthcare-pillar-4-toolkit-1.webp';
+import pillar4Toolkit2 from '../images/healthcare-pillar-4-toolkit-2.webp';
 
 const baseUrl = import.meta.env.BASE_URL;
 
@@ -43,6 +43,25 @@ const pillar4Images = await Promise.all([
   getImage({ src: pillar4Toolkit1, format: "webp" }),
   getImage({ src: pillar4Toolkit2, format: "webp" })
 ]);
+
+// Reflection cards data
+const reflections = [
+  {
+    icon: Scale,
+    title: "Balancing bottom-up insights with top-down sponsorship",
+    description: "Markets know the reality. Leadership controls the levers. We often sat in the middle, getting both sides to move in the same direction."
+  },
+  {
+    icon: ArrowRightLeft,
+    title: "Change feels uncomfortable",
+    description: "We asked compliance-driven pharma to try creative ways of thinking, while requiring design team to learn clinical terminologies. Everyone had to stretch. Trust made that stretch possible."
+  },
+  {
+    icon: Sparkles,
+    title: "It could be done differently now",
+    description: "With today's AI and agentic capabilities, many of the workflows we built could now be further accelerated or reimagined."
+  }
+];
 
 // Impact metrics data
 const deliveryMetrics = [
@@ -313,13 +332,19 @@ const testimonials = [
         <!-- 5. Reflection Section -->
         <section id="reflection" class="reflections-section" data-aos="fade-up">
           <h2>Learnings & Reflections</h2>
-          <div class="reflection-content">
-            <p>Insights and learnings from the 14-month transformation initiative.</p>
-            <ul>
-              <li><strong>Balancing bottom-up insights with top-down sponsorship.</strong> Markets know the reality. Leadership controls the levers. We often sat in the middle, getting both sides to move in the same direction.</li>
-              <li><strong>Change feels uncomfortable.</strong> We asked compliance-driven pharma to try creative ways of thinking, while requiring design team to learn clinical terminologies. Everyone had to stretch. Trust made that stretch possible.</li>
-              <li><strong>It could be done differently now.</strong> With today's AI and agentic capabilities, many of the workflows we built could now be further accelerated or reimagined.</li>
-            </ul>
+          <div class="reflections-grid">
+            {reflections.map((reflection) => {
+              const Icon = reflection.icon;
+              return (
+                <div class="reflection-card">
+                  <div class="reflection-icon">
+                    <Icon size={24} />
+                  </div>
+                  <h3>{reflection.title}</h3>
+                  <p>{reflection.description}</p>
+                </div>
+              );
+            })}
           </div>
         </section>
 
@@ -837,33 +862,152 @@ const testimonials = [
 
   /* 12. Reflections Section */
   .reflections-section {
-    margin: var(--spacing-md) 0;
+    margin: var(--spacing-xl) 0;
   }
 
   .reflections-section h2 {
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
     font-size: var(--font-size-h2);
     font-weight: var(--font-weight-semibold);
   }
 
-  .reflection-content {
-    max-width: var(--text-width-single);
+  .reflections-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-md);
   }
 
-  .reflection-content p {
-    color: var(--color-text-light);
+  .reflection-card {
+    position: relative;
+    padding: var(--spacing-md);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    transition: all 0.7s ease;
+    overflow: hidden;
+    will-change: transform, border-color, background, box-shadow;
   }
 
-  .reflection-content ul {
-    margin-top: 1rem;
-    max-width: var(--text-width-column);
+  /* Animated gradient overlay */
+  .reflection-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      circle at center,
+      var(--color-primary-alpha-medium) 0%,
+      var(--color-icterine-alpha-light) 30%,
+      transparent 50%
+    );
+    opacity: 0.3;
+    transform: scale(0.5);
+    transform-origin: top right;
+    transition: all 0.7s ease;
+    pointer-events: none;
+    will-change: transform, opacity;
   }
 
-  .reflection-content ul li {
-    margin-bottom: var(--spacing-xs);
+  /* Variation for second card - gradient from top left */
+  .reflection-card:nth-child(2)::before {
+    top: -50%;
+    left: -50%;
+    right: auto;
+    transform-origin: top left;
+  }
+
+  /* Variation for third card - gradient from bottom right */
+  .reflection-card:nth-child(3)::before {
+    top: auto;
+    bottom: -50%;
+    transform-origin: bottom right;
+    transition: all 0.8s ease;
+  }
+
+  /* Corner accent blur */
+  .reflection-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 128px;
+    height: 128px;
+    background: var(--color-primary);
+    opacity: 0.1;
+    filter: blur(48px);
+    transition: all 0.7s ease;
+    pointer-events: none;
+    will-change: opacity, width, height;
+  }
+
+  /* Second card - corner blur from top left */
+  .reflection-card:nth-child(2)::after {
+    left: 0;
+    right: auto;
+  }
+
+  /* Third card - corner blur from bottom right with slower transition */
+  .reflection-card:nth-child(3)::after {
+    top: auto;
+    bottom: 0;
+    transition: all 0.8s ease;
+  }
+
+  .reflection-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-4px);
+    background: var(--color-bg);
+    box-shadow: 0 8px 24px var(--color-primary-alpha-medium);
+  }
+
+  .reflection-card:hover::before {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Third card - slightly larger scale on hover */
+  .reflection-card:nth-child(3):hover::before {
+    transform: scale(1.1);
+  }
+
+  .reflection-card:hover::after {
+    opacity: 0.2;
+    width: 200px;
+    height: 200px;
+  }
+
+  .reflection-icon {
+    position: relative;
+    z-index: 1;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-primary);
+    transition: all 0.3s ease;
+  }
+
+  .reflection-card h3 {
+    position: relative;
+    z-index: 1;
+    font-size: var(--font-size-body-0);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.4;
+  }
+
+  .reflection-card p {
+    position: relative;
+    z-index: 1;
     font-size: var(--font-size-body-1);
+    color: var(--color-text-secondary);
     line-height: var(--line-height-body);
-    color: var(--color-text-light);
   }
 
   /* 13. Footer CTA */
@@ -891,6 +1035,11 @@ const testimonials = [
 
     .image-grid {
       grid-template-columns: 1fr;
+    }
+
+    .reflections-grid {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-sm);
     }
   }
 

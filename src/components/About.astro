@@ -105,7 +105,7 @@ const logos: ClientLogo[] = [
   </div>
 </section>
 
-<script define:vars={{ logos }}>
+<script is:inline define:vars={{ logos }}>
   // Update logo images based on current theme
   function updateLogos() {
     const theme = document.documentElement.getAttribute('data-theme');

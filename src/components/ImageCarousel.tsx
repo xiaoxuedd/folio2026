@@ -57,12 +57,6 @@ const ImageCarousel = ({ images, autoPlay = true, interval = 5000, useLabels = f
     setCurrentIndex(index);
   };
 
-  const fadeVariants = {
-    enter: { opacity: 0 },
-    center: { opacity: 1 },
-    exit: { opacity: 0 }
-  };
-
   // Get the appropriate image source based on theme
   const getCurrentImage = (image: typeof images[0]) => {
     if (isDark && image.darkSrc) {

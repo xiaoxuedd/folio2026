@@ -2,88 +2,102 @@
 import EmailIcon from './icons/EmailIcon.astro';
 import LinkedInIcon from './icons/LinkedInIcon.astro';
 import DownloadIcon from './icons/DownloadIcon.astro';
+import { ProfilePhoto } from './ProfilePhoto';
+import HeroCTAAlternative from './HeroCTAAlternative';
+import profileImage from '../images/xiaoxue-photo-2.jpeg';
+
+const metrics = [
+  { number: '10+', title: 'years experience', description: 'designing E2E products and services across consultancy and in-house teams', color: 'primary', colSpan: 5, rowSpan: 1, delay: '0s' },
+  { number: '£30M+', title: 'in revenue and efficiency gains', description: 'driven through systemic service innovations', color: 'gold', colSpan: 5, rowSpan: 1, delay: '0.1s' },
+  { number: '15+', title: 'international markets', description: 'balancing global consistency with localised execution', color: 'gold', colSpan: 5, rowSpan: 1, delay: '0.2s' },
+  { number: '5+', title: 'organisational transformation', description: 'coordinating teams across commercials, data, operations, legal & compliance, and support', color: 'gold', colSpan: 6, rowSpan: 2, delay: '0.25s' },
+  { number: '10M+', title: 'users and teams', description: 'optimised experiences with measurable improvements in conversion, satisfaction, and efficiency', color: 'primary', colSpan: 9, rowSpan: 1, delay: '0.3s' },
+  { number: '10+', title: 'products', description: 'delivered from concept to live operation and scaled adoption', color: 'primary', colSpan: 9, rowSpan: 1, delay: '0.35s' },
+];
 ---
 
 <section id="contact" class="contact">
   <div class="container">
     <div class="contact-grid">
-      <!-- Left: Contact Info -->
-      <div class="contact-left" data-aos="fade-right" data-aos-delay="100">
-        <div class="contact-content">
-          <h2>About me</h2>
-          <p class="contact-intro">
-            <strong>Hi, I'm Xiaoxue</strong> (/shiau_shweh/ — say it out loud, don't be shy!)
-          </p>
-          <p class="contact-intro">
-            As a designer, I thrive at the intersection of technology, strategy, and humanity, helping organisations see through their users' eyes, spot the opportunities hiding in plain sight, and transform big ideas into tangible change.
-          </p>
-          <p class="contact-intro">
-            From consultancy war rooms to in-house innovation labs, I've learned that the best solutions emerge when we put people first and aren't afraid to challenge business assumptions.
-          </p>
-          <p class="contact-intro">
-            I believe in Design Doings over Design Thinking, turning insight into action and strategy into reality. Whether you're tackling a gnarly problem or exploring new possibilities, I'd love to hear from you.
-          </p>
+      <!-- Left: Profile Photo -->
+      <div class="contact-photo" data-aos="fade-right" data-aos-delay="100">
+        <ProfilePhoto imageSrc={profileImage.src} client:load />
 
-          <div class="contact-links">
-            <a href="mailto:xiaoxue.sherryd@gmail.com" class="contact-icon-link" aria-label="Email">
+        <div class="contact-links">
+          <a href="mailto:xiaoxue.sherryd@gmail.com" class="contact-icon-link" aria-label="Email">
+            <div class="icon-wrapper">
               <EmailIcon />
-              <span class="icon-label">Email</span>
-            </a>
+              <div class="white-icon-layer">
+                <EmailIcon />
+              </div>
+            </div>
+            <span class="icon-label">Email</span>
+          </a>
 
-            <a href="https://www.linkedin.com/in/xiaoxued/" target="_blank" rel="noopener noreferrer" class="contact-icon-link" aria-label="LinkedIn">
+          <a href="https://www.linkedin.com/in/xiaoxued/" target="_blank" rel="noopener noreferrer" class="contact-icon-link" aria-label="LinkedIn">
+            <div class="icon-wrapper">
               <LinkedInIcon />
-              <span class="icon-label">LinkedIn</span>
-            </a>
+              <div class="white-icon-layer">
+                <LinkedInIcon />
+              </div>
+            </div>
+            <span class="icon-label">LinkedIn</span>
+          </a>
 
-            <a href="/resume-xiaoxue.pdf" target="_blank" rel="noopener noreferrer" class="contact-icon-link" aria-label="View Resume">
+          <a href="/resume-xiaoxue.pdf" target="_blank" rel="noopener noreferrer" class="contact-icon-link" aria-label="View Resume">
+            <div class="icon-wrapper">
               <DownloadIcon />
-              <span class="icon-label">Resume</span>
-            </a>
+              <div class="white-icon-layer">
+                <DownloadIcon />
+              </div>
+            </div>
+            <span class="icon-label">Resume</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right: About Content -->
+      <div class="contact-content" data-aos="fade-left" data-aos-delay="100">
+        <h2>About me</h2>
+        <p class="contact-intro">
+          <strong>Hi, I'm Xiaoxue</strong> (/shiau_shweh/ — say it out loud, don't be shy!)
+        </p>
+        <p class="contact-intro">
+          As a designer, I thrive at the intersection of technology, strategy, and humanity, helping organisations see through their users' eyes, spot the opportunities hiding in plain sight, and transform big ideas into tangible change.
+        </p>
+        <p class="contact-intro">
+          From consultancy war rooms to in-house innovation labs, I've learned that the best solutions emerge when we put people first and aren't afraid to challenge business assumptions.
+        </p>
+        <p class="contact-intro">
+          I believe in Design Doing over Design Thinking, turning insight into action and strategy into reality. Whether you're tackling a gnarly problem or exploring new possibilities, I'd love to hear from you.
+        </p>
+      </div>
+    </div>
+
+    <div class="hero-cta-wrapper" data-aos="fade-up" data-aos-delay="400">
+      <HeroCTAAlternative text="Impact at a glance" href="#metrics" client:load />
+    </div>
+  </div>
+</section>
+
+<!-- Metrics Section -->
+<section id="metrics" class="metrics-section">
+  <div class="container">
+    <div class="metrics-flow">
+      {metrics.map((metric) => (
+        <div
+          class={`metric-card metric-card--col-${metric.colSpan}${metric.rowSpan > 1 ? ` metric-card--row-${metric.rowSpan}` : ''}`}
+          style={`animation-delay: ${metric.delay};`}
+        >
+          <div class="metric-glow"></div>
+          <div class="metric-content">
+            <div class={`metric-number ${metric.color}`}>{metric.number}</div>
+            <div class="metric-title">{metric.title}</div>
+            <p class="metric-description">{metric.description}</p>
           </div>
+          <div class={`metric-line ${metric.color}`}></div>
         </div>
-      </div>
-
-      <!-- Right: Bento Box Metrics -->
-      <div class="metrics-bento">
-        <!-- Row 1: Two side by side -->
-        <div class="metric-card slide-from-top" style="animation-delay: 0.1s;">
-          <span class="metric-number">10+</span>
-          <span class="metric-title">products</span>
-          <span class="metric-description">delivered from concept to live operation and scaled adoption</span>
-        </div>
-
-        <div class="metric-card slide-from-right" style="animation-delay: 0.15s;">
-          <span class="metric-number">15+</span>
-          <span class="metric-title">international markets</span>
-          <span class="metric-description">balancing global consistency with localised execution</span>
-        </div>
-
-        <!-- Row 2: Full width -->
-        <div class="metric-card metric-wide zoom-fade" style="animation-delay: 0.2s;">
-          <span class="metric-number">10+</span>
-          <span class="metric-title">years experience</span>
-          <span class="metric-description">designing E2E products and services across consultancy and in-house teams</span>
-        </div>
-
-        <!-- Row 3-4: Two on left, one tall on right -->
-        <div class="metric-card slide-from-left" style="animation-delay: 0.25s;">
-          <span class="metric-number">5+</span>
-          <span class="metric-title">organisational transformation</span>
-          <span class="metric-description">coordinating teams across commercials, data, operations, legal & compliance, and support</span>
-        </div>
-
-        <div class="metric-card metric-tall slide-from-right" style="animation-delay: 0.3s;">
-          <span class="metric-number">10M+</span>
-          <span class="metric-title">users and teams</span>
-          <span class="metric-description">with measurable improvements in conversion, satisfaction, and efficiency</span>
-        </div>
-
-        <div class="metric-card slide-from-bottom" style="animation-delay: 0.35s;">
-          <span class="metric-number">£30M+</span>
-          <span class="metric-title">in revenue and efficiency gains</span>
-          <span class="metric-description">driven through systemic service innovations</span>
-        </div>
-      </div>
+      ))}
     </div>
   </div>
 </section>
@@ -91,9 +105,10 @@ import DownloadIcon from './icons/DownloadIcon.astro';
 <style>
   .contact {
     background: var(--color-bg);
-    padding: var(--spacing-xl) var(--spacing-md);
+    padding: var(--spacing-xl) var(--spacing-md) var(--spacing-2xl);
     transition: background-color 0.3s ease;
     min-height: 100vh;
+    position: relative;
     display: flex;
     align-items: center;
   }
@@ -104,13 +119,21 @@ import DownloadIcon from './icons/DownloadIcon.astro';
 
   .contact-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 2fr;
     gap: var(--spacing-xl);
     align-items: center;
   }
 
-  /* Left Side - Contact Info */
-  .contact-left {
+  /* Left Side - Profile Photo */
+  .contact-photo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Right Side - About Content */
+  .contact-content {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -135,7 +158,8 @@ import DownloadIcon from './icons/DownloadIcon.astro';
   .contact-links {
     display: flex;
     align-items: center;
-    gap: var(--gap-xs);
+    justify-content: center;
+    gap: var(--spacing-sm);
     margin-top: var(--spacing-md);
   }
 
@@ -148,14 +172,100 @@ import DownloadIcon from './icons/DownloadIcon.astro';
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease;
     text-decoration: none;
     position: relative;
+    overflow: visible;
   }
 
-  .contact-icon-link :global(svg) {
+  .icon-wrapper {
+    position: relative;
     width: var(--icon-2xl);
     height: var(--icon-2xl);
+  }
+
+  .icon-wrapper > :global(svg) {
+    width: var(--icon-2xl);
+    height: var(--icon-2xl);
+  }
+
+  .white-icon-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--icon-2xl);
+    height: var(--icon-2xl);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .white-icon-layer :global(svg) {
+    width: var(--icon-2xl);
+    height: var(--icon-2xl);
+  }
+
+  .contact-icon-link :global(svg circle),
+  .contact-icon-link :global(svg rect) {
+    transition: none;
+  }
+
+  .contact-icon-link :global(svg path) {
+    stroke: var(--color-icon-stroke);
+    transition: none;
+  }
+
+  /* Base circle color */
+  .contact-icon-link :global(svg circle),
+  .contact-icon-link :global(svg rect) {
+    fill: var(--color-icon-bg);
+  }
+
+  /* Wipe effect on circle background */
+  .contact-icon-link:hover :global(svg circle),
+  .contact-icon-link:hover :global(svg rect) {
+    fill: var(--color-primary);
+    animation: wipeCircle 0.4s ease-out forwards;
+  }
+
+  /* Reveal white icon layer on hover */
+  .contact-icon-link:hover .white-icon-layer {
+    opacity: 1;
+  }
+
+  /* White icon has white stroke */
+  .contact-icon-link .white-icon-layer :global(svg path) {
+    stroke: white;
+  }
+
+  /* Mask the white icon layer to match circle expansion */
+  .contact-icon-link:hover .white-icon-layer {
+    mask-image: radial-gradient(
+      circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      black 49.9%,
+      transparent 50%
+    );
+    mask-size: 0% 0%;
+    mask-position: var(--mouse-x, 50%) var(--mouse-y, 50%);
+    mask-repeat: no-repeat;
+    animation: revealWhite 0.48s ease-out 0.01s forwards;
+  }
+
+  @keyframes wipeCircle {
+    0% {
+      clip-path: circle(0% at var(--mouse-x, 50%) var(--mouse-y, 50%));
+    }
+    100% {
+      clip-path: circle(150% at var(--mouse-x, 50%) var(--mouse-y, 50%));
+    }
+  }
+
+  @keyframes revealWhite {
+    0% {
+      mask-size: 0% 0%;
+    }
+    100% {
+      mask-size: 300% 300%;
+    }
   }
 
   .icon-label {
@@ -180,147 +290,182 @@ import DownloadIcon from './icons/DownloadIcon.astro';
     transform: translateY(0);
   }
 
-  /* Right Side - Bento Box Metrics */
-  .metrics-bento {
+  .hero-cta-wrapper {
+    position: absolute;
+    bottom: var(--spacing-lg);
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    z-index: 10;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .hero-cta-wrapper.hidden {
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none;
+  }
+
+  /* Metrics Section */
+  .metrics-section {
+    background: var(--color-bg);
+    padding: var(--spacing-xl) 0;
+    transition: background-color 0.3s ease;
+    position: relative;
+  }
+
+  .metrics-section .container {
+    max-width: 70%;
+  }
+
+  .metrics-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent, var(--color-bg-secondary), transparent);
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .metrics-flow {
+    margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(15, 1fr);
+    grid-auto-rows: minmax(150px, auto);
     gap: var(--spacing-sm);
+    position: relative;
+    z-index: 1;
   }
 
   .metric-card {
-    background: var(--color-bg-secondary);
+    position: relative;
+    padding: var(--spacing-md);
+    background: var(--color-bg);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-sm);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: var(--spacing-xs);
-    text-align: left;
-    transition: all 0.3s ease;
+    border-radius: var(--radius-xl);
+    transition: all 0.5s ease;
+    cursor: default;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  /* Column span utilities */
+  .metric-card--col-1 { grid-column: span 1; }
+  .metric-card--col-2 { grid-column: span 2; }
+  .metric-card--col-3 { grid-column: span 3; }
+  .metric-card--col-4 { grid-column: span 4; }
+  .metric-card--col-5 { grid-column: span 5; }
+  .metric-card--col-6 { grid-column: span 6; }
+  .metric-card--col-7 { grid-column: span 7; }
+  .metric-card--col-8 { grid-column: span 8; }
+  .metric-card--col-9 { grid-column: span 9; }
+  .metric-card--col-10 { grid-column: span 10; }
+  .metric-card--col-11 { grid-column: span 11; }
+  .metric-card--col-12 { grid-column: span 12; }
+  .metric-card--col-13 { grid-column: span 13; }
+  .metric-card--col-14 { grid-column: span 14; }
+  .metric-card--col-15 { grid-column: span 15; }
+
+  /* Row span utilities */
+  .metric-card--row-1 { grid-row: span 1; }
+  .metric-card--row-2 { grid-row: span 2; }
+  .metric-card--row-3 { grid-row: span 3; }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 
   .metric-card:hover {
-    border-color: var(--color-primary);
-    transform: translateY(-2px);
-    background: var(--color-bg);
+    border-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
   }
 
-  .metric-wide {
-    grid-column: span 2;
+  .metric-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-xl);
+    background: linear-gradient(135deg, var(--color-primary-alpha-light), var(--color-gold-alpha-light));
+    opacity: 0;
+    transition: opacity 0.5s ease;
   }
 
-  .metric-tall {
-    grid-row: span 2;
-    grid-column: 2;
+  .metric-card:hover .metric-glow {
+    opacity: 1;
+  }
+
+  .metric-content {
+    position: relative;
+    z-index: 2;
   }
 
   .metric-number {
     font-size: var(--font-size-h2);
     font-weight: var(--font-weight-regular);
+    line-height: 1;
+    margin-bottom: var(--spacing-xs);
+    display: inline-block;
+    transition: transform 0.3s ease;
+  }
+
+  .metric-card:hover .metric-number {
+    transform: scale(1.1);
+  }
+
+  .metric-number.primary {
     color: var(--color-primary);
-    line-height: 1.2;
-    transition: color 0.3s ease;
+  }
+
+  .metric-number.gold {
+    color: var(--color-gold);
   }
 
   .metric-title {
-    font-size: var(--font-size-body-0);
-    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-body-1);
+    font-weight: var(--font-weight-semibold);
     color: var(--color-text);
-    line-height: var(--line-height-body);
-    transition: color 0.3s ease;
+    margin-bottom: var(--spacing-xs);
+    display: block;
   }
 
   .metric-description {
-    font-size: var(--font-size-ui-xs);
+    font-size: var(--font-size-ui);
     color: var(--color-text-secondary);
-    font-weight: var(--font-weight-regular);
     line-height: var(--line-height-body);
-    transition: color 0.3s ease;
+    margin: 0;
   }
 
-  /* Slide animations */
-  @keyframes slideFromLeft {
-    from {
-      opacity: 0;
-      transform: translateX(-60px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
+  .metric-line {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    transition: width 0.5s ease;
   }
 
-  @keyframes slideFromRight {
-    from {
-      opacity: 0;
-      transform: translateX(60px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
+  .metric-card:hover .metric-line {
+    /* width: 50%; */
   }
 
-  @keyframes slideFromTop {
-    from {
-      opacity: 0;
-      transform: translateY(-60px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  .metric-line.primary {
+    background: color-mix(in srgb, var(--color-primary) 50%, transparent);
   }
 
-  @keyframes slideFromBottom {
-    from {
-      opacity: 0;
-      transform: translateY(60px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  .metric-line.gold {
+    background: color-mix(in srgb, var(--color-gold) 50%, transparent);
   }
 
-  @keyframes zoomFade {
-    from {
-      opacity: 0;
-      transform: scale(0.8);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-
-  .slide-from-left {
-    opacity: 0;
-    animation: slideFromLeft 0.6s ease-out forwards;
-  }
-
-  .slide-from-right {
-    opacity: 0;
-    animation: slideFromRight 0.6s ease-out forwards;
-  }
-
-  .slide-from-top {
-    opacity: 0;
-    animation: slideFromTop 0.6s ease-out forwards;
-  }
-
-  .slide-from-bottom {
-    opacity: 0;
-    animation: slideFromBottom 0.6s ease-out forwards;
-  }
-
-  .zoom-fade {
-    opacity: 0;
-    animation: zoomFade 0.6s ease-out forwards;
-  }
-
+  /* Responsive */
   @media (max-width: 968px) {
     .contact {
       min-height: auto;
@@ -332,28 +477,95 @@ import DownloadIcon from './icons/DownloadIcon.astro';
       gap: var(--spacing-lg);
     }
 
-    .metrics-bento {
+    .hero-cta-wrapper {
+      position: static;
+      margin-top: var(--spacing-lg);
+    }
+
+    .metrics-flow {
       grid-template-columns: repeat(2, 1fr);
     }
 
-    .metric-large {
-      grid-column: span 1;
-      grid-row: span 1;
+    /* Reset all cards to span full 2 columns on tablet */
+    [class*="metric-card--col-"] {
+      grid-column: span 2;
     }
 
-    .metric-wide {
-      grid-column: span 2;
+    .metric-card--row-2,
+    .metric-card--row-3 {
+      grid-row: span 1;
     }
   }
 
   @media (max-width: 768px) {
-    .metrics-bento {
+    .hero-cta-wrapper {
+      position: absolute;
+      bottom: var(--spacing-md);
+    }
+
+    .metrics-flow {
       grid-template-columns: 1fr;
     }
 
-    .metric-large,
-    .metric-wide {
+    /* Stack everything on mobile */
+    [class*="metric-card--col-"] {
       grid-column: span 1;
+    }
+
+    .metric-card--row-2,
+    .metric-card--row-3 {
+      grid-row: span 1;
     }
   }
 </style>
+
+<script>
+  function setupCTAHiding() {
+    const ctaWrapper = document.querySelector('.contact .hero-cta-wrapper');
+    const metricsSection = document.getElementById('metrics');
+
+    if (!ctaWrapper || !metricsSection) return;
+
+    const handleScroll = () => {
+      const metricsRect = metricsSection.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+
+      // Hide button when metrics section is 150px from bottom of viewport
+      if (metricsRect.top < viewportHeight - 150) {
+        ctaWrapper.classList.add('hidden');
+      } else {
+        ctaWrapper.classList.remove('hidden');
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Initial check
+  }
+
+  function setupIconHoverEffect() {
+    const iconLinks = document.querySelectorAll('.contact-icon-link');
+
+    iconLinks.forEach(link => {
+      link.addEventListener('mouseenter', (e) => {
+        const mouseEvent = e as MouseEvent;
+        const rect = link.getBoundingClientRect();
+        const x = ((mouseEvent.clientX - rect.left) / rect.width) * 100;
+        const y = ((mouseEvent.clientY - rect.top) / rect.height) * 100;
+
+        (link as HTMLElement).style.setProperty('--mouse-x', `${x}%`);
+        (link as HTMLElement).style.setProperty('--mouse-y', `${y}%`);
+      });
+    });
+  }
+
+  // Run on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      setupCTAHiding();
+      setupIconHoverEffect();
+    });
+  } else {
+    setupCTAHiding();
+    setupIconHoverEffect();
+  }
+</script>

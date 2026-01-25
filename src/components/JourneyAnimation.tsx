@@ -128,7 +128,7 @@ const JourneyAnimation = () => {
               exit={{ opacity: 0 }}
               transition={transitionConfig}
             >
-              <JourneyCornerIcons stage={3} />
+              <JourneyCornerIcons />
             </motion.div>
           )}
         </AnimatePresence>

@@ -11,7 +11,6 @@ interface Props {
 
 const { project, index} = Astro.props;
 const isFeatured = index === 0;
-const description = index === 0 ? project.description : (project.shortDescription || project.description);
 const CardWrapper = project.link ? 'a' : 'div';
 const baseUrl = import.meta.env.BASE_URL;
 

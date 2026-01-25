@@ -7,7 +7,7 @@
 
 const PORT = 4321;
 const BASE_URL = `http://localhost:${PORT}`;
-const PAGES_TO_TEST = ['/', '/healthcare', '/project-example'];
+const PAGES_TO_TEST = ['/', '/healthcare'];
 
 // ANSI colors
 const colors = {

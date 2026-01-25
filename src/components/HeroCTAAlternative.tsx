@@ -1,10 +1,15 @@
 import { motion } from 'framer-motion';
 import './HeroCTAAlternative.css';
 
-const HeroCTAAlternative = () => {
+interface HeroCTAAlternativeProps {
+  text?: string;
+  href?: string;
+}
+
+const HeroCTAAlternative = ({ text = "View my work", href = "#projects" }: HeroCTAAlternativeProps) => {
   return (
     <motion.a
-      href="#projects"
+      href={href}
       className="hero-cta-alt"
       whileHover="hover"
       initial="initial"
@@ -17,7 +22,7 @@ const HeroCTAAlternative = () => {
         }}
         transition={{ duration: 0.3, ease: "easeOut" }}
       >
-        <span className="hero-cta-alt-text">View my work</span>
+        <span className="hero-cta-alt-text">{text}</span>
         <motion.div
           className="hero-cta-alt-icon"
           variants={{

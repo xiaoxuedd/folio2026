@@ -26,8 +26,6 @@ const { number } = Astro.props;
       path.style.strokeDasharray = `${pathLength}`;
       path.style.strokeDashoffset = `${pathLength}`;
 
-      const pillarNumber = pillar.getAttribute('data-pillar');
-
       const handleScroll = () => {
         const rect = pillar.getBoundingClientRect();
         const windowHeight = window.innerHeight;

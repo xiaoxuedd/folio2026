@@ -22,11 +22,7 @@ const CENTER_Y = 2088 / 2; // 1044
 const STAGE3_OFFSET_X = 0;
 const STAGE3_OFFSET_Y = 0;
 
-interface JourneyCornerIconsProps {
-  stage: 3;
-}
-
-const JourneyCornerIcons = ({ stage }: JourneyCornerIconsProps) => {
+const JourneyCornerIcons = () => {
   return (
     <svg
       width="2878"

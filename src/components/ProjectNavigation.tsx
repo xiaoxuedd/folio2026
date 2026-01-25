@@ -47,7 +47,6 @@ export default function ProjectNavigation() {
         return;
       }
 
-      const windowHeight = window.innerHeight;
       const sectionElements = sections.map(section =>
         document.getElementById(section.id)
       );

@@ -251,6 +251,15 @@ try {
     // protected page doesn't exist, that's fine
   }
 
+  // Check healthcare.html if it exists
+  try {
+    const healthcarePath = join(DIST_DIR, 'healthcare', 'index.html');
+    statSync(healthcarePath);
+    htmlFiles.push({ name: 'healthcare/index.html', path: healthcarePath });
+  } catch (e) {
+    // healthcare page doesn't exist, that's fine
+  }
+
   if (htmlFiles.length === 0) {
     console.log(`${colors.red}No HTML files found in dist/${colors.reset}`);
     process.exit(1);

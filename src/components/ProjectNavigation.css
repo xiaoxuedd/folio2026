@@ -106,11 +106,12 @@
   top: 50%;
   left: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  background: var(--color-primary);
   transform: translateY(-50%);
   transition: width var(--transition-normal) cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: var(--radius-xs);
   z-index: 1;
+  box-shadow: 0 0 4px rgba(100, 67, 254, 0.4);
 }
 
 .progress-bubbles {
@@ -130,7 +131,7 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: rgba(228, 228, 231, 0.6);
+  background: var(--color-primary-alpha-medium);
   transform: translateY(-50%);
   z-index: -1;
 }
