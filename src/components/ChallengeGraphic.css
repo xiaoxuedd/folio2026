@@ -1,18 +1,13 @@
 .challenge-graphic-container {
   position: relative;
-  width: 75%;
+  height: 100%;
+  max-height: 500px;
   margin: 0 auto;
   container-type: inline-size;
+  aspect-ratio: 857 / 1169;
   --color-diagram-bg: #ffffff;
   --color-diagram-text: #000000;
   --color-diagram-border: #e0e0e0;
-}
-
-/* Maintain aspect ratio - 1169/857 = 136.4% */
-.challenge-graphic-container::before {
-  content: '';
-  display: block;
-  padding-top: 136.4%;
 }
 
 .challenge-back {

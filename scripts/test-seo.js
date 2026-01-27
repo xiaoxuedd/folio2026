@@ -237,9 +237,10 @@ try {
     process.exit(1);
   }
 
-  // Find all HTML files
+  // Find all HTML files (exclude redirect pages)
+  const REDIRECT_PAGES = ['about-me.html', 'contact.html'];
   const htmlFiles = readdirSync(DIST_DIR)
-    .filter(file => file.endsWith('.html'))
+    .filter(file => file.endsWith('.html') && !REDIRECT_PAGES.includes(file))
     .map(file => ({ name: file, path: join(DIST_DIR, file) }));
 
   // Check protected.html if it exists
