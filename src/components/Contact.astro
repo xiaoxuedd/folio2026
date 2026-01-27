@@ -4,6 +4,7 @@ import LinkedInIcon from './icons/LinkedInIcon.astro';
 import DownloadIcon from './icons/DownloadIcon.astro';
 import { ProfilePhoto } from './ProfilePhoto';
 import HeroCTAAlternative from './HeroCTAAlternative';
+import ClosingStatement from './ClosingStatement';
 import profileImage from '../images/xiaoxue-photo-2.jpeg';
 
 const metrics = [
@@ -68,9 +69,6 @@ const metrics = [
         <p class="contact-intro">
           From consultancy war rooms to in-house innovation labs, I've learned that the best solutions emerge when we put people first and aren't afraid to challenge business assumptions.
         </p>
-        <p class="contact-intro">
-          I believe in Design Doing over Design Thinking, turning insight into action and strategy into reality. Whether you're tackling a gnarly problem or exploring new possibilities, I'd love to hear from you.
-        </p>
       </div>
     </div>
 
@@ -81,7 +79,7 @@ const metrics = [
 </section>
 
 <!-- Metrics Section -->
-<section id="metrics" class="metrics-section">
+<section id="metrics" class="metrics-section" data-aos="fade-up">
   <div class="container">
     <div class="metrics-flow">
       {metrics.map((metric) => (
@@ -99,6 +97,8 @@ const metrics = [
         </div>
       ))}
     </div>
+
+    <ClosingStatement client:load />
   </div>
 </section>
 
@@ -121,7 +121,7 @@ const metrics = [
     display: grid;
     grid-template-columns: 1fr 2fr;
     gap: var(--spacing-xl);
-    align-items: center;
+    align-items: start;
   }
 
   /* Left Side - Profile Photo */
@@ -292,7 +292,7 @@ const metrics = [
 
   .hero-cta-wrapper {
     position: absolute;
-    bottom: var(--spacing-lg);
+    bottom: var(--spacing-xl);
     left: 0;
     right: 0;
     display: flex;
@@ -312,9 +312,11 @@ const metrics = [
   /* Metrics Section */
   .metrics-section {
     background: var(--color-bg);
-    padding: var(--spacing-xl) 0;
+    padding-top: 0;
+    padding-bottom: var(--spacing-lg);
     transition: background-color 0.3s ease;
     position: relative;
+    scroll-margin-top: 80px;
   }
 
   .metrics-section .container {
@@ -343,7 +345,7 @@ const metrics = [
   .metric-card {
     position: relative;
     padding: var(--spacing-md);
-    background: var(--color-bg);
+    background: var(--color-bg-secondary);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
     transition: all 0.5s ease;
@@ -463,6 +465,24 @@ const metrics = [
 
   .metric-line.gold {
     background: color-mix(in srgb, var(--color-gold) 50%, transparent);
+  }
+
+  /* Closing Statement */
+  .closing-statement {
+    margin-top: var(--spacing-lg);
+    padding: 0 var(--spacing-md);
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  .closing-text {
+    font-size: var(--font-size-body-0);
+    line-height: var(--line-height-body);
+    color: var(--color-text-light);
+    margin: 0;
+    transition: color 0.3s ease;
   }
 
   /* Responsive */
