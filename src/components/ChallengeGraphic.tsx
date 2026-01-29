@@ -4,11 +4,11 @@ import challengeBackImg from '../images/challenge-back.webp';
 // Label data extracted from the diagram
 const labels = [
   // Ecosystem Circle (top)
-  { text: 'Investors and Funding Bodies', x: 39, y: 15.5 },
-  { text: 'Policy Makers', x: 69, y: 15.5 },
+  { text: 'Investors and Funding Bodies', x: 38.5, y: 15.5 },
+  { text: 'Policy Makers', x: 69.5, y: 15.5 },
   { text: 'Public Health Authorities', x: 50, y: 20 },
-  { text: 'Regulatory Agencies', x: 33, y: 24.5 },
-  { text: 'Payers (public & private)', x: 64.5, y: 24.5 },
+  { text: 'Regulatory Agencies', x: 32.5, y: 24.5 },
+  { text: 'Payers (public & private)', x: 65, y: 24.5 },
 
   // Caring Circle (middle purple)
   { text: 'Treating physicians', x: 10.5, y: 44.5 },
@@ -28,9 +28,9 @@ const labels = [
   // Enabling Circle (bottom)
   { text: 'Technology Solution Provider', x: 50, y: 84.5 },
   { text: 'Logistics & Supply Chain', x: 50, y: 89 },
-  { text: 'Media & Communications', x: 38, y: 93.5 },
-  { text: 'Advocacy groups', x: 68, y: 93.5 },
-  { text: 'HCP Associations', x: 42, y: 98 },
+  { text: 'Media & Communications', x: 37.5, y: 93.5 },
+  { text: 'Advocacy groups', x: 68.5, y: 93.5 },
+  { text: 'HCP Associations', x: 41.5, y: 98 },
   { text: 'HCP KOLS', x: 63, y: 98 },
 ];
 

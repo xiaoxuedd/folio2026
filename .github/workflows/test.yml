@@ -22,6 +22,25 @@ jobs:
       - name: Run SEO tests
         run: pnpm run test:seo
 
+      - name: Start preview server
+        run: pnpm preview > preview.log 2>&1 &
+        env:
+          HOST: localhost
+          PORT: 4321
+
+      - name: Wait for server to be ready
+        run: |
+          echo "Waiting for server to start..."
+          for i in {1..30}; do
+            if curl -fs http://localhost:4321 > /dev/null; then
+              echo "Server is ready!"
+              exit 0
+            fi
+            echo "Waiting... ($i/30)"
+            sleep 2
+          done
+          echo "Server failed to start"
+          exit 1
+
       - name: Run performance tests
         run: pnpm run test:performance
-        continue-on-error: true
