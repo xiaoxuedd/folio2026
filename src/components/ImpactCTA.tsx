@@ -1,11 +1,21 @@
 import { motion } from 'framer-motion';
 import './ImpactCTA.css';
+import { trackEvent } from '../utils/analytics';
 
 const ImpactCTA = () => {
+  const handleClick = () => {
+    trackEvent('cta_click', {
+      cta_location: 'impact_section',
+      cta_text: 'Impact at a glance',
+      destination: '#metrics'
+    });
+  };
+
   return (
     <motion.a
       href="#metrics"
       className="impact-cta"
+      onClick={handleClick}
       whileHover="hover"
       initial="initial"
     >

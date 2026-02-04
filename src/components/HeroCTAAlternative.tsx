@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import './HeroCTAAlternative.css';
+import { trackEvent } from '../utils/analytics';
 
 interface HeroCTAAlternativeProps {
   text?: string;
@@ -7,10 +8,19 @@ interface HeroCTAAlternativeProps {
 }
 
 const HeroCTAAlternative = ({ text = "View my work", href = "#projects" }: HeroCTAAlternativeProps) => {
+  const handleClick = () => {
+    trackEvent('cta_click', {
+      cta_location: 'contact_section',
+      cta_text: text,
+      destination: href
+    });
+  };
+
   return (
     <motion.a
       href={href}
       className="hero-cta-alt"
+      onClick={handleClick}
       whileHover="hover"
       initial="initial"
     >

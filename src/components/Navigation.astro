@@ -507,6 +507,8 @@ const baseUrl = import.meta.env.BASE_URL;
 </style>
 
 <script>
+  import { trackEvent } from '../utils/analytics';
+
   // Scroll behavior
   const header = document.querySelector('.site-header') as HTMLElement | null;
   const navPill = document.querySelector('.nav-pill') as HTMLElement | null;
@@ -549,8 +551,63 @@ const baseUrl = import.meta.env.BASE_URL;
   window.addEventListener('scroll', updateHeaderOnScroll);
   updateHeaderOnScroll();
 
-  // Mobile menu toggle
+  // Analytics: Track navigation link clicks
+  const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      const target = e.currentTarget as HTMLAnchorElement;
+      const linkText = target.textContent?.trim();
+      const linkHref = target.getAttribute('href');
+      const isMobile = target.classList.contains('mobile-nav-link');
+
+      trackEvent('navigation_click', {
+        link_text: linkText,
+        link_destination: linkHref,
+        navigation_type: isMobile ? 'mobile' : 'desktop'
+      });
+    });
+  });
+
+  // Analytics: Track theme toggle clicks
+  const themeToggles = document.querySelectorAll('.theme-toggle, .mobile-theme-toggle');
+  themeToggles.forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      const isMobile = toggle.classList.contains('mobile-theme-toggle');
+
+      trackEvent('theme_toggle', {
+        from_theme: currentTheme,
+        to_theme: newTheme,
+        toggle_location: isMobile ? 'mobile' : 'desktop'
+      });
+    });
+  });
+
+  // Analytics: Track LinkedIn button clicks
+  const linkedinButtons = document.querySelectorAll('.cta-button, .mobile-cta-button');
+  linkedinButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const isMobile = button.classList.contains('mobile-cta-button');
+
+      trackEvent('social_click', {
+        platform: 'linkedin',
+        button_location: isMobile ? 'mobile_nav' : 'desktop_nav'
+      });
+    });
+  });
+
+  // Analytics: Track mobile menu toggle
   const hamburger = document.querySelector('.hamburger');
+  hamburger?.addEventListener('click', () => {
+    const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+
+    trackEvent('mobile_menu_toggle', {
+      action: isExpanded ? 'close' : 'open'
+    });
+  });
+
+  // Mobile menu toggle
   const mobileMenu = document.querySelector('.mobile-menu');
 
   hamburger?.addEventListener('click', () => {

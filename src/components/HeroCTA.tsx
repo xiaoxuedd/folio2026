@@ -1,12 +1,22 @@
 import { motion } from 'framer-motion';
 import { ArrowDown } from 'lucide-react';
 import './HeroCTA.css';
+import { trackEvent } from '../utils/analytics';
 
 const HeroCTA = () => {
+  const handleClick = () => {
+    trackEvent('cta_click', {
+      cta_location: 'hero',
+      cta_text: 'View My Work',
+      destination: '#projects'
+    });
+  };
+
   return (
     <motion.a
       href="#projects"
       className="hero-cta-button"
+      onClick={handleClick}
       whileHover={{
         y: -2,
         backgroundColor: '#6443fe',

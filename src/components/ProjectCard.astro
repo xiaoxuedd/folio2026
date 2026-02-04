@@ -49,6 +49,9 @@ if (typeof project.image === 'string') {
   href={project.link ? `${baseUrl}${project.link}`.replace(/\/\//g, '/') : undefined}
   class={`project-card ${isFeatured ? 'featured' : ''} ${!project.link ? 'no-link' : ''}`}
   data-aos="fade-up"
+  data-project-title={project.title}
+  data-project-category={project.category}
+  data-project-link={project.link || ''}
 >
   <div class="project-image-wrapper">
     <img
@@ -442,3 +445,34 @@ if (typeof project.image === 'string') {
     }
   }
 </style>
+
+<script>
+  import { trackEvent } from '../utils/analytics';
+
+  function setupProjectTracking() {
+    const projectCards = document.querySelectorAll('.project-card:not(.no-link)');
+
+    projectCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const title = card.getAttribute('data-project-title');
+        const category = card.getAttribute('data-project-category');
+        const link = card.getAttribute('data-project-link');
+
+        if (title) {
+          trackEvent('project_click', {
+            project_title: title,
+            project_category: category,
+            project_link: link
+          });
+        }
+      });
+    });
+  }
+
+  // Run on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupProjectTracking);
+  } else {
+    setupProjectTracking();
+  }
+</script>
