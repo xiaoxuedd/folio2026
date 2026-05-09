@@ -1,397 +1,129 @@
-# Xiaoxue's Portfolio - Design Doings
+# Design Doings — Xiaoxue Dong's Portfolio
 
-A modern, fast-loading portfolio website built with Astro, React, and deployed to GitHub Pages. Features smooth scroll animations, interactive project filtering, and password-protected content.
+Personal portfolio site for Xiaoxue Dong, service designer and strategist. Built with Astro + React, statically generated, and deployed to GitHub Pages at [designdoings.com](https://designdoings.com).
 
-## Features
+> **Working with an AI assistant?** Point it at [`CLAUDE.md`](./CLAUDE.md) — it's the orientation doc covering structure, conventions, and "where do I edit X?" lookups.
 
-- **Modern Tech Stack**: Astro 4.x + React 18.x
-- **Smooth Animations**: AOS (Animate On Scroll) library with staggered animations
-- **Interactive Filtering**: Search and category-based project filtering
-- **Password Protection**: SHA-256 hashed password protection for confidential content
-- **Responsive Design**: Mobile-first, fully responsive layout
-- **Fast Loading**: Minimal JavaScript, optimized for performance
-- **GitHub Pages**: Automated deployment with GitHub Actions
-- **Custom Domain**: Support for custom domain configuration
+## Tech stack
 
-## Project Structure
+- **Astro 4** with `@astrojs/react` integration (static output)
+- **React 19** for interactive components (`client:load` / `client:visible` islands)
+- **TypeScript** (strict)
+- **Sharp** image pipeline producing responsive WebP/AVIF
+- **AOS** for scroll-triggered animations
+- **GSAP** + **Framer Motion** for richer interactions
+- **Lucide React** for icons
+- Self-hosted **Inter** via `@fontsource/inter`
+- Light/dark themes via `data-theme` on `<html>` with a pre-paint inline script
+- Google Analytics (gtag) with a small `trackEvent` helper
+
+## Project structure
 
 ```
-portfolio/
-├── .github/
-│   └── workflows/
-│       └── deploy.yml          # GitHub Actions deployment workflow
-├── public/
-│   └── favicon.svg             # Site favicon
-├── src/
-│   ├── components/
-│   │   ├── About.astro         # About section
-│   │   ├── Contact.astro       # Contact section with form
-│   │   ├── Hero.astro          # Hero section with gradient
-│   │   ├── PasswordGate.tsx    # Password input component (React)
-│   │   ├── PasswordGate.css
-│   │   ├── ProtectedContent.tsx # Protected content wrapper (React)
-│   │   ├── ProtectedContent.css
-│   │   ├── ProjectFilter.tsx   # Project filtering component (React)
-│   │   └── ProjectFilter.css
-│   ├── data/
-│   │   └── projects.ts         # Project data and types
-│   ├── layouts/
-│   │   └── Layout.astro        # Main layout with AOS setup
-│   ├── pages/
-│   │   ├── index.astro         # Home page
-│   │   └── protected.astro     # Password-protected case study
-│   └── utils/
-│       └── auth.ts             # Password hashing utilities
-├── astro.config.mjs            # Astro configuration
+folio2026/
+├── astro.config.mjs            # Astro config (custom domain, image pipeline, vendor chunks)
 ├── package.json
-└── tsconfig.json
+├── tsconfig.json
+├── public/                     # Static assets copied verbatim
+│   ├── CNAME                   # designdoings.com
+│   ├── robots.txt, sitemap.xml
+│   ├── favicon + touch icons
+│   ├── resume-xiaoxue.pdf
+│   ├── about-me.html, contact.html   # Legacy meta-refresh redirects
+│   └── images/                 # Static project images & SVGs
+├── scripts/
+│   ├── optimize-images.sh
+│   ├── test-seo.js
+│   └── test-performance.js
+└── src/
+    ├── pages/
+    │   ├── index.astro         # Home (hero, craft, projects, about)
+    │   ├── about.astro         # About + contact
+    │   ├── healthcare.astro    # Healthcare case study
+    │   └── 404.astro
+    ├── layouts/
+    │   └── Layout.astro        # HTML shell, meta/OG, design tokens, theme + AOS bootstrap
+    ├── components/             # Astro + React components (see below)
+    ├── config/aos.ts           # AOS init options
+    ├── data/
+    │   ├── projects.ts         # Project content + image imports
+    │   └── expertise.ts        # Expertise areas for the Craft section
+    ├── images/                 # Bundled assets processed by Astro
+    ├── registry/magicui/
+    │   └── highlighter.tsx     # rough-notation highlighter wrapper
+    ├── utils/
+    │   └── analytics.ts        # gtag event helper
+    └── env.d.ts
 ```
 
-## Local Setup
+### Components
 
-### Prerequisites
+`src/components/` mixes Astro components (page sections + icons) with React islands (interactive bits). Highlights:
 
-- Node.js 18.x or higher
-- npm or pnpm
+- **Layout/chrome:** `Navigation.astro`, `Footer.astro`
+- **Home:** `Hero.astro` + `HeroText`, `HeroCTAAlternative`, `Craft.astro` + `CraftAccordion.astro`, `ProjectsShowcase.astro` + `ProjectCard.astro`, `About.astro` (client logo grid)
+- **About page:** `Contact.astro`, `ProfilePhoto`, `ClosingStatement`
+- **Healthcare case study:** `ProjectNavigation`, `ChallengeDiagram`, `ChallengeGraphic`, `JourneyAnimation` (with `JourneyIcons`, `JourneyLabels`, `JourneyLabelsAnimated`, `JourneyCornerIcons`), `ImageCarousel`, `ImpactMetrics` + `GlassIcon`, `TestimonialCarousel`, `PillarNumber.astro`, `CircleTitle.astro`
+- **Icons:** `src/components/icons/*.astro`
 
-### Installation
+## Local setup
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/your-repo-name.git
-   cd your-repo-name
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Set up environment variables** (for local testing of protected content)
-
-   Create a `.env` file in the root directory:
-   ```bash
-   # Generate a password hash
-   echo -n "your-password" | shasum -a 256
-   # Copy the resulting hash
-   ```
-
-   Add to `.env`:
-   ```
-   PUBLIC_PASSWORD_HASH=your-generated-hash-here
-   ```
-
-4. **Start the development server**
-   ```bash
-   npm run dev
-   ```
-
-   The site will be available at `http://localhost:4321`
-
-### Development Commands
+Requirements: Node 18+ and npm.
 
 ```bash
-npm run dev          # Start dev server
-npm run build        # Build for production
-npm run preview      # Preview production build locally
-npm run astro        # Run Astro CLI commands
+npm install
+npm run dev        # http://localhost:4321
 ```
 
-## GitHub Repository Setup
+### Scripts
 
-### 1. Create GitHub Repository
+| Script | What it does |
+| --- | --- |
+| `npm run dev` | Start the Astro dev server |
+| `npm run build` | `astro check` (type check) then `astro build` |
+| `npm run preview` | Serve the production build locally |
+| `npm run test` | Build, then run the SEO smoke test |
+| `npm run test:seo` | Run `scripts/test-seo.js` against the build |
+| `npm run test:performance` | Run `scripts/test-performance.js` |
 
-1. Go to GitHub and create a new repository (e.g., `xiaoxue-portfolio`)
-2. **DO NOT** initialize with README (you already have one)
+## Customising content
 
-### 2. Update Configuration
-
-The `astro.config.mjs` is already configured for a custom domain (designdoings.com).
-
-**If using GitHub Pages without a custom domain:**
-Edit `astro.config.mjs`:
-
-```javascript
-export default defineConfig({
-  site: 'https://yourusername.github.io',
-  base: '/your-repo-name',  // Match your repository name
-  // ... rest of config
-});
-```
-
-**If using a custom domain** (recommended):
-- Keep `site: 'https://www.designdoings.com'`
-- Keep `base: '/'`
-
-### 3. Set Up Password Hash Secret
-
-1. Generate a SHA-256 hash of your desired password:
-   ```bash
-   echo -n "your-secure-password" | shasum -a 256
-   ```
-
-2. In your GitHub repository, go to:
-   **Settings → Secrets and variables → Actions → New repository secret**
-
-3. Add a new secret:
-   - Name: `PASSWORD_HASH`
-   - Value: (paste the hash from step 1)
-
-### 4. Enable GitHub Pages
-
-1. Go to **Settings → Pages**
-2. Under "Build and deployment":
-   - Source: **GitHub Actions**
-
-### 5. Push Your Code
-
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git remote add origin https://github.com/yourusername/your-repo-name.git
-git push -u origin main
-```
-
-The GitHub Action will automatically build and deploy your site.
-
-## Custom Domain Setup (Namecheap)
-
-### 1. Add CNAME File
-
-Create a file named `CNAME` in the `public/` directory:
-
-```
-designdoings.com
-```
-
-**Note**: The site is already configured for designdoings.com with `base: '/'` in `astro.config.mjs`.
-
-### 2. Configure DNS in Namecheap
-
-1. Log in to Namecheap
-2. Go to **Domain List → Manage → Advanced DNS**
-3. Add the following records:
-
-#### For Apex Domain (designdoings.com)
-
-Add four A Records:
-```
-Type: A Record
-Host: @
-Value: 185.199.108.153
-TTL: Automatic
-
-Type: A Record
-Host: @
-Value: 185.199.109.153
-TTL: Automatic
-
-Type: A Record
-Host: @
-Value: 185.199.110.153
-TTL: Automatic
-
-Type: A Record
-Host: @
-Value: 185.199.111.153
-TTL: Automatic
-```
-
-#### For WWW Subdomain (www.designdoings.com)
-
-Add a CNAME Record:
-```
-Type: CNAME Record
-Host: www
-Value: yourusername.github.io.
-TTL: Automatic
-```
-
-**Note**: Make sure to include the trailing dot after `.io.` and replace `yourusername` with your actual GitHub username.
-
-### 3. Configure Custom Domain in GitHub
-
-1. Go to your repository: **Settings → Pages**
-2. Under "Custom domain", enter: `designdoings.com`
-3. Click **Save**
-4. Wait for DNS check to complete (can take up to 24 hours)
-5. Once verified, check **Enforce HTTPS**
-
-### DNS Propagation
-
-DNS changes can take 24-48 hours to fully propagate. You can check the status:
-
-```bash
-# Check A records
-dig designdoings.com
-
-# Check CNAME record
-dig www.designdoings.com
-```
-
-Or use online tools like [dnschecker.org](https://dnschecker.org)
-
-## Customization
-
-### Update Project Data
-
-Edit `src/data/projects.ts` to add/modify your projects:
-
-```typescript
-export const projects: Project[] = [
-  {
-    id: 1,
-    title: "Your Project",
-    description: "Project description",
-    category: "Category Name",
-    image: "image-url",
-    tags: ["Tag1", "Tag2"],
-    link: "#",
-    isProtected: false  // Set to true for password-protected projects
-  },
-  // Add more projects...
-];
-```
-
-### Update Personal Information
-
-- **Contact Details**: Edit `src/components/Contact.astro`
-- **About Section**: Edit `src/components/About.astro`
-- **Hero Text**: Edit `src/components/Hero.astro`
-
-### Change Colors
-
-Edit CSS variables in `src/layouts/Layout.astro`:
-
-```css
-:root {
-  --color-primary: #6366f1;
-  --color-secondary: #8b5cf6;
-  --color-accent: #ec4899;
-  /* ... other colors */
-}
-```
-
-### Add More Protected Pages
-
-1. Create a new page in `src/pages/` (e.g., `another-protected.astro`)
-2. Wrap content with `ProtectedContent` component:
-
-```astro
----
-import Layout from '../layouts/Layout.astro';
-import ProtectedContent from '../components/ProtectedContent';
-
-const PASSWORD_HASH = import.meta.env.PUBLIC_PASSWORD_HASH || '';
----
-
-<Layout title="Protected Page">
-  <ProtectedContent client:load passwordHash={PASSWORD_HASH}>
-    <!-- Your protected content here -->
-  </ProtectedContent>
-</Layout>
-```
-
-## Password Protection
-
-The password protection system works as follows:
-
-1. **Build Time**: Password hash is injected from GitHub Secrets
-2. **Client Side**: User enters password → hashed with SHA-256 → compared to stored hash
-3. **Session Storage**: Successful authentication stored in browser session
-4. **Limitations**:
-   - Content is included in the built site (not truly secure)
-   - Suitable for light protection, not sensitive data
-   - Anyone with source access can see the content
-
-### To Change the Password
-
-1. Generate a new hash:
-   ```bash
-   echo -n "new-password" | shasum -a 256
-   ```
-
-2. Update the GitHub Secret:
-   - Go to **Settings → Secrets and variables → Actions**
-   - Edit `PASSWORD_HASH` secret
-   - Replace with new hash
-
-3. Trigger a new deployment (push to main or manual workflow run)
+- **Projects:** edit `src/data/projects.ts`. Each project imports its own image from `src/images/projects/`. Add a new entry with `id`, `title`, `description`, `category`, `image`, `tags`, optional `link`, `overlaySubtitle`, `overlayBody`, etc.
+- **Expertise areas (Craft section):** edit `src/data/expertise.ts`.
+- **Healthcare case study:** content lives inline in `src/pages/healthcare.astro` (reflections, metrics, testimonials, body copy).
+- **About / contact copy and client logos:** `src/components/About.astro` and `src/components/Contact.astro`. Logos live in `src/images/clients/` with light/dark variants.
+- **Site metadata (title/description/OG defaults):** `src/layouts/Layout.astro`.
+- **Design tokens (colors, spacing, typography, shadows, radii, blur):** the `:root` and `[data-theme="dark"]` blocks in `src/layouts/Layout.astro`.
 
 ## Deployment
 
-### Automatic Deployment
+The site deploys to GitHub Pages via the workflow in `.github/workflows/`. The custom domain is set in `public/CNAME` and `astro.config.mjs` (`site: 'https://designdoings.com'`, `base: '/'`).
 
-Every push to the `main` branch automatically triggers deployment via GitHub Actions.
+For GitHub Pages without a custom domain, change `astro.config.mjs`:
 
-### Manual Deployment
-
-1. Go to **Actions** tab in your repository
-2. Select "Deploy to GitHub Pages" workflow
-3. Click **Run workflow → Run workflow**
-
-### Build Locally
-
-To test the production build locally:
-
-```bash
-npm run build
-npm run preview
+```js
+site: 'https://<user>.github.io',
+base: '/<repo-name>',
 ```
 
-## Troubleshooting
+### DNS (Namecheap, for reference)
 
-### 404 on GitHub Pages
+Apex `designdoings.com` → four A records pointing at GitHub's Pages IPs (`185.199.108.153`, `.109.153`, `.110.153`, `.111.153`).
+`www` → CNAME to `<user>.github.io.` (trailing dot).
 
-- Ensure `base` in `astro.config.mjs` is set correctly
-- For custom domain (designdoings.com): `base: '/'`
-- For GitHub Pages subdirectory: `base: '/your-repo-name'`
+In GitHub: **Settings → Pages → Custom domain** → `designdoings.com`, then enable **Enforce HTTPS** once DNS verifies.
 
-### Password Protection Not Working
+## Performance notes
 
-- Verify `PASSWORD_HASH` secret is set in GitHub
-- Check browser console for errors
-- Ensure hash format is correct (64 character hex string)
+- Static output, inline critical CSS (`build.inlineStylesheets: 'always'`)
+- React vendor + framer-motion split into separate chunks (`astro.config.mjs`)
+- Images served as responsive WebP via Astro's image service (`src/images/`) — `public/images/` is reserved for assets that bypass the pipeline
+- AOS is the only always-on JS on every page; React islands hydrate per-section (`client:load` / `client:visible`)
 
-### Custom Domain Not Working
+## Browser support
 
-- Wait 24-48 hours for DNS propagation
-- Verify DNS records with `dig` command
-- Check GitHub Pages settings show "DNS check successful"
-
-### Styles Not Loading
-
-- Clear browser cache
-- Check that `import.meta.env.BASE_URL` is used correctly for asset paths
-- Verify build completed without errors in Actions tab
-
-## Performance
-
-- **Lighthouse Score**: 95-100 across all metrics
-- **First Contentful Paint**: < 1s
-- **Time to Interactive**: < 2s
-- **Bundle Size**: < 200kb (JS + CSS)
-
-## Browser Support
-
-- Chrome/Edge (last 2 versions)
-- Firefox (last 2 versions)
-- Safari (last 2 versions)
-- Mobile browsers (iOS Safari, Chrome Mobile)
+Last 2 versions of Chrome, Edge, Firefox, Safari, plus iOS Safari and Chrome Mobile.
 
 ## License
 
-MIT License - feel free to use this template for your own portfolio!
-
-## Support
-
-For issues or questions:
-1. Check this README
-2. Review [Astro Documentation](https://docs.astro.build)
-3. Check [GitHub Pages Documentation](https://docs.github.com/pages)
-
----
-
-Built with ❤️ using [Astro](https://astro.build) and [React](https://react.dev)
+MIT.

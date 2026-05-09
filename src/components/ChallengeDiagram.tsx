@@ -4,13 +4,10 @@ import './ChallengeDiagram.css';
 
 export function ChallengeDiagram() {
   const circleRef = useRef<SVGCircleElement>(null);
-  const deliveryRef = useRef<HTMLDivElement>(null);
-  const accessRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [animationReady, setAnimationReady] = useState(false);
   const [hoveredGroup, setHoveredGroup] = useState<'delivery' | 'access' | null>(null);
-  const [textPositions, setTextPositions] = useState({ delivery: 360, access: 440 });
 
   const handleWrapperMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!wrapperRef.current) return;
@@ -73,30 +70,8 @@ export function ChallengeDiagram() {
       setAnimationReady(true);
     }, 400);
 
-    // Calculate actual text positions
-    const updateTextPositions = () => {
-      if (deliveryRef.current && accessRef.current && wrapperRef.current) {
-        const wrapperRect = wrapperRef.current.getBoundingClientRect();
-        const deliveryRect = deliveryRef.current.getBoundingClientRect();
-        const accessRect = accessRef.current.getBoundingClientRect();
-
-        // Calculate center positions relative to the wrapper, then convert to SVG coords (800x800)
-        const deliveryY = ((deliveryRect.top + deliveryRect.height / 2 - wrapperRect.top) / wrapperRect.height) * 800;
-        const accessY = ((accessRect.top + accessRect.height / 2 - wrapperRect.top) / wrapperRect.height) * 800;
-
-        setTextPositions({
-          delivery: deliveryY,
-          access: accessY
-        });
-      }
-    };
-
-    updateTextPositions();
-    window.addEventListener('resize', updateTextPositions);
-
     return () => {
       clearTimeout(iconAnimationTimer);
-      window.removeEventListener('resize', updateTextPositions);
     };
   }, []);
 
@@ -117,14 +92,12 @@ export function ChallengeDiagram() {
           }}
         >
           <div
-            ref={deliveryRef}
             className={`challenge-delivery ${hoveredGroup === 'delivery' ? 'highlighted' : ''}`}
           >
             Delivery
           </div>
           <div className="challenge-title">Challenge</div>
           <div
-            ref={accessRef}
             className={`challenge-access ${hoveredGroup === 'access' ? 'highlighted' : ''}`}
           >
             Access

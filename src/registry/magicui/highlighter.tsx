@@ -86,6 +86,7 @@ export function Highlighter({
 
       return () => {
         observer.disconnect();
+        annotationRef.current?.remove();
       };
     } else {
       // Show annotation with delay
@@ -98,14 +99,9 @@ export function Highlighter({
 
       return () => {
         clearTimeout(timeoutId);
+        annotationRef.current?.remove();
       };
     }
-
-    return () => {
-      if (annotationRef.current) {
-        annotationRef.current.remove();
-      }
-    };
   }, [color, action, strokeWidth, animationDuration, iterations, padding, multiline, isView, delay]);
 
   return (

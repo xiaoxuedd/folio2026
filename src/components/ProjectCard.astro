@@ -1,7 +1,6 @@
 ---
 import type { Project } from '../data/projects';
 import { getImage } from 'astro:assets';
-import LockIcon from './icons/LockIcon.astro';
 import ArrowIcon from './icons/ArrowIcon.astro';
 
 interface Props {
@@ -63,12 +62,6 @@ if (typeof project.image === 'string') {
       width={imageWidth}
       height={imageHeight}
     />
-    {project.isProtected && (
-      <div class="protected-badge">
-        <LockIcon width={12} height={12} />
-        Protected
-      </div>
-    )}
     {project.link && (
       <div class="arrow-button">
         <ArrowIcon width={20} height={20} class="arrow-icon" rotate={-45} />
@@ -263,23 +256,6 @@ if (typeof project.image === 'string') {
     cursor: default;
   }
 
-  .protected-badge {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(var(--blur-overlay));
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius-2xl);
-    font-size: var(--font-size-ui-sm);
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    z-index: 2;
-  }
-
   .arrow-button {
     position: absolute;
     bottom: 1.5rem;
@@ -388,13 +364,6 @@ if (typeof project.image === 'string') {
     .disciplines-list li {
       font-size: var(--font-size-ui-xs);
       padding: 0.1875rem 0.5rem;
-    }
-
-    .protected-badge {
-      top: 1rem;
-      right: 1rem;
-      padding: 0.375rem 0.75rem;
-      font-size: var(--font-size-ui-xs);
     }
 
     .arrow-button {

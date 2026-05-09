@@ -16,7 +16,6 @@ export interface Project {
   image: ImageMetadata | string;
   tags: string[];
   link?: string;
-  isProtected?: boolean;
   // Extended fields for detailed view
   scope?: string;
   responsibilities?: string[];
@@ -37,7 +36,6 @@ export const projects: Project[] = [
     image: healthcarePrecisionMedicine,
     tags: ["Service Design", "Strategy", "Product / UX", "Research"],
     link: "/healthcare",
-    isProtected: false,
     industry: "Healthcare",
     duration: "18 months",
     scope: "18-month engagement spanning 10+ global markets",

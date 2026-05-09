@@ -1,0 +1,8 @@
+# pnpm 11 reads settings from this file (the `pnpm` field in package.json
+# is no longer read). Allow Sharp and esbuild to run their post-install
+# scripts so their native binaries get built — without this, pnpm 11 fails
+# the install/build with ERR_PNPM_IGNORED_BUILDS because strictDepBuilds
+# defaults to true.
+allowBuilds:
+  esbuild: true
+  sharp: true
