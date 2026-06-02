@@ -1,0 +1,472 @@
+---
+const baseUrl = import.meta.env.BASE_URL;
+const aboutHref = `${baseUrl}about`.replace(/\/\//g, '/');
+---
+
+<!--
+  Scroll-expansion wrapper. Provides scroll room so the section can:
+    1. Slide naturally into view from below (no layout gap)
+    2. Stick at the viewport bottom once visible
+    3. Expand to full-screen as the user keeps scrolling
+  Height is set by JS once the natural content height is known.
+-->
+<div class="cta-wrapper" data-cta-wrapper>
+  <section id="cta" class="cta" data-cta>
+    <!-- Expanded content — heading + CTA, fades in above as section grows -->
+    <div class="cta__expanded" data-cta-expanded aria-hidden="true">
+      <div class="container">
+        <div class="cta__expanded-inner">
+          <h2 class="cta__heading" data-cta-heading>Ready to translate <span class="cta__word cta__word--thinking">thinking</span> into <span class="cta__word cta__word--doing">doing</span>?</h2>
+          <a href={aboutHref} class="cta__button" data-cta-link>
+            <span class="cta__button-label">Get in touch</span>
+            <span class="cta__shimmer" aria-hidden="true"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main strip — always visible on entry -->
+    <div class="cta__main">
+      <div class="container">
+        <div class="cta__inner">
+          <p class="cta__tagline">Service designer &amp; strategist</p>
+          <div class="cta__contact-row">
+            <a href="mailto:xiaoxue.sherryd@gmail.com" class="cta__contact-link" data-cta-email>
+              xiaoxue.sherryd@gmail.com
+            </a>
+            <span class="cta__sep" aria-hidden="true">·</span>
+            <a
+              href="https://www.linkedin.com/in/xiaoxued/"
+              class="cta__contact-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-cta-linkedin
+            >LinkedIn</a>
+            <span class="cta__sep" aria-hidden="true">·</span>
+            <a
+              href="/resume-xiaoxue.pdf"
+              class="cta__contact-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-cta-resume
+            >Resume</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+  /* ─── Wrapper — provides scroll room, height set by JS ─────────── */
+  .cta-wrapper {
+    /* JS sets height; this prevents a flash with 0 height */
+    min-height: var(--cta-wrapper-h, auto);
+  }
+
+  /* ─── Sticky section ───────────────────────────────────────────── */
+  .cta {
+    position: sticky;
+    /* top and height are driven by JS — initial values below are
+       overridden before first paint via an inline style set in JS,
+       but these provide a safe default if JS hasn't run yet. */
+    top: 0;
+
+    background:
+      radial-gradient(
+        circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(255, 255, 255, 0.04) 0%,
+        transparent 42%
+      ),
+      var(--color-bg-inverse);
+    color: var(--color-text-inverse);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    overflow: hidden;
+    will-change: top, height;
+  }
+
+  /* ─── Expanded content (fades in above the main strip) ────────── */
+  .cta__expanded {
+    display: flex;
+    justify-content: center;
+    padding: 0 0 clamp(1.5rem, 2.5vw, 2rem);
+    opacity: var(--cta-expanded-opacity, 0);
+    pointer-events: none;
+  }
+
+  .cta__expanded-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-lg);
+  }
+
+  .cta__inner {
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-md);
+  }
+
+  .cta__tagline {
+    font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--color-text-inverse) 55%, transparent);
+    margin: 0;
+  }
+
+  .cta__contact-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 0.75rem;
+  }
+
+  .cta__sep {
+    color: color-mix(in srgb, var(--color-text-inverse) 30%, transparent);
+    font-size: var(--font-size-ui-sm);
+    user-select: none;
+  }
+
+  .cta__contact-link {
+    font-size: var(--font-size-ui-sm);
+    font-weight: var(--font-weight-medium);
+    color: color-mix(in srgb, var(--color-text-inverse) 70%, transparent);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-text-inverse) 20%, transparent);
+    transition: color var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  .cta__contact-link:hover {
+    color: var(--color-text-inverse);
+    border-color: color-mix(in srgb, var(--color-text-inverse) 50%, transparent);
+  }
+
+  /* ─── Original main content (bottom strip) ────────────────────── */
+  .cta__main {
+    flex-shrink: 0;
+    padding: clamp(1.25rem, 2.5vw, 1.75rem) 0;
+  }
+
+  .cta__heading {
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-inverse);
+    margin: 0 0 var(--gap-lg);
+  }
+
+  /* Highlighted words — animated underline sweep on scroll-in.
+     "thinking" echoes the indigo diagram pill; "doing" echoes the accent. */
+  .cta__word {
+    display: inline-block;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: 0 95%;
+    background-size: 0% 2px;
+    transition: background-size 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    transform-origin: 50% 60%;
+  }
+
+  .cta__word--thinking { color: #9B8FF5; }
+  .cta__word--doing    { color: #24D48E; }
+
+  .cta__heading.is-highlighted .cta__word--thinking {
+    background-size: 100% 2px;
+    transition-delay: 0.1s;
+  }
+
+  .cta__heading.is-highlighted .cta__word--doing {
+    background-size: 100% 2px;
+    transition-delay: 0.35s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cta__word {
+      background-size: 100% 2px;
+    }
+  }
+
+  .cta__button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.875rem 2rem;
+    border-radius: 0;
+    border: 1px solid color-mix(in srgb, var(--color-text-inverse) 30%, transparent);
+    color: var(--color-text-inverse);
+    font-size: var(--font-size-ui-sm);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    overflow: hidden;
+    transition:
+      background-color var(--transition-normal),
+      color var(--transition-normal),
+      transform var(--transition-normal);
+  }
+
+  .cta__button-label {
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta__button:hover {
+    background: var(--color-text-inverse);
+    color: var(--color-bg-inverse);
+    transform: scale(1.02);
+  }
+
+  .cta__button:active {
+    transform: scale(0.97);
+  }
+
+  .cta__shimmer {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.18),
+      transparent
+    );
+    transform: translateX(-100%);
+  }
+
+  .cta__button:hover .cta__shimmer {
+    animation: cta-shimmer 1.6s ease-in-out infinite;
+  }
+
+  @keyframes cta-shimmer {
+    100% { transform: translateX(100%); }
+  }
+
+  /* ─── Reduced motion ───────────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .cta-wrapper {
+      min-height: auto !important;
+    }
+
+    .cta {
+      position: static !important;
+      height: auto !important;
+    }
+
+    .cta__expanded {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+
+    .cta__button,
+    .cta__button:hover,
+    .cta__button:active {
+      transform: none;
+    }
+
+    .cta__button:hover .cta__shimmer {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  import { trackEvent } from '../utils/analytics';
+
+  function setupCtaMouse() {
+    const section = document.querySelector('[data-cta]');
+    if (!(section instanceof HTMLElement)) return;
+
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (!canHover) return;
+
+    section.addEventListener('mousemove', (e) => {
+      const rect = section.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      section.style.setProperty('--mouse-x', `${x}%`);
+      section.style.setProperty('--mouse-y', `${y}%`);
+    });
+  }
+
+  function setupCtaAnalytics() {
+    document.querySelector('[data-cta-link]')?.addEventListener('click', () => {
+      trackEvent('navigation_click', { label: 'Get in touch', destination: 'about' });
+    });
+    document.querySelector('[data-cta-email]')?.addEventListener('click', () => {
+      trackEvent('social_click', { platform: 'email', location: 'cta_expanded' });
+    });
+    document.querySelector('[data-cta-linkedin]')?.addEventListener('click', () => {
+      trackEvent('social_click', { platform: 'linkedin', location: 'cta_expanded' });
+    });
+    document.querySelector('[data-cta-resume]')?.addEventListener('click', () => {
+      trackEvent('social_click', { platform: 'resume', location: 'cta_expanded' });
+    });
+  }
+
+  function setupCtaExpansion() {
+    const wrapper = document.querySelector('[data-cta-wrapper]');
+    const section = document.querySelector('[data-cta]');
+    const expandedEl = section?.querySelector('[data-cta-expanded]');
+    const mainEl = section?.querySelector('.cta__main');
+
+    if (
+      !(wrapper instanceof HTMLElement) ||
+      !(section instanceof HTMLElement) ||
+      !(expandedEl instanceof HTMLElement) ||
+      !(mainEl instanceof HTMLElement)
+    ) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      expandedEl.removeAttribute('aria-hidden');
+      expandedEl.style.pointerEvents = 'auto';
+      return;
+    }
+
+    let vh = window.innerHeight;
+    let wrapperTop = 0;
+    let H_nat = 0;
+    let expansionPx = 0;
+
+    const init = () => {
+      vh = window.innerHeight;
+
+      // Measure the natural strip height (heading + button + padding).
+      // We need the section at its natural size, so temporarily reset any
+      // JS-applied height so the measurement is accurate.
+      const prevHeight = section.style.height;
+      section.style.height = 'auto';
+      H_nat = mainEl.offsetHeight;
+      section.style.height = prevHeight || `${H_nat}px`;
+
+      expansionPx = vh - H_nat;
+
+      // Set the section's initial sticky position to viewport bottom.
+      section.style.top = `${expansionPx}px`;
+      section.style.height = `${H_nat}px`;
+
+      // Wrapper height = section natural height + expansion scroll range + hold time.
+      // The hold is 30% extra viewport height after full expansion.
+      const holdPx = Math.round(vh * 0.3);
+      wrapper.style.height = `${H_nat + expansionPx + holdPx}px`;
+
+      // Cache wrapper's page position (stable after layout).
+      wrapperTop = wrapper.getBoundingClientRect().top + window.scrollY;
+    };
+
+    const update = () => {
+      const scrollY = window.scrollY;
+
+      // Sticky activates when section's natural top = expansionPx from viewport,
+      // which is scrollY = wrapperTop - expansionPx.
+      const scrollStart = wrapperTop - expansionPx;
+      const progress = Math.max(0, Math.min(1, (scrollY - scrollStart) / expansionPx));
+
+      // Section grows upward: top decreases, height increases, bottom stays at vh.
+      const currentTop = expansionPx * (1 - progress);
+      const currentHeight = H_nat + expansionPx * progress;
+      section.style.top = `${currentTop}px`;
+      section.style.height = `${currentHeight}px`;
+
+      // Fade expanded content in between progress 0.35 and 0.75.
+      const expandedOpacity = Math.max(0, Math.min(1, (progress - 0.35) / 0.4));
+      section.style.setProperty('--cta-expanded-opacity', String(expandedOpacity));
+
+      // Accessibility: toggle aria-hidden and pointer events.
+      const isVisible = progress > 0.35;
+      expandedEl.setAttribute('aria-hidden', isVisible ? 'false' : 'true');
+      expandedEl.style.pointerEvents = isVisible ? 'auto' : 'none';
+    };
+
+    window.addEventListener('scroll', update, { passive: true });
+
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        init();
+        update();
+      }, 150);
+    }, { passive: true });
+
+    init();
+    update();
+  }
+
+  function setupHeadingHighlight() {
+    const heading = document.querySelector('[data-cta-heading]');
+    if (!(heading instanceof HTMLElement)) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      heading.classList.add('is-highlighted');
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          heading.classList.add('is-highlighted');
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(heading);
+  }
+
+  function setupWordProximity() {
+    const words = [
+      document.querySelector('.cta__word--thinking'),
+      document.querySelector('.cta__word--doing'),
+    ].filter(Boolean) as HTMLElement[];
+
+    if (!words.length) return;
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const RADIUS = 220;
+    const MAX_SCALE = 0.08;
+    const smoothstep = (t: number) => t * t * (3 - 2 * t);
+
+    document.addEventListener('mousemove', (e) => {
+      words.forEach((word) => {
+        const r = word.getBoundingClientRect();
+        const cx = r.left + r.width / 2;
+        const cy = r.top + r.height / 2;
+        const dist = Math.hypot(e.clientX - cx, e.clientY - cy);
+        const t = Math.max(0, 1 - dist / RADIUS);
+        const scale = 1 + smoothstep(t) * MAX_SCALE;
+        word.style.transform = `scale(${scale})`;
+      });
+    }, { passive: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      setupCtaMouse();
+      setupCtaAnalytics();
+      setupCtaExpansion();
+      setupHeadingHighlight();
+      setupWordProximity();
+    });
+  } else {
+    setupCtaMouse();
+    setupCtaAnalytics();
+    setupCtaExpansion();
+    setupHeadingHighlight();
+    setupWordProximity();
+  }
+</script>

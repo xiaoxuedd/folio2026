@@ -2,116 +2,46 @@
 
 Personal portfolio for **Xiaoxue Dong** (service designer & strategist), deployed at <https://designdoings.com>. Static site built with **Astro 4 + React 19**, shipped to GitHub Pages.
 
-This file is the orientation doc. Read it first. It tells you where things live, what the conventions are, and which file to open for any common task.
-
----
-
-## TL;DR map
-
-```
-folio2026/
-├── astro.config.mjs        # Site URL, image pipeline, vendor chunks, inline CSS
-├── tsconfig.json           # Strict; path alias @/* -> src/*
-├── package.json            # Scripts (dev/build/preview/test:seo/test:performance)
-├── public/                 # Served as-is — favicons, CNAME, robots.txt, sitemap.xml,
-│                           #   resume PDF, legacy meta-refresh redirects, raw SVGs
-├── scripts/                # Dev tooling: image optimization, SEO/perf smoke tests
-└── src/
-    ├── pages/              # 1 file per route: index, about, healthcare, 404
-    ├── layouts/Layout.astro    # HTML shell, design tokens, theme bootstrap, AOS init
-    ├── components/         # Astro sections + React islands, co-located CSS
-    │   └── icons/          # Astro icon components
-    ├── config/aos.ts       # AOS animation options
-    ├── data/               # Content as TS modules (projects, expertise)
-    ├── images/             # Bundled assets — go through Astro image pipeline
-    ├── registry/magicui/   # rough-notation Highlighter wrapper
-    ├── utils/analytics.ts  # gtag trackEvent helper
-    └── env.d.ts
-```
-
-**Path alias:** `@/*` resolves to `src/*` (e.g. `import { Highlighter } from '@/registry/magicui/highlighter'`).
+This file covers the non-obvious bits — conventions, visual rules, and gotchas. Structure, types, and component composition you can read from the codebase directly. Path alias: `@/*` → `src/*`.
 
 ---
 
 ## Tech stack
 
-- **Astro 4** (`output: 'static'`, `inlineStylesheets: 'always'`) with `@astrojs/react`
-- **React 19** for interactive islands, hydrated `client:load` (above the fold) or `client:visible` (below)
-- **TypeScript** extends `astro/tsconfigs/strict` — type errors fail the build
-- **Sharp** image service → responsive WebP/AVIF
-- **AOS** for scroll-reveal animations (init in `Layout.astro`, opts in `src/config/aos.ts`)
-- **GSAP**, **Framer Motion**, **rough-notation** available for richer motion
-- **Lucide React** for icon glyphs in `.tsx`
-- Self-hosted **Inter** via `@fontsource/inter` (weights 400/500/600/700)
-- **Google Analytics** via gtag in `Layout.astro`; use `trackEvent()` from `src/utils/analytics.ts`
+- **Astro 4** (`output: 'static'`, `inlineStylesheets: 'always'`) + `@astrojs/react` + **React 19**. **TypeScript** strict; type errors fail `npm run build`.
+- **Sharp** image service → responsive WebP/AVIF.
+- Motion: **AOS** (init in `Layout.astro`, opts in `src/config/aos.ts`), **Framer Motion**, **GSAP**, **rough-notation**.
+- **Lucide React** icons in `.tsx`; Astro icons in `src/components/icons/*.astro`.
+- Self-hosted via `@fontsource`: Manrope (300–800) headings, Inter 300 body, Cormorant Garamond 400 italic for pull quotes.
+- **Google Analytics** via gtag in `Layout.astro`; use `trackEvent()` from `@/utils/analytics`.
 
 ---
 
-## Conventions (follow these)
+## Visual direction (redesign in progress)
 
-### Astro vs React
+Single accent: **Electric Mint** (replaces coral). Cool grey neutrals with a subtle purple tint. Clean white + near-black ink + mint, Manrope headings, light-weight Inter body.
 
-- **Astro** (`.astro`) for static section markup, page composition, server-rendered content, and anything image-pipeline related.
-- **React** (`.tsx`) for state, effects, hover/scroll interactions, animation libraries.
-- Hydrate React islands explicitly: `client:load` for above-the-fold/critical, `client:visible` for everything else. Avoid `client:idle` unless you have a reason.
-- Co-locate CSS next to the component: `Foo.tsx` + `Foo.css`. Astro components use scoped `<style>` blocks.
+- **Sharp 0px corners** on newer surfaces (`ProjectCard`, `ContactCTA` button). Older chrome (nav pill, hero avatar pill) is intentionally still rounded — don't "fix" it unless asked.
+- **Editorial layout** — Selected Works is 2-up featured + 3-up grid; all cards use the same title size (`--font-size-h4`), industry sub-line under the title, glass status pill ("Case study" / "Coming soon"), mint hover overlay reveals the `overlaySubtitle` tagline (semibold, larger) then `overlayBody` intro paragraph below it.
+- **Token-first, hard rule.** Use `Layout.astro` design tokens; never hardcode color/space/radius. Prefer canonical semantic names (`--bg`, `--surface`, `--text`, `--accent`) for new code; `--color-*` aliases exist only for backward-compat.
+- Glass pills (`backdrop-filter: blur(var(--blur-glass))`) are an intentional rounded exception.
+- **`--project: #5B3CEE`** is project-scoped (case-study context only). Never use as a site-level UI accent.
 
-### Design tokens
+---
 
-**All visual primitives are CSS custom properties defined in `src/layouts/Layout.astro`** under `:root` and `[data-theme="dark"]`. Use them — don't hardcode colors, spacing, type sizes, shadows, radii, or blur values.
+## Conventions
 
-Token families (full list in `Layout.astro`):
+**Astro vs React.** Astro for static markup, page composition, image-pipeline. React for state/effects/hover/scroll/animation libraries. Hydrate islands explicitly: `client:load` above the fold, `client:visible` below. Co-locate CSS: `Foo.tsx` + `Foo.css`; Astro uses scoped `<style>`.
 
-| Family | Examples |
-| --- | --- |
-| Color | `--color-primary`, `--color-text`, `--color-text-secondary`, `--color-bg`, `--color-bg-secondary`, `--color-border`, `--color-primary-alpha-light/medium`, `--color-gold`, `--color-icterine` |
-| Spacing | `--spacing-xs/sm/md/lg/xl/2xl` |
-| Gaps | `--gap-tight/xs/sm/md/lg/xl/2xl/3xl` |
-| Typography (size) | `--font-size-h0..h6`, `--font-size-body-0/1`, `--font-size-ui-lg/sm/xs` |
-| Typography (weight/line) | `--font-weight-regular/medium/semibold/bold`, `--line-height-hero/headings/body` |
-| Radii | `--radius-xs/sm/md/lg/xl/2xl/3xl/pill/full` |
-| Shadows | `--shadow-sm/md/lg/hover` |
-| Transitions | `--transition-fast/normal/slow` |
-| Blur | `--blur-glass/menu/overlay` |
-| Icon sizes | `--icon-xs/sm/md/lg/xl/2xl/3xl` |
+**Design tokens.** All visual primitives are CSS custom properties in `src/layouts/Layout.astro` (`:root` + `[data-theme="dark"]`) — colours (semantic + special: `--color-bg-inverse`/`--color-text-inverse` are theme-independent), spacing/gaps, typography, radii, shadows, transitions, blur, icon sizes. Read the file for the full set. Use canonical names for new code; legacy `--color-*` aliases stay for backward-compat.
 
-Adding a new token? Put it in `Layout.astro` alongside its family — don't scatter `--my-color: …` declarations across components.
+**Theming.** State on `<html data-theme="light|dark">`. Toggle via `window.toggleTheme()` (defined in `Layout.astro`). A pre-paint inline script reads `localStorage.theme` to avoid FOUC — don't move it. Dark overrides: `:global([data-theme="dark"]) .selector` in scoped Astro `<style>`; in React component CSS, write the same selector at top level (it's a global stylesheet).
 
-### Theming
+**Images.** Bundled assets → `src/images/...` via `<Image>` / `getImage()` from `astro:assets` (responsive WebP/AVIF). Pipeline-bypass (favicons, PDFs, OG images) → `public/`. Patterns: size-array + `getImage` loop in `ProjectCard.astro`; healthcare carousel `Promise.all([getImage(...)])` block at the top of `healthcare.astro`.
 
-- State lives on `<html data-theme="light|dark">`.
-- Toggle: call the global `window.toggleTheme()` (defined inline in `Layout.astro`).
-- A pre-paint inline script reads `localStorage.theme` to avoid FOUC. Don't move it.
-- For dark-mode overrides inside a scoped Astro `<style>`, use `:global([data-theme="dark"]) .selector { … }`. In React component CSS, write the same selector at the top level (it's a global stylesheet).
+**Animations.** Scroll reveal: `data-aos="fade-up"` (+ optional `data-aos-delay`) on any element — AOS is initialised globally. Custom AOS overrides live in `Layout.astro`'s global stylesheet. `prefers-reduced-motion` disables smooth scroll in `Layout.astro`; AOS handles its own reduce-motion behaviour. Don't add new GSAP/Framer without checking the user's preference.
 
-### Images
-
-- **Bundled, optimized assets** → `src/images/...`. Import them and pass to `<Image>` or `getImage()` from `astro:assets`. Output is responsive WebP/AVIF.
-- **Raw / pipeline-bypass assets** (favicons, PDFs, OG images served verbatim) → `public/`.
-- Responsive card pattern: see the size-array + `getImage` loop in `src/components/ProjectCard.astro`.
-- Healthcare carousel pattern: see the `Promise.all([getImage(...)])` block at the top of `src/pages/healthcare.astro`.
-
-### Animations
-
-- Scroll reveal: drop `data-aos="fade-up"` (and optional `data-aos-delay="100"`) on any Astro element. AOS init is global; no per-component setup needed.
-- Custom AOS overrides (e.g. larger upward translate) live in `Layout.astro`'s global stylesheet.
-- `prefers-reduced-motion` disables smooth scroll in `Layout.astro`. AOS handles its own reduce-motion behaviour.
-
-### Analytics
-
-```ts
-import { trackEvent } from '../utils/analytics';      // .astro / .tsx in components/
-import { trackEvent } from '@/utils/analytics';        // anywhere with the alias
-
-trackEvent('event_name', { key: value });
-```
-
-Existing events (search before inventing new ones): `navigation_click`, `theme_toggle`, `social_click`, `mobile_menu_toggle`, `project_click`.
-
-### Icons
-
-- **Astro icons** (used in `.astro` files) live in `src/components/icons/*.astro`. Props: `{ width?: number; height?: number; class?: string }`. Follow the existing pattern (`LinkedInIcon`, `ArrowIcon`, `ChevronDownIcon`, `DownloadIcon`, `EmailIcon`, `QuoteIcon`).
-- **React icons** (used in `.tsx` files) come from `lucide-react`.
+**Analytics.** `import { trackEvent } from '@/utils/analytics'`. Existing events (search before inventing new ones): `navigation_click`, `theme_toggle`, `social_click`, `mobile_menu_toggle`, `project_click`, `hero_pronunciation_open`.
 
 ---
 
@@ -119,65 +49,21 @@ Existing events (search before inventing new ones): `navigation_click`, `theme_t
 
 | Goal | File |
 | --- | --- |
-| Add or edit a project card | `src/data/projects.ts` (image goes in `src/images/projects/`) |
-| Add or edit an expertise area | `src/data/expertise.ts` |
-| Healthcare case study copy / metrics / reflections / testimonials | `src/pages/healthcare.astro` (inline arrays + JSX) |
-| About-page contact copy | `src/components/Contact.astro` |
-| Client logo wall | `src/components/About.astro` (logos in `src/images/clients/`, `-dark` variants required) |
-| Navigation links / hamburger / theme toggle / pill-shrink behaviour | `src/components/Navigation.astro` |
-| Footer | `src/components/Footer.astro` |
-| Site `<title>` / meta description / OG defaults | `src/layouts/Layout.astro` (Layout `Props` defaults) |
-| Global CSS reset, body styles, button styles | `src/layouts/Layout.astro` global `<style>` |
-| Add or change a design token | `:root` block in `src/layouts/Layout.astro` |
-| Add a new page | new file in `src/pages/`, wrap content in `<Layout>`, include `<Navigation>` + `<Footer>`. Update `public/sitemap.xml`. |
-| Update sitemap | `public/sitemap.xml` (hand-maintained — see Gotchas) |
+| Project card | `src/data/projects.ts` (image in `src/images/projects/`). **First 2 entries render featured (4:3, 2-up); rest are 4:5 in a 3-up grid** — see `ProjectsShowcase.astro`. `link` flips the status pill from "Coming soon" to "Case study"; `industry` is the sub-line under the title; `overlaySubtitle` is the hover tagline (shown larger); `overlayBody` is the hover intro paragraph (shown below the tagline) |
+| Expertise area | `src/data/expertise.ts` (renders in `Craft` accordion; `\n` separates paragraphs in body) |
+| Healthcare case study (copy / metrics / reflections / testimonials) | `src/pages/healthcare.astro` (inline arrays + JSX) |
+| Home-page testimonials | `src/components/Testimonials.astro` → `TestimonialCarousel`. **Currently not mounted in `index.astro`** — re-add `<Testimonials />` to show it |
+| Client logo marquee | `src/components/About.astro` (logos in `src/images/clients/`, `-dark` variants required — see Gotchas) |
+| Closing CTA | `src/components/ContactCTA.astro` (always-dark via inverse tokens; scroll-driven expansion — see Gotchas) |
+| Healthcare page nav | `src/components/ProjectNavigation.tsx` + `.css` (token-driven; mirrors `Navigation`) |
+| Site `<title>` / meta / OG defaults, global CSS, design tokens | `src/layouts/Layout.astro` |
+| New page | new file in `src/pages/`, wrap in `<Layout>`, include `<Navigation>` + `<Footer>`. Update `public/sitemap.xml` |
+| Sitemap | `public/sitemap.xml` (hand-maintained — see Gotchas) |
 | Custom domain | `public/CNAME` + `astro.config.mjs` (`site` and `base`) |
-| Change AOS defaults | `src/config/aos.ts` |
-| Add a new analytics event | call site + (optionally) document in this file |
+| AOS defaults | `src/config/aos.ts` |
+| Cursor-proximity tilt on a surface | `src/components/ProximityTilt.tsx` (see `ProximityTilt.README.md` for parent-sizing constraint). Easing in `src/utils/proximity.ts`, shared with `RadialDiagram` |
 
----
-
-## Page → component map
-
-- **`src/pages/index.astro`** → `Navigation`, `Hero` (`HeroText` + `HeroCTAAlternative`), `Craft` (+ `CraftAccordion`, reads `data/expertise`), `ProjectsShowcase` (+ `ProjectCard`, reads `data/projects`), `About` (client logos), `Footer`
-- **`src/pages/about.astro`** → `Navigation` (compact mode), `Contact` (uses `ProfilePhoto` + `ClosingStatement`), `Footer`
-- **`src/pages/healthcare.astro`** → `ProjectNavigation`, `ChallengeDiagram`, `ChallengeGraphic`, `ImageCarousel` (×3 with different image sets), `JourneyAnimation` (composes `JourneyIcons` + `JourneyLabels` + `JourneyLabelsAnimated` + `JourneyCornerIcons`), `ImpactMetrics` (+ `GlassIcon`), `TestimonialCarousel`, `PillarNumber`, `CircleTitle`, `Footer`
-- **`src/pages/404.astro`** → `Layout` only
-
----
-
-## Data shapes
-
-### `src/data/projects.ts`
-
-```ts
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  shortDescription?: string;
-  category: string;
-  image: ImageMetadata | string;       // import the asset; string path is legacy
-  tags: string[];
-  link?: string;                        // makes the card clickable
-  scope?: string;
-  responsibilities?: string[];
-  outcomes?: string[];
-  industry?: string;
-  duration?: string;
-  overlaySubtitle?: string;             // shown in hover overlay
-  overlayBody?: string;                 // shown in hover overlay (clamped)
-}
-```
-
-### `src/data/expertise.ts`
-
-```ts
-interface ExpertiseArea {
-  title: string;
-  description: string;     // \n separates paragraphs in the accordion body
-}
-```
+Section anchors used by `Navigation`: `#works` (ProjectsShowcase), `#about` (About). Nav links are "Work" and "About" only — "Skills & Tools" was removed.
 
 ---
 
@@ -186,24 +72,31 @@ interface ExpertiseArea {
 | Command | Purpose |
 | --- | --- |
 | `npm run dev` | Dev server at <http://localhost:4321> |
-| `npm run build` | `astro check` (type check) then `astro build`. **Type errors fail the build.** |
-| `npm run preview` | Serve the production build locally |
+| `npm run build` | `astro check` + `astro build`. **Type errors fail the build.** |
+| `npm run preview` | Serve production build locally |
 | `npm run test` | `build` + `test:seo` |
-| `npm run test:seo` | Run `scripts/test-seo.js` against the build |
-| `npm run test:performance` | Run `scripts/test-performance.js` |
+| `npm run test:seo` / `test:performance` | Smoke tests in `scripts/` |
 
-Deployment: GitHub Pages workflow under `.github/workflows/`. Custom domain in `public/CNAME`; `astro.config.mjs` uses `site: 'https://designdoings.com'` and `base: '/'`.
+Deployed via GitHub Pages workflow (`.github/workflows/`). Custom domain in `public/CNAME`; `astro.config.mjs` uses `site: 'https://designdoings.com'`, `base: '/'`.
 
 ---
 
 ## Gotchas
 
-- **`public/about-me.html`, `public/contact.html`** are legacy meta-refresh redirects to `/about`. They preserve old inbound URLs — leave them unless you've audited every link.
-- **`public/sitemap.xml`** is hand-maintained. Update `lastmod` when pages change, or migrate to `@astrojs/sitemap` if you need automation.
-- **`Navigation.astro`** has a non-passive scroll handler that drives the pill-shrink animation by writing inline transforms each frame. Don't add expensive work to that handler — and if you change scroll behaviour, audit it for jank on long pages.
-- **`healthcare.astro`** ends with three `setTimeout(setupCircleTitleAnimations, …)` calls. They're a defensive workaround for path-length init ordering, not load-bearing logic. If you fix the underlying ordering, you can remove them.
-- **`inlineStylesheets: 'always'`** in `astro.config.mjs` inlines all CSS into HTML. Keep per-page CSS reasonable.
-- **`tsconfig.json`** extends `astro/tsconfigs/strict` — unused vars, implicit `any`, etc. will fail `astro check` and therefore `npm run build`.
-- **Vendor chunking:** React and Framer Motion are split into separate chunks via `vite.build.rollupOptions.output.manualChunks` in `astro.config.mjs`. If you add another large dep, consider doing the same.
-- **Dark-mode logo swap** in `About.astro` uses a `MutationObserver` on `<html data-theme>`. Each new logo needs both light and dark variants in `src/images/clients/`.
-- **`prefers-reduced-motion`** is honoured for smooth scrolling in `Layout.astro` but not separately for AOS — AOS has its own handling. Don't add new GSAP/Framer animations without checking the user's preference.
+- **Legacy redirects** — `public/about-me.html`, `public/contact.html` are meta-refresh redirects to `/about` preserving old inbound URLs. Don't delete without auditing every link.
+- **Hand-maintained sitemap** — `public/sitemap.xml`. Update `lastmod` when pages change, or migrate to `@astrojs/sitemap`.
+- **Nav scroll handler (`Navigation.astro`)** is non-passive and writes inline transforms each frame for the pill-shrink. Keep it cheap; audit for jank if you change scroll behaviour.
+- **Healthcare init shim** — three trailing `setTimeout(setupCircleTitleAnimations, …)` calls in `healthcare.astro` work around path-length init ordering. Not load-bearing; remove if you fix the underlying ordering.
+- **`inlineStylesheets: 'always'`** inlines all CSS into HTML — keep per-page CSS reasonable.
+- **Vendor chunking** — React + Framer Motion are split via `vite.build.rollupOptions.output.manualChunks` in `astro.config.mjs`. Add new large deps to that list.
+- **Dark-mode logo swap** in `About.astro` uses a `MutationObserver` on `<html data-theme>`. Each new client logo needs both light and `-dark` variants in `src/images/clients/`.
+- **Client marquee is JS-driven** (`About.astro`). Inline script disables the CSS animation at mount, drives `translateX` per rAF (wraps at `scrollWidth / 2`), eases velocity (exponential lerp) toward a target set by **cursor-proximity smoothstep** to the marquee's bounding box — full stop when pointer is inside, ramps back on leave. Replaced CSS `animation-play-state: paused`, which snapped a frame on hover. The `@keyframes marquee-scroll` is now only the reduced-motion / no-JS fallback. Logos are `loading="eager"` so `scrollWidth` is accurate before frame 1.
+- **Marquee seam** — strip is one logo set rendered twice. Wrap stays seamless because spacing is a per-item `margin-right` (track = *N items + N gaps*). **Don't switch to flex `gap`** — gives *N + (N−1) gaps* and a visible half-gap jump at the seam. Dark-mode swap updates both copies via `querySelectorAll`.
+- **`CraftAccordion.astro` is click-only, single-open**, first item open by default. Hover-to-open was removed on purpose — tall panels made the page jump as the cursor crossed items. Don't re-add it.
+- **Framer Motion owns inline `transform`** on its `motion.*` elements — a CSS `:hover { transform: … }` is overridden. Use `whileHover` (see hero avatar pill in `HeroText.tsx`). Animate non-transform props (shadow, color, child `<img>` scale) in CSS if needed.
+- **Nav links (`Navigation.astro`)** each carry `transform: translateZ(0)` to sit on their own compositing layer. Without it, hovering one link re-rasterises the others through the pill's fractional `scaleY` scroll transform → sub-pixel jitter. Keep hover effects layout-stable (color, not opacity/size).
+- **Project grids use `minmax(0, 1fr)` tracks** (`ProjectsShowcase.astro`) + `min-width: 0` on the card. Plain `1fr` pins to the image's intrinsic width and overflows on narrow screens. Only `body` carries `overflow-x: hidden`, not `html`.
+- **`RadialDiagram.tsx` cursor reactivity** — two mechanisms, both gated on `useReducedMotion`: (1) **pill proximity magnetism** — dock-style scale falloff (smoothstep, radius `PROXIMITY_RADIUS_RATIO` × width, peak `PROXIMITY_MAX_BUMP`) folded onto the bob transform; (2) **ring-tilt envelope** — the squircle stack leans toward the cursor, smoothstep ramping from `TILT_START_RADIUS_RATIO` to `TILT_PEAK_RADIUS_RATIO` then holding inward. Both `hoveredPill` and `centerActive` are **proximity-driven from `handleMouseMove`** — there is no SVG hotspot circle. Don't re-add the hotspot circle or pointer-event-based `centerActive` toggling.
+- **`ProjectCard.astro` overlay is pastel coral**, not the vivid `--color-primary` (which reads "barbie pink"). Light mode mixes primary into `--color-bg` (~18% / 92% alpha); dark mode rebuilds it by mixing primary into `--color-text` instead (because `--color-bg` is near-black) and flips statement text to `--color-bg`. Keep both overrides in sync if you retune.
+- **`HeroText.tsx` pronunciation badge (`.hero-pron`)** is `position: absolute` at the name's top-right so it never reflows the heading. It lives inside the ~5rem heading — must keep `font-size: 1rem` or its `em`-based offsets (and the bubble's) inherit heading size and fling the popover off-screen. Bubble centres via Framer's `x: '-50%'` (Framer owns the transform). It's a real `<button>` for touch (outside-tap / Escape dismiss). Scale uses the same proximity magnetism as `RadialDiagram`, gated on `useReducedMotion`.
+- **`ContactCTA.astro` scroll-driven expansion.** Section lives inside `.cta-wrapper`; wrapper height set by JS (`natural + expansion + hold`). Section is `position: sticky; top: [vh - natural]` so it pins at the viewport bottom on entry. As the user scrolls, it grows upward to full-screen. **DOM order:** `.cta__expanded` (top, fades in on scroll) holds the heading + "Get in touch" button; `.cta__main` (bottom, always visible on entry) holds the tagline + contact/social links. The "thinking" and "doing" words in the heading have proximity-driven scale (document `mousemove`, smoothstep) and an animated underline sweep on scroll-in. Reduced-motion users get the fully-expanded static version. **Don't set `overflow: hidden` on `.cta-wrapper`** — breaks sticky.

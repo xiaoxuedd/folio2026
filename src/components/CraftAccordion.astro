@@ -8,35 +8,23 @@ interface Props {
 const { expertiseAreas } = Astro.props;
 ---
 
-<div class="craft-accordion">
+<div class="craft-accordion" data-accordion>
   {expertiseAreas.map((area, index) => (
     <div class="accordion-item" data-accordion-item>
       <button
         class="accordion-header"
         data-accordion-trigger
-        aria-expanded={index === 0 ? "true" : "false"}
+        aria-expanded={index === 0 ? 'true' : 'false'}
       >
-        {area.title}
-        <svg
-          class="accordion-arrow"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          aria-hidden="true"
-        >
-          <polyline points="6 9 12 15 18 9"></polyline>
-        </svg>
+        <span class="accordion-title">{area.title}</span>
+        <span class="accordion-icon" aria-hidden="true">
+          <span class="accordion-icon__bar accordion-icon__bar--h"></span>
+          <span class="accordion-icon__bar accordion-icon__bar--v"></span>
+        </span>
       </button>
-      <div
-        class="accordion-content"
-        data-accordion-content
-        class:list={[{ 'is-open': index === 0 }]}
-      >
+      <div class="accordion-content" data-accordion-content class:list={[{ 'is-open': index === 0 }]}>
         <div class="accordion-panel">
-          <p>{area.description}</p>
+          {area.description.split('\n').map((para) => para && <p>{para}</p>)}
         </div>
       </div>
     </div>
@@ -48,23 +36,12 @@ const { expertiseAreas } = Astro.props;
     width: 100%;
   }
 
-  @media (max-width: 767px) {
-    .craft-accordion {
-      margin-top: 0;
-    }
-  }
-
   .accordion-item {
-    border-bottom: var(--border-divider);
-    transition: border-color 0.3s ease;
-  }
-
-  .accordion-item:first-child .accordion-header {
-    padding-top: 0;
+    border-top: 1px solid var(--color-border);
   }
 
   .accordion-item:last-child {
-    border-bottom: none;
+    border-bottom: 1px solid var(--color-border);
   }
 
   .accordion-header {
@@ -72,37 +49,78 @@ const { expertiseAreas } = Astro.props;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.75rem 0;
+    gap: var(--gap-md);
+    padding: var(--gap-lg) 0;
     background: none;
     border: none;
     cursor: pointer;
-    transition: opacity 0.2s ease, color 0.3s ease;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: var(--font-size-body-0);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text);
     text-align: left;
   }
 
-  .accordion-header:hover {
-    opacity: 0.7;
-  }
-
-  .accordion-arrow {
-    flex-shrink: 0;
+  .accordion-title {
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
     color: var(--color-text);
-    transition: transform var(--transition-normal), color 0.3s ease;
+    transition: color var(--transition-fast), transform var(--transition-fast);
   }
 
-  .accordion-header[aria-expanded="true"] .accordion-arrow {
-    transform: rotate(180deg);
+  .accordion-header:hover .accordion-title,
+  .accordion-header[aria-expanded='true'] .accordion-title {
+    color: var(--color-primary);
+  }
+
+  .accordion-header:hover .accordion-title {
+    transform: translateX(4px);
+  }
+
+  /* Plus / minus toggle */
+  .accordion-icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    color: var(--color-text-secondary);
+    transition: color var(--transition-fast);
+  }
+
+  .accordion-header:hover .accordion-icon,
+  .accordion-header[aria-expanded='true'] .accordion-icon {
+    color: var(--color-primary);
+  }
+
+  .accordion-icon__bar {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: currentColor;
+    border-radius: var(--radius-full);
+  }
+
+  .accordion-icon__bar--h {
+    width: 18px;
+    height: 2px;
+    transform: translate(-50%, -50%);
+  }
+
+  .accordion-icon__bar--v {
+    width: 2px;
+    height: 18px;
+    transform: translate(-50%, -50%);
+    transition: transform var(--transition-fast);
+  }
+
+  /* Collapse the vertical bar → minus when open */
+  .accordion-header[aria-expanded='true'] .accordion-icon__bar--v {
+    transform: translate(-50%, -50%) scaleY(0);
   }
 
   .accordion-content {
     display: grid;
     grid-template-rows: 0fr;
     overflow: hidden;
-    transition: grid-template-rows 0.3s ease-in-out;
+    transition: grid-template-rows 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .accordion-content.is-open {
@@ -113,77 +131,78 @@ const { expertiseAreas } = Astro.props;
     min-height: 0;
     overflow: hidden;
     padding-bottom: 0;
-    padding-top: 0;
     opacity: 0;
-    transition: opacity 0.25s ease-in-out, padding 0.3s ease-in-out;
+    transition: opacity 0.25s ease, padding 0.35s ease;
   }
 
   .accordion-content.is-open .accordion-panel {
     opacity: 1;
-    padding-bottom: var(--spacing-sm);
+    padding-bottom: var(--gap-lg);
   }
 
   .accordion-panel p {
-    font-size: var(--font-size-body-0);
+    font-size: var(--font-size-body-1);
     line-height: var(--line-height-body);
-    font-weight: var(--font-weight-regular);
-    color: var(--color-text-light);
+    color: var(--color-text-secondary);
     margin: 0;
-    max-width: var(--text-width-single);
-    transition: color 0.3s ease;
   }
 
-  @media (max-width: 768px) {
-    .accordion-header {
-      padding: var(--spacing-sm) 0;
-    }
+  .accordion-panel p + p {
+    margin-top: var(--gap-md);
+  }
 
-    .accordion-header h3 {
-      font-size: var(--font-size-body-0);
-    }
-
-    .accordion-content.is-open .accordion-panel {
-      padding-bottom: var(--spacing-sm);
-    }
-
-    .accordion-panel p {
-      font-size: var(--font-size-body-1);
+  @media (prefers-reduced-motion: reduce) {
+    .accordion-content,
+    .accordion-panel,
+    .accordion-title {
+      transition: none;
     }
   }
 </style>
 
 <script>
-  // Simple accordion functionality
-  const accordionItems = document.querySelectorAll('[data-accordion-item]');
+  import { trackEvent } from '../utils/analytics';
 
-  accordionItems.forEach((item) => {
-    const trigger = item.querySelector('[data-accordion-trigger]') as HTMLButtonElement;
-    const content = item.querySelector('[data-accordion-content]') as HTMLElement;
+  function setupAccordion() {
+    document.querySelectorAll('[data-accordion]').forEach((accordion) => {
+      const items = Array.from(accordion.querySelectorAll('[data-accordion-item]'));
 
-    if (!trigger || !content) return;
+      const open = (item: Element) => {
+        items.forEach((other) => {
+          const trigger = other.querySelector('[data-accordion-trigger]');
+          const content = other.querySelector('[data-accordion-content]');
+          if (!trigger || !content) return;
+          const isTarget = other === item;
+          trigger.setAttribute('aria-expanded', isTarget ? 'true' : 'false');
+          content.classList.toggle('is-open', isTarget);
+        });
+      };
 
-    trigger.addEventListener('click', () => {
-      const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+      // Hover opens nothing — the panels are tall, so a hover-driven open
+      // makes the page jump as the pointer crosses items. Click only.
+      items.forEach((item) => {
+        const trigger = item.querySelector('[data-accordion-trigger]');
+        const content = item.querySelector('[data-accordion-content]');
+        if (!trigger || !content) return;
 
-      // Close all other accordions
-      accordionItems.forEach((otherItem) => {
-        const otherTrigger = otherItem.querySelector('[data-accordion-trigger]') as HTMLButtonElement;
-        const otherContent = otherItem.querySelector('[data-accordion-content]') as HTMLElement;
-
-        if (otherItem !== item && otherTrigger && otherContent) {
-          otherTrigger.setAttribute('aria-expanded', 'false');
-          otherContent.classList.remove('is-open');
-        }
+        trigger.addEventListener('click', () => {
+          const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+          if (isOpen) {
+            trigger.setAttribute('aria-expanded', 'false');
+            content.classList.remove('is-open');
+          } else {
+            open(item);
+            const title = item.querySelector('.accordion-title')?.textContent?.trim();
+            if (title) trackEvent('expertise_open', { title });
+          }
+        });
       });
-
-      // Toggle current accordion
-      if (isOpen) {
-        trigger.setAttribute('aria-expanded', 'false');
-        content.classList.remove('is-open');
-      } else {
-        trigger.setAttribute('aria-expanded', 'true');
-        content.classList.add('is-open');
-      }
     });
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupAccordion);
+  } else {
+    setupAccordion();
+  }
 </script>

@@ -43,7 +43,7 @@ const TestimonialCarousel = ({ testimonials, autoPlay = true, interval = 7000 }:
   return (
     <div className="testimonial-carousel">
       <div className="testimonial-slideshow">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={currentIndex}
             className="testimonial-slide"

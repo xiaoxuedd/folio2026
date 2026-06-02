@@ -51,6 +51,19 @@ export function ChallengeDiagram() {
   const centerY = 400 + offsetY;
 
   useEffect(() => {
+    // Trigger icon animations after a short delay. Independent of the
+    // circle-draw effect below so icons appear even if the SVG circle
+    // ref isn't ready yet.
+    const iconAnimationTimer = setTimeout(() => {
+      setAnimationReady(true);
+    }, 400);
+
+    return () => {
+      clearTimeout(iconAnimationTimer);
+    };
+  }, []);
+
+  useEffect(() => {
     const circle = circleRef.current;
 
     if (!circle) return;
@@ -64,15 +77,6 @@ export function ChallengeDiagram() {
       circle.style.transition = 'stroke-dashoffset 1.5s ease-out';
       circle.style.strokeDashoffset = '0';
     });
-
-    // Trigger icon animations after circle is mostly drawn
-    const iconAnimationTimer = setTimeout(() => {
-      setAnimationReady(true);
-    }, 400);
-
-    return () => {
-      clearTimeout(iconAnimationTimer);
-    };
   }, []);
 
   return (

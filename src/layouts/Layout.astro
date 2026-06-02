@@ -1,25 +1,65 @@
 ---
 import 'aos/dist/aos.css';
-// Import self-hosted fonts
+// Self-hosted fonts
+import '@fontsource/manrope/300.css';
+import '@fontsource/manrope/400.css';
+import '@fontsource/manrope/500.css';
+import '@fontsource/manrope/600.css';
+import '@fontsource/manrope/700.css';
+import '@fontsource/manrope/800.css';
+import '@fontsource/inter/300.css';
 import '@fontsource/inter/400.css';
 import '@fontsource/inter/500.css';
 import '@fontsource/inter/600.css';
 import '@fontsource/inter/700.css';
+import '@fontsource/cormorant-garamond/400-italic.css';
 
 interface Props {
   title: string;
   description?: string;
   image?: string;
+  noindex?: boolean;
 }
 
 const {
   title,
   description = "Service designer & strategist based in London. Driving positive change through strategic design across healthcare, finance, retail, and social services.",
-  image = "/images/og-image.png"
+  image = "/images/og-image.png",
+  noindex = false
 } = Astro.props;
 const baseUrl = import.meta.env.BASE_URL;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(image, Astro.site);
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://designdoings.com';
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Xiaoxue Dong',
+  jobTitle: 'Service Designer & Strategist',
+  url: siteUrl,
+  image: ogImage.toString(),
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'London',
+    addressCountry: 'GB'
+  },
+  email: 'mailto:xiaoxue.sherryd@gmail.com',
+  sameAs: [
+    'https://www.linkedin.com/in/xiaoxued/'
+  ]
+};
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Design Doings',
+  url: siteUrl,
+  author: {
+    '@type': 'Person',
+    name: 'Xiaoxue Dong'
+  }
+};
 ---
 
 <!doctype html>
@@ -28,6 +68,7 @@ const ogImage = new URL(image, Astro.site);
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes"/>
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
 
     <!-- Canonical URL -->
     <link rel="canonical" href={canonicalURL} />
@@ -54,6 +95,10 @@ const ogImage = new URL(image, Astro.site);
 
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+
+    <!-- Structured data -->
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
 
     <!-- Google tag (gtag.js) -->
     <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-1H1K7GE6J0"></script>
@@ -106,211 +151,226 @@ const ogImage = new URL(image, Astro.site);
 <style is:global>
   :root {
     /* ============================================
-       COLOR TOKENS
+       SEMANTIC COLOUR TOKENS — Electric Mint
+       Single accent, cool-grey neutrals (purple tint).
        ============================================ */
-    --color-primary: #6443fe;        /* Light Purple */
-    --color-secondary: #4B32C8;      /* Mid Purple */
-    --color-accent: #271968;         /* Dark Purple */
-    --color-bg: #ffffff;             /* White */
-    --color-bg-secondary: #f6f6f6;   /* Light grey */
-    --color-text: #271968;           /* Dark Purple - headings */
-    --color-text-secondary: #666666; /* Dark grey - body text */
-    --color-text-light: #000000;     /* Black */
-    --color-border: #e5e5e5;
-    --color-border-alpha: rgba(228, 228, 231, 0.6);
-    --color-hover-bg: rgba(0, 0, 0, 0.03);
 
-    /* Primary alpha variants */
-    --color-primary-alpha-light: rgba(100, 67, 254, 0.08);
-    --color-primary-alpha-medium: rgba(100, 67, 254, 0.12);
+    /* -- Canonical semantic tokens -- */
+    --bg:        #FFFFFF;
+    --surface:   #F8F8FC;
+    --surface-2: #EFEFF7;
+    --border:    #DCDCE8;
+    --text:      #1C1A38;
+    --text-2:    #6E6B8A;
+    --text-3:    #A8A6BD;
+    --accent:    #0A7A58;         /* mint-700 — 5.2:1 AA on white */
+    --accent-h:  #086645;         /* hover / pressed */
+    --accent-bg: #EDFAF4;         /* mint-50 tint background */
+    --glass:     rgba(255,255,255,.82);
+    --project:   #5B3CEE;         /* project-scoped only — case studies */
 
-    /* Gold accent variants */
-    --color-gold: #F3D700;
-    --color-gold-alpha-light: rgba(243, 215, 0, 0.1);
-    --color-gold-alpha-medium: rgba(243, 215, 0, 0.25);
-    --color-gold-alpha-strong: rgba(243, 215, 0, 0.4);
+    /* -- Backward-compatible aliases (used by existing components) -- */
+    --color-bg:                   var(--bg);
+    --color-bg-secondary:         var(--surface);
+    --color-text:                 var(--text);
+    --color-text-secondary:       var(--text-2);
+    --color-text-light:           var(--text);
+    --color-border:               var(--border);
+    --color-border-alpha:         rgba(220,220,232,.6);
+    --color-hover-bg:             rgba(28,26,56,.04);
+    --color-accent-coral:         var(--accent);
+    --color-accent-coral-hover:   var(--accent-h);
+    --color-accent-indigo:        var(--project);
+    --color-primary:              var(--accent);
+    --color-secondary:            var(--project);
+    --color-accent:               var(--text);  /* nav/footer contrast surfaces */
+    --color-primary-alpha-light:  rgba(10,122,88,.08);
+    --color-primary-alpha-medium: rgba(10,122,88,.12);
 
-    /* Icterine accent variants */
-    --color-icterine: #FCFF61;
-    --color-icterine-alpha-light: rgba(252, 255, 97, 0.1);
-    --color-icterine-alpha-medium: rgba(252, 255, 97, 0.25);
-    --color-icterine-alpha-strong: rgba(252, 255, 97, 0.4);
+    /* Inverse surface — permanently-dark sections (ContactCTA), theme-independent */
+    --color-bg-inverse:   #0A0812;
+    --color-text-inverse: #F0EFF8;
 
-    /* Icon colors */
-    --color-icon-bg: #F3F4F6;        /* Icon circle backgrounds */
-    --color-icon-stroke: #364153;     /* Dark icon strokes */
+    /* Hero diagram surfaces */
+    --color-pill-neutral-bg: var(--surface-2);
+    --color-grid-mark:       var(--border);
+
+    /* Gold / icterine — legacy case-study accents */
+    --color-gold:                 #F3D700;
+    --color-gold-alpha-light:     rgba(243,215,0,.10);
+    --color-gold-alpha-medium:    rgba(243,215,0,.25);
+    --color-gold-alpha-strong:    rgba(243,215,0,.40);
+    --color-icterine:             #FCFF61;
+    --color-icterine-alpha-light:  rgba(252,255,97,.10);
+    --color-icterine-alpha-medium: rgba(252,255,97,.25);
+    --color-icterine-alpha-strong: rgba(252,255,97,.40);
+
+    /* Icon colours */
+    --color-icon-bg:     var(--surface-2);
+    --color-icon-stroke: var(--text);
 
     /* Icon sizes */
-    --icon-xs: 16px;                  /* Extra small icons (navigation links) */
-    --icon-sm: 20px;                  /* Small icons (arrows) */
-    --icon-md: 24px;                  /* Medium icons (chevrons, menu items) */
-    --icon-lg: 32px;                  /* Large icons (button icons) */
-    --icon-xl: 40px;                  /* Extra large icons (avatars) */
-    --icon-2xl: 48px;                 /* 2XL icons (contact buttons) */
-    --icon-3xl: 64px;                 /* 3XL icons (hero/feature icons) */
+    --icon-xs:  16px;
+    --icon-sm:  20px;
+    --icon-md:  24px;
+    --icon-lg:  32px;
+    --icon-xl:  40px;
+    --icon-2xl: 48px;
+    --icon-3xl: 64px;
 
     /* ============================================
-       LAYOUT TOKENS
+       LAYOUT
        ============================================ */
-    --max-width: 1200px;
+    --max-width: 1100px;
 
-    /* Text width constraints for readability */
-    --text-width-single: 900px;  /* Single column max-width */
-    --text-width-column: 500px;  /* Two-column text max-width */
-
-    /* Content width constraints */
-    --content-width-narrow: 800px;   /* Single column narrow content */
-    --content-width-reading: 900px;  /* Optimal reading width */
-    --content-width-wide: 1400px;    /* Wide content areas */
+    --text-width-single:     900px;
+    --text-width-column:     500px;
+    --content-width-narrow:  800px;
+    --content-width-reading: 900px;
+    --content-width-wide:   1400px;
 
     /* ============================================
-       SPACING TOKENS
+       SPACING — 8px grid
        ============================================ */
-    --spacing-xs: 0.5rem;
-    --spacing-sm: 1rem;
-    --spacing-md: 2rem;
-    --spacing-lg: 4rem;
-    --spacing-xl: 8rem;
-    --spacing-2xl: 12rem;
+    --spacing-xs:  0.5rem;   /* 8px */
+    --spacing-sm:  1rem;     /* 16px */
+    --spacing-md:  2rem;     /* 32px */
+    --spacing-lg:  4rem;     /* 64px */
+    --spacing-xl:  8rem;     /* 128px */
+    --spacing-2xl: 12rem;    /* 192px */
 
-    /* Gap tokens for flexbox/grid layouts */
-    --gap-tight: 0.125rem;    /* 2px - Very tight spacing */
-    --gap-xs: 0.5rem;         /* 8px - Extra small */
-    --gap-sm: 0.75rem;        /* 12px - Small */
-    --gap-md: 1rem;           /* 16px - Medium */
-    --gap-lg: 1.5rem;         /* 24px - Large */
-    --gap-xl: 2rem;           /* 32px - Extra large */
-    --gap-2xl: 3rem;          /* 48px - 2XL */
-    --gap-3xl: 5rem;          /* 80px - 3XL (for large section gaps) */
+    /* Gap tokens */
+    --gap-tight: 0.125rem;  /* 2px */
+    --gap-xs:    0.25rem;   /* 4px */
+    --gap-sm:    0.5rem;    /* 8px */
+    --gap-md:    1rem;      /* 16px */
+    --gap-lg:    1.5rem;    /* 24px */
+    --gap-xl:    2.5rem;    /* 40px */
+    --gap-2xl:   4rem;      /* 64px */
+    --gap-3xl:   6.75rem;   /* 108px */
 
     /* ============================================
-       OPACITY LEVELS
+       OPACITY
        ============================================ */
-    --opacity-subtle: 0.1;        /* Very faint overlays */
-    --opacity-light: 0.2;         /* Light overlays */
-    --opacity-medium: 0.4;        /* Medium emphasis */
-    --opacity-visible: 0.6;       /* Clearly visible but muted */
-    --opacity-strong: 0.7;        /* Strong visibility */
+    --opacity-subtle:  .10;
+    --opacity-light:   .20;
+    --opacity-medium:  .40;
+    --opacity-visible: .60;
+    --opacity-strong:  .70;
 
     /* ============================================
-       TYPOGRAPHY - FONT SIZES
-       Usage: Apply to specific text elements
+       TYPOGRAPHY — sizes
        ============================================ */
-    /* H0 - Hero display text */
-    --font-size-h0: 4rem;                                /* 64px: Hero headlines */
+    --font-size-h0: 4.25rem;                            /* 68px: hero display */
+    --font-size-h1: 3.25rem;                            /* 52px */
+    --font-size-h2: 2.5rem;                             /* 40px */
+    --font-size-h3: 2rem;                               /* 32px */
+    --font-size-h4: clamp(1.25rem, 3vw, 1.5rem);       /* 20–24px */
+    --font-size-h5: 1.25rem;                            /* 20px */
+    --font-size-h6: 1rem;                               /* 16px */
 
-    /* Heading sizes */
-    --font-size-h1: 2.5rem;                              /* 40px: Section titles */
-    --font-size-h2: 2rem;                                /* 32px: Project titles */
-    --font-size-h3: 1.5rem;                              /* 24px: Accordion headers, card titles */
-    --font-size-h4: clamp(1.5rem, 3vw, 2rem);           /* 24-32px: Minor headings */
-    --font-size-h5: 1.5rem;                              /* 24px: Small heading */
-    --font-size-h6: 1.25rem;                             /* 20px: Tiny heading */
+    --font-size-body-0:  1.125rem;  /* 18px: lead / large body */
+    --font-size-body-1:  1rem;      /* 16px: default body */
+    --font-size-body-lg: 1.25rem;   /* legacy alias */
+    --font-size-body:    1.125rem;  /* legacy alias */
+    --font-size-body-sm: 1rem;      /* legacy alias */
+    --font-size-body-xs: 0.875rem;  /* 14px */
 
-    /* Body text sizes */
-    --font-size-body-0: 1.13rem;                         /* 18px: Large body, intro text */
-    --font-size-body-1: 1rem;                            /* 16px: Default body text */
-    --font-size-body-lg: 1.25rem;                        /* 20px: Legacy - use body-0 */
-    --font-size-body: 1.125rem;                          /* 18px: Legacy */
-    --font-size-body-sm: 1rem;                           /* 16px: Legacy - use body-1 */
-    --font-size-body-xs: 0.9375rem;                      /* 15px: Extra small body, mobile */
+    --font-size-ui-lg: 1rem;        /* 16px */
+    --font-size-ui:    0.9375rem;   /* 15px */
+    --font-size-ui-sm: 0.875rem;    /* 14px */
+    --font-size-ui-xs: 0.75rem;     /* 12px */
 
-    /* UI element sizes */
-    --font-size-ui-lg: 1rem;                             /* 16px: Large button */
-    --font-size-ui: 0.95rem;                             /* 15.2px: Default button, badge */
-    --font-size-ui-sm: 0.875rem;                         /* 14px: Small button, tag */
-    --font-size-ui-xs: 0.85rem;                          /* 13.6px: Tiny UI text, caption */
-
-    /* Display sizes (legacy - keeping for compatibility) */
-    --font-size-display-lg: clamp(2.5rem, 5vw, 4rem);   /* 40-64px: Main hero headings */
-    --font-size-display-md: clamp(2rem, 4vw, 3.5rem);   /* 32-56px: Case study hero */
-    --font-size-display-sm: clamp(2rem, 4vw, 3rem);     /* 32-48px: Section headings */
+    --font-size-display-lg: clamp(2.5rem, 5vw, 4.25rem);
+    --font-size-display-md: clamp(2rem, 4vw, 3.5rem);
+    --font-size-display-sm: clamp(2rem, 4vw, 3rem);
 
     /* ============================================
-       TYPOGRAPHY - FONT WEIGHTS
+       TYPOGRAPHY — weights / line-heights / tracking
        ============================================ */
-    --font-weight-regular: 400;      /* Regular text */
-    --font-weight-medium: 500;       /* Medium emphasis */
-    --font-weight-semibold: 600;     /* Buttons, labels, subheadings */
-    --font-weight-bold: 700;         /* Headings, strong emphasis */
+    --font-weight-regular:  300;  /* Inter 300 — light-first body */
+    --font-weight-medium:   500;
+    --font-weight-semibold: 600;
+    --font-weight-bold:     700;
 
-    /* ============================================
-       TYPOGRAPHY - LINE HEIGHTS
-       ============================================ */
-    --line-height-hero: 1.2;         /* H0 hero text */
-    --line-height-headings: 1.4;     /* H1, H2, H3 */
-    --line-height-body: 1.4;         /* B0, B1 body text */
-    --line-height-tight: 1.2;        /* Legacy - use hero */
-    --line-height-normal: 1.6;       /* UI elements, compact text */
-    --line-height-relaxed: 1.7;      /* Legacy */
-    --line-height-loose: 1.8;        /* Very spacious reading */
+    --line-height-hero:     1.0;
+    --line-height-headings: 1.15;
+    --line-height-body:     1.65;
+    --line-height-tight:    1.15;
+    --line-height-normal:   1.5;
+    --line-height-relaxed:  1.7;
+    --line-height-loose:    1.8;
 
-    /* ============================================
-       TYPOGRAPHY - LETTER SPACING
-       ============================================ */
-    --letter-spacing-tight: -0.02em; /* Large headings */
-    --letter-spacing-normal: 0;      /* Default */
-    --letter-spacing-wide: 0.02em;   /* Small caps, labels */
+    --letter-spacing-tight:  -0.03em;
+    --letter-spacing-normal:  0;
+    --letter-spacing-wide:    0.10em;
 
     /* ============================================
        BORDER RADIUS
        ============================================ */
-    --radius-xs: 2px;
-    --radius-sm: 4px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
-    --radius-xl: 16px;
-    --radius-2xl: 20px;
-    --radius-3xl: 24px;
-    --radius-pill: 50px;
+    --radius-xs:   2px;
+    --radius-sm:   6px;
+    --radius-md:   8px;
+    --radius-lg:   16px;
+    --radius-xl:   20px;
+    --radius-2xl:  20px;
+    --radius-3xl:  24px;
+    --radius-pill: 9999px;
     --radius-full: 9999px;
 
     /* ============================================
        BORDERS
        ============================================ */
-    --border-divider: 1px solid var(--color-border);
+    --border-divider: 1px solid var(--border);
 
     /* ============================================
        TRANSITIONS
        ============================================ */
-    --transition-fast: 0.15s ease;
-    --transition-normal: 0.3s ease;
-    --transition-slow: 0.5s ease;
+    --transition-fast:   0.15s ease;
+    --transition-normal: 0.28s cubic-bezier(.22,.68,0,1.2);
+    --transition-slow:   0.5s ease;
 
     /* ============================================
-       SHADOW ELEVATION SYSTEM
+       SHADOWS
        ============================================ */
-    --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.06);         /* Subtle card elevation */
-    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);         /* Medium card elevation */
-    --shadow-lg: 0 8px 32px rgba(100, 67, 254, 0.1);     /* Large card with brand color */
-    --shadow-hover: 0 10px 30px rgba(100, 67, 254, 0.3); /* Button hover state */
+    --shadow-sm:    0 1px 2px rgba(28,26,56,.04);
+    --shadow-md:    0 4px 12px rgba(28,26,56,.07);
+    --shadow-lg:    0 8px 24px rgba(28,26,56,.10);
+    --shadow-hover: 0 6px 16px rgba(28,26,56,.12);
+    --shadow-glow:  rgba(10,122,88,.15);
 
     /* ============================================
-       BLUR EFFECTS
+       BLUR
        ============================================ */
-    --blur-glass: 12px;       /* Glassmorphism blur for navigation */
-    --blur-menu: 10px;        /* Mobile menu blur */
-    --blur-overlay: 10px;     /* Card/overlay backdrop blur */
+    --blur-glass:   20px;
+    --blur-menu:    10px;
+    --blur-overlay: 10px;
   }
 
   [data-theme="dark"] {
-    --color-primary: #7c5cff;
-    --color-secondary: #0ea5e9;
-    --color-accent: #1f0e3d;
-    --color-bg: #1a0f2e;
-    --color-bg-secondary: #2d1b4e;
-    --color-text: #f1f5f9;
-    --color-text-secondary: #f1f5f9;  /* Same as main text in dark mode */
-    --color-text-light: #cbd5e1;
-    --color-border: #3d2d5f;
-    --color-border-alpha: rgba(61, 45, 95, 0.6);
-    --color-hover-bg: rgba(255, 255, 255, 0.05);
+    --bg:        #0A0812;
+    --surface:   #12101E;
+    --surface-2: #1C1A2E;
+    --border:    rgba(53,51,84,.85);
+    --text:      #F0EFF8;
+    --text-2:    #8B89A5;
+    --text-3:    #514E6E;
+    --accent:    #24D48E;         /* mint-400 — 10.9:1 AAA on dark bg */
+    --accent-h:  #3BEBA0;
+    --accent-bg: rgba(36,212,142,.12);
+    --glass:     rgba(10,8,18,.86);
+    --project:   #7B63F5;
 
-    /* Shadow elevation system - adjusted for dark mode */
-    --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.25);         /* More pronounced in dark mode */
-    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 8px 32px rgba(124, 92, 255, 0.2);     /* Brand color adjusted */
-    --shadow-hover: 0 10px 30px rgba(124, 92, 255, 0.4);
+    /* Recomputed backward-compat overrides */
+    --color-border-alpha:         rgba(53,51,84,.50);
+    --color-hover-bg:             rgba(255,255,255,.04);
+    --color-primary-alpha-light:  rgba(36,212,142,.10);
+    --color-primary-alpha-medium: rgba(36,212,142,.16);
+
+    --shadow-sm:    0 1px 2px rgba(0,0,0,.30);
+    --shadow-md:    0 4px 12px rgba(0,0,0,.40);
+    --shadow-lg:    0 8px 24px rgba(0,0,0,.45);
+    --shadow-hover: 0 6px 16px rgba(0,0,0,.50);
   }
 
   * {
@@ -325,7 +385,7 @@ const ogImage = new URL(image, Astro.site);
     left: 0;
     right: 0;
     height: 80px;
-    background: linear-gradient(to bottom, var(--color-bg) 0%, var(--color-bg) 30%, transparent 100%);
+    background: linear-gradient(to bottom, var(--bg) 0%, var(--bg) 30%, transparent 100%);
     pointer-events: none;
     z-index: 998;
     transition: background 0.3s ease;
@@ -335,6 +395,7 @@ const ogImage = new URL(image, Astro.site);
     scroll-behavior: smooth;
     height: 100%;
     scroll-padding-top: 100px;
+    scrollbar-gutter: stable;
   }
 
   /* Respect users' motion preferences */
@@ -346,6 +407,7 @@ const ogImage = new URL(image, Astro.site);
 
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 300;
     color: var(--color-text-secondary);
     background: var(--color-bg);
     line-height: var(--line-height-body);
@@ -362,6 +424,7 @@ const ogImage = new URL(image, Astro.site);
   }
 
   h1, h2, h3, h4, h5, h6 {
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-headings);
     color: var(--color-text);
@@ -419,13 +482,40 @@ const ogImage = new URL(image, Astro.site);
   }
 
   a {
-    color: var(--color-primary);
+    color: var(--color-text);
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: opacity 0.2s ease, color 0.3s ease;
   }
 
   a:hover {
-    color: var(--color-secondary);
+    opacity: 0.7;
+  }
+
+  /* Primary CTA — the only place coral appears as a button background.
+     Used sparingly: hero, /about-me contact block. */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-xs);
+    padding: 0.875rem 1.5rem;
+    background: var(--color-accent-coral);
+    color: #FFFFFF;
+    border-radius: var(--radius-pill);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-ui-lg);
+    border: none;
+    cursor: pointer;
+    transition: background-color var(--transition-fast), transform 0.1s ease;
+  }
+
+  .btn-primary:hover {
+    background: var(--color-accent-coral-hover);
+    color: #FFFFFF;
+    opacity: 1;
+  }
+
+  .btn-primary:active {
+    transform: scale(0.98);
   }
 
   .container {
@@ -457,39 +547,36 @@ const ogImage = new URL(image, Astro.site);
 
   .btn {
     display: inline-block;
-    padding: 1rem 2rem;
-    background: var(--color-primary);
-    color: white;
-    border-radius: var(--radius-md);
+    padding: 0.875rem 1.5rem;
+    background: var(--color-text);
+    color: var(--color-bg);
+    border-radius: var(--radius-pill);
     font-weight: var(--font-weight-semibold);
-    transition: all var(--transition-normal);
+    transition: opacity var(--transition-fast), transform 0.1s ease;
     border: none;
     cursor: pointer;
     font-size: var(--font-size-ui-lg);
   }
 
   .btn:hover {
-    background: var(--color-accent);
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-hover);
-    color: white;
+    opacity: 0.85;
+    color: var(--color-bg);
   }
 
   .btn:active {
-    transform: translateY(-1px);
+    transform: scale(0.98);
   }
 
   .btn-secondary {
     background: transparent;
-    color: var(--color-primary);
-    border: 2px solid var(--color-primary);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
   }
 
   .btn-secondary:hover {
-    background: var(--color-primary);
-    color: white;
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-hover);
+    background: var(--color-bg-secondary);
+    color: var(--color-text);
+    opacity: 1;
   }
 
   @keyframes float {
@@ -513,6 +600,12 @@ const ogImage = new URL(image, Astro.site);
 
     .container {
       padding: 0 var(--spacing-sm);
+    }
+  }
+
+  @media (min-width: 1600px) {
+    :root {
+      --max-width: 1300px;
     }
   }
 </style>

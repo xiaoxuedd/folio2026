@@ -1,0 +1,200 @@
+---
+import { ProfilePhoto } from './ProfilePhoto';
+import EmailIcon from './icons/EmailIcon.astro';
+import LinkedInIcon from './icons/LinkedInIcon.astro';
+import DownloadIcon from './icons/DownloadIcon.astro';
+import profileImage from '../images/xiaoxue-photo-2.jpeg';
+---
+
+<div class="about-sidebar-inner">
+  <div class="sidebar-photo">
+    <ProfilePhoto imageSrc={profileImage.src} client:load />
+  </div>
+
+  <p class="sidebar-bio">
+    I came to service design from a fascination with people: how things work and how people behave
+    within them. A decade later, that curiosity hasn't gone anywhere. Outside of work, you'll find
+    me bouldering on a wall or Duolingoing on my phone.
+  </p>
+
+  <div class="sidebar-links">
+    <a href="mailto:xiaoxue.sherryd@gmail.com" class="sidebar-icon-link" aria-label="Email">
+      <div class="icon-wrapper">
+        <EmailIcon />
+        <div class="white-icon-layer"><EmailIcon /></div>
+      </div>
+      <span class="icon-label">Email</span>
+    </a>
+    <a href="https://www.linkedin.com/in/xiaoxued/" target="_blank" rel="noopener noreferrer" class="sidebar-icon-link" aria-label="LinkedIn">
+      <div class="icon-wrapper">
+        <LinkedInIcon />
+        <div class="white-icon-layer"><LinkedInIcon /></div>
+      </div>
+      <span class="icon-label">LinkedIn</span>
+    </a>
+    <a href="/resume-xiaoxue.pdf" target="_blank" rel="noopener noreferrer" class="sidebar-icon-link" aria-label="Resume">
+      <div class="icon-wrapper">
+        <DownloadIcon />
+        <div class="white-icon-layer"><DownloadIcon /></div>
+      </div>
+      <span class="icon-label">Resume</span>
+    </a>
+  </div>
+</div>
+
+<style>
+  .about-sidebar-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+  }
+
+  .sidebar-photo {
+    width: 100%;
+  }
+
+  .sidebar-bio {
+    font-size: var(--font-size-body-1);
+    line-height: var(--line-height-body);
+    color: var(--color-text-secondary);
+    margin: 0;
+    transition: color 0.3s ease;
+  }
+
+  .sidebar-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: var(--spacing-sm);
+  }
+
+  .sidebar-icon-link {
+    width: var(--icon-2xl);
+    height: var(--icon-2xl);
+    background: transparent;
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+    text-decoration: none;
+    position: relative;
+    overflow: visible;
+  }
+
+  .icon-wrapper {
+    position: relative;
+    width: var(--icon-2xl);
+    height: var(--icon-2xl);
+  }
+
+  .icon-wrapper > :global(svg) {
+    width: var(--icon-2xl);
+    height: var(--icon-2xl);
+  }
+
+  .white-icon-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--icon-2xl);
+    height: var(--icon-2xl);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .white-icon-layer :global(svg) {
+    width: var(--icon-2xl);
+    height: var(--icon-2xl);
+  }
+
+  .sidebar-icon-link :global(svg path) {
+    stroke: var(--color-icon-stroke);
+    transition: none;
+  }
+
+  .sidebar-icon-link :global(svg circle),
+  .sidebar-icon-link :global(svg rect) {
+    fill: var(--color-icon-bg);
+    transition: none;
+  }
+
+  .sidebar-icon-link:hover :global(svg circle),
+  .sidebar-icon-link:hover :global(svg rect) {
+    fill: var(--color-primary);
+    animation: wipeCircle 0.4s ease-out forwards;
+  }
+
+  .sidebar-icon-link:hover .white-icon-layer {
+    opacity: 1;
+    mask-image: radial-gradient(
+      circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      black 49.9%,
+      transparent 50%
+    );
+    mask-size: 0% 0%;
+    mask-position: var(--mouse-x, 50%) var(--mouse-y, 50%);
+    mask-repeat: no-repeat;
+    animation: revealWhite 0.48s ease-out 0.01s forwards;
+  }
+
+  .sidebar-icon-link .white-icon-layer :global(svg path) {
+    stroke: white;
+  }
+
+  @keyframes wipeCircle {
+    0%   { clip-path: circle(0% at var(--mouse-x, 50%) var(--mouse-y, 50%)); }
+    100% { clip-path: circle(150% at var(--mouse-x, 50%) var(--mouse-y, 50%)); }
+  }
+
+  @keyframes revealWhite {
+    0%   { mask-size: 0% 0%; }
+    100% { mask-size: 300% 300%; }
+  }
+
+  .icon-label {
+    position: absolute;
+    top: 56px;
+    font-size: var(--font-size-ui-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text);
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+  }
+
+  .sidebar-icon-link:hover {
+    transform: translateY(-2px);
+  }
+
+  .sidebar-icon-link:hover .icon-label {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<script>
+  function setupIconHover() {
+    document.querySelectorAll('.sidebar-icon-link').forEach(link => {
+      link.addEventListener('mouseenter', (e) => {
+        const mouseEvent = e as MouseEvent;
+        const rect = link.getBoundingClientRect();
+        const x = ((mouseEvent.clientX - rect.left) / rect.width) * 100;
+        const y = ((mouseEvent.clientY - rect.top) / rect.height) * 100;
+        (link as HTMLElement).style.setProperty('--mouse-x', `${x}%`);
+        (link as HTMLElement).style.setProperty('--mouse-y', `${y}%`);
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupIconHover);
+  } else {
+    setupIconHover();
+  }
+</script>

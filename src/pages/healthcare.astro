@@ -329,6 +329,8 @@ const testimonials = [
           </div>
         </section>
 
+        <hr class="section-divider" />
+
         <!-- 5. Reflection Section -->
         <section id="reflection" class="reflections-section" data-aos="fade-up">
           <h2>Learnings & Reflections</h2>
@@ -360,6 +362,54 @@ const testimonials = [
 </Layout>
 
 <script>
+  import { trackEvent } from '../utils/analytics';
+
+  // Fire one-shot scroll-depth milestones on the case study so we can see how
+  // far through the story people actually read (this is the centrepiece page
+  // and was previously uninstrumented). Aggregate only — no PII.
+  function setupReadDepthTracking() {
+    const milestones = [25, 50, 75, 100];
+    const fired = new Set<number>();
+    let ticking = false;
+
+    const check = () => {
+      const doc = document.documentElement;
+      const scrollable = doc.scrollHeight - window.innerHeight;
+      if (scrollable <= 0) return;
+      const percent = (window.pageYOffset / scrollable) * 100;
+
+      milestones.forEach((m) => {
+        if (percent >= m && !fired.has(m)) {
+          fired.add(m);
+          trackEvent('case_study_scroll', { project: 'healthcare', depth: m });
+        }
+      });
+
+      if (fired.size === milestones.length) {
+        window.removeEventListener('scroll', onScroll);
+      }
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          check();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    check();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupReadDepthTracking);
+  } else {
+    setupReadDepthTracking();
+  }
+
   // Animate circle title paths on scroll
   function setupCircleTitleAnimations() {
     const circleTitles = document.querySelectorAll('.circle-title[data-circle-id]');
@@ -425,6 +475,31 @@ const testimonials = [
   setTimeout(setupCircleTitleAnimations, 1000);
   setTimeout(setupCircleTitleAnimations, 2000);
 </script>
+
+<style is:global>
+  /* Remap primary accent to project violet for this case study page */
+  :root {
+    --color-primary:              #5B3CEE;
+    --color-primary-alpha-light:  rgba(91,60,238,.08);
+    --color-primary-alpha-medium: rgba(91,60,238,.12);
+  }
+  [data-theme="dark"] {
+    --color-primary:              #7B63F5;
+    --color-primary-alpha-light:  rgba(123,99,245,.10);
+    --color-primary-alpha-medium: rgba(123,99,245,.16);
+  }
+  /* Nav progress tracker stays mint green */
+  .project-header {
+    --color-primary:              #0A7A58;
+    --color-primary-alpha-light:  rgba(10,122,88,.08);
+    --color-primary-alpha-medium: rgba(10,122,88,.12);
+  }
+  [data-theme="dark"] .project-header {
+    --color-primary:              #24D48E;
+    --color-primary-alpha-light:  rgba(36,212,142,.10);
+    --color-primary-alpha-medium: rgba(36,212,142,.16);
+  }
+</style>
 
 <style>
   .project-page {
@@ -870,9 +945,15 @@ const testimonials = [
     margin: var(--spacing-md) 0;
   }
 
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--color-border);
+    margin: var(--spacing-md) 0;
+  }
+
   /* 12. Reflections Section */
   .reflections-section {
-    margin: var(--spacing-xl) 0;
+    margin: var(--spacing-md) 0;
   }
 
   .reflections-section h2 {

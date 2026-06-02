@@ -8,6 +8,7 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "test:links": "node scripts/test-links.js",
     "test:seo": "node scripts/test-seo.js",
     "test:performance": "node scripts/test-performance.js",
     "test": "npm run build && npm run test:seo"
@@ -15,7 +16,9 @@
   "dependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/react": "^3.6.2",
+    "@fontsource/cormorant-garamond": "^5.2.11",
     "@fontsource/inter": "^5.2.8",
+    "@fontsource/manrope": "^5.2.8",
     "@gsap/react": "^2.1.2",
     "@szhsin/react-accordion": "^1.4.1",
     "@types/react": "^18.3.12",

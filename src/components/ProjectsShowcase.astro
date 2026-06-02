@@ -7,61 +7,83 @@ interface Props {
 }
 
 const { projects } = Astro.props;
-const heroProject = projects[0];
-const remainingProjects = projects.slice(1);
+
+// The two flagship projects anchor a large 2-up row; the rest fill a 3-up row.
+const featured = projects.slice(0, 2);
+const rest = projects.slice(2);
 ---
 
-<section id="projects" class="projects-section">
+<section id="works" class="projects-section">
   <div class="container">
-    <div data-aos="fade-up">
-      <h1>Selected works</h1>
-    </div>
+    <header class="section-head" data-aos="fade-up">
+      <h2 class="section-heading">Selected works</h2>
+    </header>
 
-    <div class="projects-showcase">
-      {heroProject && (
-        <div class="hero-project">
-          <ProjectCard project={heroProject} index={0} />
-        </div>
-      )}
-
-      <div class="projects-grid">
-        {remainingProjects.map((project, index) => (
-          <ProjectCard project={project} index={index + 1} />
+    {featured.length > 0 && (
+      <div class="projects-grid projects-grid--featured">
+        {featured.map((project, index) => (
+          <ProjectCard project={project} index={index} featured />
         ))}
       </div>
-    </div>
+    )}
+
+    {rest.length > 0 && (
+      <div class="projects-grid projects-grid--rest">
+        {rest.map((project, index) => (
+          <ProjectCard project={project} index={index + featured.length} />
+        ))}
+      </div>
+    )}
   </div>
 </section>
 
 <style>
   .projects-section {
     background: var(--color-bg);
-    padding: var(--spacing-md) 0 var(--spacing-lg) 0;
+    padding: clamp(5rem, 12vw, 10rem) 0;
   }
 
-  .projects-section h1 {
-    margin-bottom: var(--spacing-md);
+  .section-head {
+    margin-bottom: var(--gap-2xl);
   }
 
-  .projects-showcase {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-sm);
-  }
-
-  .hero-project {
-    width: 100%;
+  .section-heading {
+    font-size: clamp(2rem, 4.4vw, 3.25rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    font-weight: var(--font-weight-bold);
+    margin: 0;
   }
 
   .projects-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-sm);
+    gap: var(--gap-lg);
   }
 
-  @media (max-width: 768px) {
-    .projects-grid {
+  /* minmax(0, 1fr) lets tracks shrink below content min-width, so the grid
+     reflows cleanly on narrow viewports instead of overflowing. */
+  .projects-grid--featured {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-bottom: var(--gap-2xl);
+  }
+
+  .projects-grid--rest {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @media (max-width: 960px) {
+    .projects-grid--rest {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--gap-lg);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .projects-grid--featured,
+    .projects-grid--rest {
       grid-template-columns: 1fr;
+      gap: var(--gap-2xl);
     }
   }
 </style>

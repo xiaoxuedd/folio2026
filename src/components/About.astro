@@ -73,37 +73,120 @@ const logos: ClientLogo[] = [
 ];
 ---
 
-<section id="about" class="about">
+<section id="about" class="about" data-aos="fade-up">
   <div class="container">
-    <!-- <div class="about-content" data-aos="fade-up">
-      <h1>About</h1>
-      <div class="about-text">
-        <p>
-          A service designer and strategist based in London, I bring over a decade of experience
-          transforming complex challenges into meaningful solutions. My work spans healthcare,
-          finance, retail, and social services—always focused on creating measurable impact
-          through strategic design.
-        </p>
-      </div>
-    </div> -->
+    <h2 class="section-heading">Selected clients</h2>
+  </div>
 
-    <div class="clients-section" data-aos="fade-up" data-aos-delay="100">
-      <h2>Selected clients</h2>
-      <div class="clients-grid">
-        {logos.map((logo, index) => (
-          <div class="client-logo">
-            <img
-              src={logo.light.src}
-              alt="Client logo"
-              loading="lazy"
-              class={`client-logo-img client-logo-${index}`}
-            />
-          </div>
-        ))}
-      </div>
+  <div class="marquee" role="img" aria-label="Logos of selected clients">
+    <div class="marquee__track">
+      {logos.map((logo, index) => (
+        <div class="client-logo">
+          <img
+            src={logo.light.src}
+            alt="Client logo"
+            loading="eager"
+            class={`client-logo-img client-logo-${index}`}
+          />
+        </div>
+      ))}
+      {/* Duplicate set for a seamless infinite loop */}
+      {logos.map((logo, index) => (
+        <div class="client-logo" aria-hidden="true">
+          <img
+            src={logo.light.src}
+            alt=""
+            loading="eager"
+            class={`client-logo-img client-logo-${index}`}
+          />
+        </div>
+      ))}
     </div>
   </div>
 </section>
+
+<script is:inline>
+  (function () {
+    function initMarquee() {
+      const marquee = document.querySelector('.marquee');
+      const track = document.querySelector('.marquee__track');
+      if (!marquee || !track) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      // Hand off from CSS animation to JS-driven position so we can
+      // decelerate smoothly rather than snap on play-state toggle.
+      track.style.animation = 'none';
+
+      const APPROACH_DIST = 100; // px outside marquee where slowdown begins
+      const EASE = 10;           // exponential factor — higher = snappier
+
+      let halfWidth = 0, normalVel = 0;
+      let vel = 0, targetVel = 0;
+      let x = 0, lastTime = null, started = false;
+
+      function start() {
+        halfWidth  = track.scrollWidth / 2;
+        normalVel  = halfWidth / 60000; // px/ms → 60 s loop
+        vel        = normalVel;
+        targetVel  = normalVel;
+        started    = true;
+        requestAnimationFrame(tick);
+      }
+
+      // Wait for images so scrollWidth is accurate before starting.
+      const imgs    = Array.from(track.querySelectorAll('img'));
+      const pending = imgs.filter(img => !img.complete);
+      if (!pending.length) {
+        start();
+      } else {
+        let n = 0;
+        const onLoad = () => { if (++n >= pending.length) start(); };
+        pending.forEach(img => {
+          img.addEventListener('load', onLoad);
+          img.addEventListener('error', onLoad);
+        });
+      }
+
+      // Proximity: ease speed toward 0 as cursor nears, stop when inside.
+      document.addEventListener('mousemove', e => {
+        if (!started) return;
+        const r  = marquee.getBoundingClientRect();
+        const dx = Math.max(0, Math.max(r.left - e.clientX, e.clientX - r.right));
+        const dy = Math.max(0, Math.max(r.top  - e.clientY, e.clientY - r.bottom));
+        const t  = Math.min(1, Math.hypot(dx, dy) / APPROACH_DIST);
+        targetVel = normalVel * t * t * (3 - 2 * t); // smoothstep
+      });
+
+      // Full speed again when cursor leaves the viewport.
+      document.addEventListener('mouseleave', () => {
+        if (started) targetVel = normalVel;
+      });
+
+      window.addEventListener('resize', () => {
+        if (!started) return;
+        halfWidth = track.scrollWidth / 2;
+        normalVel = halfWidth / 60000;
+      });
+
+      function tick(time) {
+        requestAnimationFrame(tick);
+        if (lastTime === null) { lastTime = time; return; }
+        const dt = Math.min(time - lastTime, 64);
+        lastTime = time;
+        vel += (targetVel - vel) * (1 - Math.exp(-EASE * dt / 1000));
+        x -= vel * dt;
+        if (x <= -halfWidth) x += halfWidth;
+        track.style.transform = `translateX(${x}px)`;
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initMarquee);
+    } else {
+      initMarquee();
+    }
+  })();
+</script>
 
 <script is:inline define:vars={{ logos }}>
   // Update logo images based on current theme
@@ -112,10 +195,12 @@ const logos: ClientLogo[] = [
     const isDark = theme === 'dark';
 
     logos.forEach((logo, index) => {
-      const img = document.querySelector(`.client-logo-${index}`);
-      if (img instanceof HTMLImageElement) {
-        img.src = isDark ? logo.dark.src : logo.light.src;
-      }
+      const imgs = document.querySelectorAll(`.client-logo-${index}`);
+      imgs.forEach((img) => {
+        if (img instanceof HTMLImageElement) {
+          img.src = isDark ? logo.dark.src : logo.light.src;
+        }
+      });
     });
   }
 
@@ -140,101 +225,85 @@ const logos: ClientLogo[] = [
 <style>
   .about {
     background: var(--color-bg);
-    padding: var(--spacing-md) 0 var(--spacing-lg) 0;
+    padding: clamp(4rem, 9vw, 7rem) 0;
+    overflow: hidden;
   }
 
-  .about-content {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    text-align: left;
+  .section-heading {
+    font-size: clamp(2rem, 4.4vw, 3.25rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    font-weight: var(--font-weight-bold);
+    margin: 0 0 var(--gap-2xl);
   }
 
-  .about-content h1 {
-    margin-bottom: var(--spacing-md);
-  }
-
-  .about-text {
-    margin-top: var(--spacing-md);
-    max-width: var(--text-width-single);
-  }
-
-  .about-text p {
-    margin-bottom: var(--spacing-md);
-  }
-
-  .clients-section {
-    text-align: left;
-  }
-
-  .clients-section h2 {
-    font-size: var(--font-size-h1);
-    font-weight: var(--font-weight-semibold);
-    margin: 0 0 var(--spacing-sm);
-  }
-
-  .clients-grid {
+  /* Full-bleed scrolling strip */
+  .marquee {
+    position: relative;
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--spacing-md);
+    overflow: hidden;
+    width: 100%;
+    /* Soften the edges so logos fade in/out rather than clipping hard. */
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 8%,
+      #000 92%,
+      transparent
+    );
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  }
+
+  .marquee__track {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    width: max-content;
+    animation: marquee-scroll 60s linear infinite;
+  }
+
+  @keyframes marquee-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      /* Track holds two identical sets; -50% lands on the loop seam. */
+      transform: translateX(-50%);
+    }
   }
 
   .client-logo {
-    width: clamp(140px, 15vw, 200px);
-    height: clamp(70px, 7.5vw, 100px);
-    background: transparent;
-    border-radius: var(--radius-md);
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.5rem;
-    transition: all var(--transition-normal);
-    overflow: hidden;
-    position: relative;
-    flex-shrink: 0;
+    height: clamp(36px, 4.5vw, 90px);
+    margin-right: clamp(3rem, 7vw, 6rem);
   }
 
   .client-logo :global(img) {
-    width: 100%;
     height: 100%;
+    width: auto;
     object-fit: contain;
-    object-position: center;
-    opacity: 1;
-    transition: transform var(--transition-normal);
+    filter: grayscale(1);
+    opacity: 0.4;
+    transition: opacity 0.18s ease, filter 0.18s ease, transform 0.18s ease;
   }
 
   .client-logo:hover :global(img) {
-    transform: scale(1.05);
+    filter: grayscale(0);
+    opacity: 0.9;
+    transform: scale(1.1);
   }
 
-  /* Dark mode: keep same opacity */
-  :global([data-theme="dark"]) .client-logo :global(img) {
-    opacity: 1;
-  }
-
-  .client-logo:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-sm);
-  }
-
-  /* Tablet: wrap to multiple rows naturally */
-  @media (max-width: 1024px) {
-    .client-logo {
-      width: clamp(120px, 18vw, 180px);
-      height: clamp(60px, 9vw, 90px);
-    }
-  }
-
-  /* Mobile: 3 per row */
-  @media (max-width: 768px) {
-    .clients-grid {
-      gap: var(--spacing-sm);
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      overflow-x: auto;
     }
 
-    .client-logo {
-      width: calc((100% - (2 * var(--spacing-sm))) / 3);
-      height: auto;
-      aspect-ratio: 2 / 1;
-      padding: 0.375rem;
+    .marquee__track {
+      animation: none;
     }
   }
 </style>

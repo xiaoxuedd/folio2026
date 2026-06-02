@@ -1,64 +1,265 @@
 .hero-text-wrapper {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
 }
 
-.hero-text-section {
-  margin-bottom: var(--gap-md);
+/* Eyebrow — small handwritten/script greeting.
+   System fallback chain works on most platforms; install @fontsource/caveat for
+   a consistent look across operating systems. */
+.hero-eyebrow {
+  font-family: 'Caveat', 'Snell Roundhand', 'Bradley Hand', 'Apple Chancery',
+    'Brush Script MT', cursive;
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-weight: 500;
+  font-style: normal;
+  color: var(--color-text-secondary);
+  margin: 0;
+  line-height: 1;
 }
 
-/* Fix rough-notation SVG positioning */
-.hero-text-wrapper span {
-  position: relative;
-  display: inline-block;
+.hero-heading {
+  font-size: clamp(2.5rem, 5.6vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-weight: var(--font-weight-bold);
+  margin: 0;
 }
 
-.hero-text-wrapper svg.rough-annotation {
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  pointer-events: none;
-}
-
-.hero-overline {
-  font-size: var(--font-size-body-1);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: 0.02em;
-  margin-bottom: var(--spacing-md);
-  text-transform: uppercase;
-}
-
-.hero-text-wrapper .hero-h0 {
-  font-size: calc(var(--font-size-h0) * 1.2);
-  line-height: var(--line-height-hero);
-  margin-bottom: var(--spacing-xs);
-  max-width: var(--text-width-single);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-}
-
-.hero-text-wrapper .hero-h1 {
-  font-size: var(--font-size-h1);
-  line-height: var(--line-height-hero);
-  max-width: var(--text-width-single);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-}
-
-.hero-subtitle-text {
-  display: block;
-}
-
-.hero-faint {
-  color: color-mix(in srgb, var(--color-text) 60%, transparent);
+.hero-mission {
+  font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+  line-height: 1.45;
   font-weight: var(--font-weight-regular);
+  color: var(--color-text);
+  margin: 0;
+  max-width: 28ch;
+}
+
+.hero-heading-coral {
+  color: var(--color-accent-coral);
+}
+
+/* Name + pronunciation badge. The "?!" badge floats absolutely at the name's
+   top-right corner, so it never affects line layout (no nudging the comma onto
+   a second line). */
+.hero-name {
+  position: relative;
+  white-space: nowrap;
+}
+
+/* Group wrapper for the badge + its bubble, pinned to the name's top-right.
+   Taken out of flow so it has zero layout footprint. font-size is reset to
+   1rem so the small UI bits inside don't inherit the huge heading size for
+   their em/offset math, and it's the positioning context for the bubble. */
+.hero-pron {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  font-size: 1rem;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: normal;
+  line-height: 1;
+}
+
+/* The "?!" badge — small coral chip. Glass-style rounded exception (it's a
+   control, not a sharp-corner surface). Scale is driven by Framer in the TSX
+   (proximity magnetism), so keep transform out of the base rule. */
+.hero-pron-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  line-height: 1;
+  padding: 0.2em 0.42em;
+  margin-left: 0.4em;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.02em;
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  opacity: 0.65;
+  cursor: pointer;
+  transition: color var(--transition-fast), border-color var(--transition-fast),
+    background var(--transition-fast), opacity var(--transition-fast);
+}
+
+.hero-pron-badge:hover,
+.hero-pron-badge:focus-visible {
+  color: var(--color-accent-coral);
+  background: var(--color-primary-alpha-light);
+  border-color: var(--color-primary-alpha-medium);
+  opacity: 1;
+  outline: none;
+}
+
+/* The pronunciation bubble — small popover centred above the badge. Fixed,
+   readable sizing (not heading-relative) and reset typography. */
+.hero-pron-bubble {
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
+  left: 50%;
+  transform-origin: bottom center;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  white-space: nowrap;
+  padding: 0.45rem 0.7rem;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  z-index: 5;
+  /* Horizontal centring (translateX(-50%)) is applied via Framer's `x` in the
+     TSX, since Framer owns this element's `transform`. */
+}
+
+.hero-pron-bubble-label {
+  font-size: var(--font-size-ui-xs);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: 0.01em;
+  color: var(--color-text-secondary);
+  line-height: 1.2;
+}
+
+.hero-pron-bubble-value {
+  font-size: var(--font-size-ui);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  line-height: 1.2;
+}
+
+/* Little pointer at the bottom of the bubble, aimed at the badge. */
+.hero-pron-bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--color-bg-secondary);
+  /* Nudge up 1px so the triangle overlaps the border seam cleanly. */
+  margin-top: -1px;
+}
+
+/* Avatar pill — circular photo + 2-line label/value text */
+
+/* Stable, content-sized context for the ProximityTilt pill. The entrance
+   animation + layout (align/margin) live here, and `--reveal` (the 0..1
+   proximity intensity) is written here so the unfurling time row can read it.
+   Must stay untransformed + sized to content — ProximityTilt measures it. */
+.hero-avatar-pill-stage {
+  position: relative;
+  width: max-content;
+  align-self: flex-start;
+  margin-top: var(--gap-md);
+  --reveal: 0;
+}
+
+/* The pill leans toward the cursor on the proximity ramp — ProximityTilt owns
+   its `transform`, so keep transform out of these rules. */
+.hero-avatar-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-md);
+  padding: 0.5rem 1.25rem 0.5rem 0.5rem;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  will-change: transform;
+}
+
+.hero-avatar-pill-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--color-pill-neutral-bg);
+}
+
+.hero-avatar-pill-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.2;
+}
+
+.hero-avatar-pill-label {
+  font-size: var(--font-size-ui-xs);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: 0.01em;
+}
+
+.hero-avatar-pill-value {
+  font-size: var(--font-size-ui);
+  color: var(--color-text);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Local-time row, unfurled on cursor proximity. Height is keyed to --reveal so
+   the row clips shut at rest; the inner line lifts + fades in on the same ramp
+   as the pill's tilt. Pointer-only — with no pointer (touch) it stays closed
+   and the location line still reads on its own. */
+.hero-avatar-pill-time {
+  height: calc(var(--reveal) * 18px);
+  overflow: hidden;
+}
+
+.hero-avatar-pill-time-row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-tight);
+  font-size: var(--font-size-ui-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent-coral);
+  white-space: nowrap;
+  opacity: var(--reveal);
+  transform: translateY(calc((1 - var(--reveal)) * -10px));
+}
+
+.hero-avatar-pill-time-row svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.hero-avatar-pill-time-num {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 900px) {
+  .hero-text-wrapper {
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-avatar-pill-stage {
+    align-self: center;
+  }
 }
 
 @media (max-width: 768px) {
-  .hero-text-wrapper .hero-h0 {
-    font-size: calc(clamp(2.5rem, 10vw, 3.5rem) * 1.2);
+  .hero-text-wrapper {
+    gap: var(--gap-md);
   }
 
-  .hero-text-wrapper .hero-h1 {
-    font-size: clamp(1.75rem, 7vw, 2.5rem);
+  .hero-eyebrow {
+    font-size: clamp(1.25rem, 5vw, 1.5rem);
+  }
+
+  .hero-heading {
+    font-size: clamp(2.25rem, 9vw, 3.25rem);
+  }
+
+  .hero-avatar-pill {
+    padding: 0.4rem 1rem 0.4rem 0.4rem;
+  }
+
+  .hero-avatar-pill-img {
+    width: 44px;
+    height: 44px;
   }
 }

@@ -4,8 +4,12 @@ import LinkedInIcon from './icons/LinkedInIcon.astro';
 import DownloadIcon from './icons/DownloadIcon.astro';
 import { ProfilePhoto } from './ProfilePhoto';
 import HeroCTAAlternative from './HeroCTAAlternative';
-import ClosingStatement from './ClosingStatement';
 import profileImage from '../images/xiaoxue-photo-2.jpeg';
+
+// Bento metrics are hidden for now in favour of the Experience ledger
+// (rendered by Experience.astro on the about page). Flip to `true` to
+// bring the "impact at a glance" grid back.
+const showMetrics = false;
 
 const metrics = [
   { number: '10+', title: 'years experience', description: 'designing E2E products and services across consultancy and in-house teams', color: 'primary', colSpan: 5, rowSpan: 1, delay: '0s' },
@@ -73,12 +77,13 @@ const metrics = [
     </div>
 
     <div class="hero-cta-wrapper" data-aos="fade-up" data-aos-delay="400">
-      <HeroCTAAlternative text="Impact at a glance" href="#metrics" client:load />
+      <HeroCTAAlternative text="Career so far" href="#experience" client:load />
     </div>
   </div>
 </section>
 
-<!-- Metrics Section -->
+<!-- Metrics Section (hidden — see showMetrics flag) -->
+{showMetrics && (
 <section id="metrics" class="metrics-section" data-aos="fade-up">
   <div class="container">
     <div class="metrics-flow">
@@ -97,10 +102,9 @@ const metrics = [
         </div>
       ))}
     </div>
-
-    <ClosingStatement client:load />
   </div>
 </section>
+)}
 
 <style>
   .contact {
@@ -542,15 +546,16 @@ const metrics = [
 <script>
   function setupCTAHiding() {
     const ctaWrapper = document.querySelector('.contact .hero-cta-wrapper');
-    const metricsSection = document.getElementById('metrics');
+    // Hide the scroll affordance once the next section scrolls into view.
+    const nextSection = document.getElementById('experience') || document.getElementById('metrics');
 
-    if (!ctaWrapper || !metricsSection) return;
+    if (!ctaWrapper || !nextSection) return;
 
     const handleScroll = () => {
-      const metricsRect = metricsSection.getBoundingClientRect();
+      const metricsRect = nextSection.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
 
-      // Hide button when metrics section is 150px from bottom of viewport
+      // Hide button when the next section is 150px from bottom of viewport
       if (metricsRect.top < viewportHeight - 150) {
         ctaWrapper.classList.add('hidden');
       } else {

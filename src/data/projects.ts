@@ -51,7 +51,7 @@ export const projects: Project[] = [
       "Created scalable service model adopted as template for future therapies"
     ],
     overlaySubtitle: "Building the infrastructure to deliver precision medicine at scale",
-    overlayBody: "Pharmaceutical companies developed breakthrough treatments but had no way to get them to patients. As the design lead, I drove the business transformation that created an end-to-end service system, from lab to hospital, enabling the commercial launch of a life-saving advanced therapy across 10+ global markets."
+    overlayBody: "Pharmaceutical companies developed breakthrough treatments but struggled to get them to patients. As the design lead, I drove the business transformation that created an end-to-end service system, from lab to hospital, enabling the commercial launch of a life-saving advanced therapy across 10+ global markets."
   },
   {
     id: 2,
@@ -75,8 +75,8 @@ export const projects: Project[] = [
       "Saved £3M+ annually in logistics and processing costs",
       "Improved customer satisfaction scores by providing better product information"
     ],
-    overlaySubtitle: "Reducing e-commerce returns through cross-functional Design",
-    overlayBody: "\"Buy-to-try\" behavior was costing a luxury fashion retailer £20M+ annually in returns. Leading a cross-functional squad team, we delivered a 6-month program designing integrated solutions, from purchase guidance and data strategy to warehouse operations, that reduced returns by 10%."
+    overlaySubtitle: "Reducing e-commerce returns through cross-functional design",
+    overlayBody: "\"Buy-to-try\" behaviour was costing a luxury fashion retailer over £20M annually in returns. Leading a cross-functional squad, I delivered a 6-month program that designed integrated solutions, from purchase guidance and data strategy to warehouse operations, resulting in a 10% reduction in returns."
   },
   {
     id: 3,
@@ -101,12 +101,12 @@ export const projects: Project[] = [
       "Improved sales team efficiency by consolidating multiple tools into one platform"
     ],
     overlaySubtitle: "Using AI to help dealerships convert more leads",
-    overlayBody: "A leading automobile brand struggled with fragmented sales processes and poor visibility into customer journeys. Working with a team of designers, we developed an intelligent lead management system that uses AI to help dealers accelerate conversion while delivering consistent customer experiences."
+    overlayBody: "A leading automobile brand had fragmented sales processes and poor visibility into customer journeys. I led the strategy and design of an intelligent lead management system that gives dealers the signal they need to act faster and more consistently."
   },
   {
     id: 4,
-    title: "Compliant and creative",
-    description: "A corporate bank's lending process was slow and complex due to manual compliance and dynamic workflows, frustrating corporate clients and creating competitive disadvantage. I led discovery across lending operations, mapping key decision points and evaluating AI applications against regulatory constraints to define clear opportunities to reduce manual burden, minimise human error, and accelerate decision-making.",
+    title: "Balance compliance and creativity",
+    description: "A corporate bank's manual lending workflows frustrated clients and created competitive risk. I led discovery across lending operations, evaluated AI applications against regulatory requirements, and built a prioritised product roadmap for transformation.",
     shortDescription: "Led discovery across corporate lending operations to identify AI opportunities within regulatory constraints and accelerate decision-making.",
     category: "Finance",
     image: financeLending,
@@ -126,12 +126,12 @@ export const projects: Project[] = [
       "Established framework for AI implementation within regulatory boundaries"
     ],
     overlaySubtitle: "Bringing innovation to regulated corporate lending",
-    overlayBody: "A corporate bank's manual lending workflows frustrated clients and created competitive risk. I led discovery across lending operations and evaluated AI applications against regulatory requirements to create a prioritised product roadmap for transformation."
+    overlayBody: "A corporate bank's manual lending workflows frustrated clients and created competitive risk. I led discovery across lending operations, evaluated AI applications against regulatory requirements, and built a prioritised product roadmap for transformation."
   },
   {
     id: 5,
-    title: "Put design at the core",
-    description: "Design was seen as execution, not strategy, limiting its impact on business outcomes. I designed and delivered capability programs for various organisations across industries that demonstrated design's business value through tailored methodologies and case-driven training.",
+    title: "Let design drive",
+    description: "Design was seen as execution, not strategy, limiting what it could achieve. I designed and delivered capability programmes across industries, agencies, and in-house teams that shifted how organisations value and apply design.",
     shortDescription: "Designed capability programs that shifted design from delivery to strategic decision-making.",
     category: "Strategy",
     image: strategyCapability,
@@ -151,6 +151,6 @@ export const projects: Project[] = [
       "Built internal capability reducing reliance on external consultants"
     ],
     overlaySubtitle: "Growing capability that shifts design from delivery to decision-making",
-    overlayBody: "Design was seen as execution, not strategy, limiting its impact. I designed and delivered capability programs for various organisations (across industries, agencies, and in-house teams) that demonstrated design's business value through tailored methodologies and case-driven training."
+    overlayBody: "Design was seen as execution, not strategy, limiting what it could achieve. I designed and delivered capability programmes across industries, agencies, and in-house teams that shifted how organisations value and apply design."
   }
 ];

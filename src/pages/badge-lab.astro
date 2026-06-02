@@ -1,0 +1,149 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getImage } from 'astro:assets';
+import xiaoxueAvatar from '../images/xiaoxue-photo-2.jpeg';
+import {
+  BadgeSlideIn,
+  BadgeCrossfade,
+  BadgeUnfurl,
+  BadgeFaceRoll,
+} from '../components/badgelab/BadgeVariants';
+
+const avatar = await getImage({
+  src: xiaoxueAvatar,
+  format: 'webp',
+  width: 128,
+  height: 128,
+  quality: 85,
+});
+
+const variants = [
+  { key: 'A', name: 'Slide-in time chip', note: 'CTA-arrow homage — a time token rotates + slides in from the right as you approach.' },
+  { key: 'B', name: 'Crossfade swap', note: '"London, UK" dissolves up into "21:43 BST" in place. Quietest / most editorial.' },
+  { key: 'C', name: 'Unfurl below — chosen (live in the hero)', note: 'A thin local-time line unfurls beneath the location as you near it.' },
+  { key: 'D', name: 'Face roll', note: 'The photo flips like a coin to reveal a clock face. Most playful.' },
+];
+---
+
+<Layout title="Badge lab">
+  <main class="lab">
+    <header class="lab-head">
+      <h1>Hero badge — reveal lab</h1>
+      <p>Move the cursor toward each badge. The London time reveals on the same proximity ramp as the tilt (tightened so it only triggers when close). Try light + dark via the system theme.</p>
+    </header>
+
+    <div class="lab-rows">
+      {variants.map(({ key, name, note }) => (
+        <section class="lab-row">
+          <div class="lab-meta">
+            <span class="lab-key">{key}</span>
+            <div>
+              <h2>{name}</h2>
+              <p>{note}</p>
+            </div>
+          </div>
+          <div class="lab-demo">
+            {key === 'A' && <BadgeSlideIn client:load avatarSrc={avatar.src} avatarAlt="Xiaoxue Dong" />}
+            {key === 'B' && <BadgeCrossfade client:load avatarSrc={avatar.src} avatarAlt="Xiaoxue Dong" />}
+            {key === 'C' && <BadgeUnfurl client:load avatarSrc={avatar.src} avatarAlt="Xiaoxue Dong" />}
+            {key === 'D' && <BadgeFaceRoll client:load avatarSrc={avatar.src} avatarAlt="Xiaoxue Dong" />}
+          </div>
+        </section>
+      ))}
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .lab {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: clamp(3rem, 8vw, 6rem) var(--spacing-lg) 8rem;
+  }
+
+  .lab-head h1 {
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+    margin: 0 0 var(--gap-sm);
+  }
+
+  .lab-head p {
+    font-size: var(--font-size-body-1);
+    color: var(--color-text-secondary);
+    max-width: 60ch;
+    margin: 0;
+  }
+
+  .lab-rows {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xl);
+    margin-top: var(--gap-2xl);
+  }
+
+  .lab-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: var(--gap-2xl);
+    padding: var(--gap-xl);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg);
+  }
+
+  .lab-meta {
+    display: flex;
+    gap: var(--gap-md);
+    align-items: flex-start;
+  }
+
+  .lab-key {
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    background: var(--color-primary-alpha-light);
+    color: var(--color-accent-coral);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-ui-sm);
+  }
+
+  .lab-meta h2 {
+    font-size: var(--font-size-h5);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+    margin: 0 0 4px;
+  }
+
+  .lab-meta p {
+    font-size: var(--font-size-ui-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+    max-width: 42ch;
+  }
+
+  .lab-demo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 320px;
+    min-height: 96px;
+  }
+
+  @media (max-width: 768px) {
+    .lab-row {
+      grid-template-columns: 1fr;
+      gap: var(--gap-lg);
+    }
+
+    .lab-demo {
+      justify-content: flex-start;
+      min-width: 0;
+    }
+  }
+</style>

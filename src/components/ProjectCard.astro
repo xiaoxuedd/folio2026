@@ -1,416 +1,262 @@
 ---
 import type { Project } from '../data/projects';
 import { getImage } from 'astro:assets';
-import ArrowIcon from './icons/ArrowIcon.astro';
 
 interface Props {
   project: Project;
   index: number;
+  featured?: boolean;
 }
 
-const { project, index} = Astro.props;
-const isFeatured = index === 0;
-const CardWrapper = project.link ? 'a' : 'div';
+const { project, index, featured = false } = Astro.props;
 const baseUrl = import.meta.env.BASE_URL;
+const hasLink = Boolean(project.link);
+const Tag = hasLink ? 'a' : 'div';
 
-// Process image if it's ImageMetadata, otherwise use string path
 let imageSrc: string;
 let imageSrcset: string | undefined;
 let imageWidth: number | undefined;
 let imageHeight: number | undefined;
 
 if (typeof project.image === 'string') {
-  // Legacy string path handling
   imageSrc = `${baseUrl}${project.image}`.replace(/\/\//g, '/');
 } else {
-  // ImageMetadata handling - generate responsive WebP images
-  const sizes = isFeatured
-    ? [{ width: 800 }, { width: 600 }, { width: 400 }]
-    : [{ width: 665 }, { width: 500 }, { width: 400 }];
-
-  const processedImages = await Promise.all(
-    sizes.map(size => getImage({
-      src: project.image,
-      format: 'webp',
-      quality: 80,
-      width: size.width
-    }))
+  const sizes = [{ width: 960 }, { width: 720 }, { width: 480 }];
+  const processed = await Promise.all(
+    sizes.map((size) =>
+      getImage({
+        src: project.image,
+        format: 'webp',
+        quality: 80,
+        width: size.width,
+      })
+    )
   );
-
-  imageSrc = processedImages[0].src;
-  imageSrcset = processedImages.map((img, i) => `${img.src} ${sizes[i].width}w`).join(', ');
-  imageWidth = processedImages[0].attributes.width;
-  imageHeight = processedImages[0].attributes.height;
+  imageSrc = processed[0].src;
+  imageSrcset = processed.map((img, i) => `${img.src} ${sizes[i].width}w`).join(', ');
+  imageWidth = processed[0].attributes.width;
+  imageHeight = processed[0].attributes.height;
 }
+
+const overlayStatement = project.overlayBody ?? project.overlaySubtitle ?? project.shortDescription ?? project.description;
+const statusTag = hasLink ? 'Case study' : 'Coming soon';
+const imageSizes = featured
+  ? '(max-width: 600px) 100vw, 50vw'
+  : '(max-width: 600px) 100vw, (max-width: 960px) 50vw, 33vw';
 ---
 
-<CardWrapper
-  href={project.link ? `${baseUrl}${project.link}`.replace(/\/\//g, '/') : undefined}
-  class={`project-card ${isFeatured ? 'featured' : ''} ${!project.link ? 'no-link' : ''}`}
+<Tag
+  href={hasLink ? `${baseUrl}${project.link}`.replace(/\/\//g, '/') : undefined}
+  class:list={['project-tile', { 'project-tile--featured': featured, 'project-tile--linked': hasLink }]}
   data-aos="fade-up"
+  data-aos-delay={Math.min(index * 80, 240)}
   data-project-title={project.title}
   data-project-category={project.category}
-  data-project-link={project.link || ''}
+  data-project-link={project.link ?? ''}
 >
-  <div class="project-image-wrapper">
+  <div class="project-tile__media">
     <img
+      class="project-tile__image"
       src={imageSrc}
       srcset={imageSrcset}
-      sizes={isFeatured ? "(max-width: 768px) 100vw, 800px" : "(max-width: 768px) 100vw, 665px"}
+      sizes={imageSizes}
       alt={project.title}
       loading="lazy"
       width={imageWidth}
       height={imageHeight}
     />
-    {project.link && (
-      <div class="arrow-button">
-        <ArrowIcon width={20} height={20} class="arrow-icon" rotate={-45} />
-      </div>
-    )}
-    <div class="project-overlay-blur"></div>
-    <div class="project-overlay">
-      <div class="overlay-content">
-        {project.overlaySubtitle && (
-          <p class="overlay-subtitle">{project.overlaySubtitle}</p>
-        )}
-        {project.overlayBody && (
-          <p class="overlay-body">{project.overlayBody}</p>
-        )}
-      </div>
+
+    {project.category && <span class="project-tile__tag">{statusTag}</span>}
+
+    <div class="project-tile__overlay">
+      {project.overlaySubtitle && <p class="project-tile__tagline">{project.overlaySubtitle}</p>}
+      {project.overlayBody && <p class="project-tile__statement">{project.overlayBody}</p>}
     </div>
   </div>
-  <div class="project-info">
-    <span class="category">{project.category}</span>
-    <h3>{project.title}</h3>
+
+  <div class="project-tile__meta">
+    <h3 class="project-tile__title">{project.title}</h3>
+    {project.industry && <p class="project-tile__sub">{project.industry}</p>}
   </div>
-</CardWrapper>
+</Tag>
 
 <style>
-  .project-card {
-    display: block;
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    background: white;
-    box-shadow: var(--shadow-sm);
-    transition: all 0.4s ease;
+  .project-tile {
+    display: flex;
+    flex-direction: column;
+    color: inherit;
+    text-decoration: none;
+    /* Allow the tile to shrink inside 1fr grid tracks — without this the
+       image's intrinsic width pins the track and the grid overflows on
+       narrow screens (looks like it won't resize live). */
+    min-width: 0;
   }
 
-  :global([data-theme="dark"]) .project-card {
-    background: var(--color-bg-secondary);
+  .project-tile--linked {
+    cursor: pointer;
   }
 
-  .project-card.featured {
-    /* Featured card styling handled by parent container */
-  }
-
-  .project-card.no-link {
-    cursor: default;
-  }
-
-  .project-card:not(.no-link):hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-  }
-
-  .project-card .project-image-wrapper {
+  .project-tile__media {
     position: relative;
-    width: 100%;
-    height: 280px;
+    aspect-ratio: 4 / 5;
     overflow: hidden;
     background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 0;
   }
 
-  .project-card.featured .project-image-wrapper {
-    height: 400px;
+  .project-tile--featured .project-tile__media {
+    aspect-ratio: 4 / 3;
   }
 
-  .project-card .project-image-wrapper img {
+  .project-tile__image {
+    display: block;
     width: 100%;
+    max-width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.4s ease;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  .project-card:hover .project-image-wrapper img {
-    transform: scale(1.03);
+  .project-tile:hover .project-tile__image {
+    transform: scale(1.04);
   }
 
-  .project-overlay-blur {
+  /* Glass status pill — rounded form is an intentional exception to the sharp grid. */
+  .project-tile__tag {
+    position: absolute;
+    top: var(--gap-lg);
+    left: var(--gap-lg);
+    z-index: 2;
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--color-bg) 45%, transparent);
+    backdrop-filter: blur(var(--blur-glass));
+    -webkit-backdrop-filter: blur(var(--blur-glass));
+    border: 1px solid color-mix(in srgb, var(--color-text) 12%, transparent);
+    color: var(--color-text);
+    font-size: var(--font-size-ui-xs);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    line-height: 1;
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+  }
+
+  .project-tile:hover .project-tile__tag {
+    opacity: 1;
+  }
+
+  .project-tile__overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(var(--blur-overlay));
-    -webkit-backdrop-filter: blur(var(--blur-overlay));
-    display: none;
     z-index: 1;
-  }
-
-  .project-card:hover .project-overlay-blur {
-    display: block;
-    animation: fadeInBlur 0.4s ease forwards;
-  }
-
-  .project-card:not(:hover) .project-overlay-blur {
-    animation: fadeOutBlur 0.4s ease forwards;
-  }
-
-  .project-card:hover .project-image-wrapper img,
-  .project-card:hover .project-overlay-blur {
-    transform: scale(1.03);
-  }
-
-  @keyframes fadeInBlur {
-    from {
-      opacity: 0;
-      transform: scale(1);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1.03);
-    }
-  }
-
-  @keyframes fadeOutBlur {
-    from {
-      opacity: 1;
-      transform: scale(1.03);
-    }
-    to {
-      opacity: 0;
-      transform: scale(1);
-    }
-  }
-
-  .project-overlay {
-    position: absolute;
-    inset: 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-md);
+    gap: var(--gap-sm);
+    padding: calc(var(--gap-lg) + var(--gap-xl)) var(--gap-xl) var(--gap-xl);
+    text-align: center;
+    background: color-mix(
+      in srgb,
+      color-mix(in srgb, var(--color-primary) 18%, var(--color-bg)) 92%,
+      transparent
+    );
     opacity: 0;
-    z-index: 2;
-    overflow: hidden;
-    transition: opacity 0.4s ease;
+    transition: opacity var(--transition-normal);
     pointer-events: none;
   }
 
-  .project-card:hover .project-overlay {
+  .project-tile:hover .project-tile__overlay {
     opacity: 1;
-    pointer-events: auto;
   }
 
-  .overlay-content {
-    color: white;
-    width: 100%;
-    max-width: 600px;
-    padding: var(--spacing-md);
+  :global([data-theme="dark"]) .project-tile__overlay {
+    background: color-mix(
+      in srgb,
+      color-mix(in srgb, var(--color-primary) 18%, var(--color-text)) 92%,
+      transparent
+    );
   }
 
-  .overlay-subtitle {
+  .project-tile__tagline {
+    margin: 0;
+    flex-shrink: 0;
+    color: var(--color-text);
     font-size: var(--font-size-body-0);
-    font-weight: var(--font-weight-medium);
-    font-style: italic;
+    font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-body);
-    margin: 0 0 var(--spacing-sm);
-    color: rgba(255, 255, 255, 0.95);
+    transform: translateY(8px);
+    transition: transform var(--transition-normal);
   }
 
-  .overlay-body {
+  .project-tile__statement {
+    margin: 0;
+    flex-shrink: 1;
+    min-height: 0;
+    color: var(--color-text);
     font-size: var(--font-size-body-1);
     line-height: var(--line-height-body);
-    margin: 0 0 var(--spacing-sm);
-    color: rgba(255, 255, 255, 0.95);
+    transform: translateY(8px);
+    transition: transform var(--transition-normal);
     display: -webkit-box;
-    -webkit-line-clamp: 6;
+    -webkit-line-clamp: 10;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
   }
 
-  .overlay-disciplines {
-    margin-bottom: 0;
-    padding-top: var(--spacing-sm);
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
+  .project-tile:hover .project-tile__tagline,
+  .project-tile:hover .project-tile__statement {
+    transform: translateY(0);
   }
 
-  .disciplines-list {
-    list-style: none;
-    padding: 0;
+  :global([data-theme="dark"]) .project-tile__tagline,
+  :global([data-theme="dark"]) .project-tile__statement {
+    color: var(--color-bg);
+  }
+
+  .project-tile__meta {
+    padding-top: var(--gap-lg);
+  }
+
+  .project-tile__title {
+    margin: 0 0 4px;
+    color: var(--color-text);
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    transition: color var(--transition-fast);
+  }
+
+  .project-tile--linked:hover .project-tile__title {
+    color: var(--color-primary);
+  }
+
+  .project-tile__sub {
     margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--spacing-xs);
-  }
-
-  .disciplines-list li {
-    font-size: var(--font-size-ui-sm);
-    color: white;
-    padding: 0.25rem 0.625rem;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: var(--radius-2xl);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
-
-  .project-card.no-link:hover .project-overlay {
-    cursor: default;
-  }
-
-  .arrow-button {
-    position: absolute;
-    bottom: 1.5rem;
-    left: 1.5rem;
-    width: var(--icon-lg);
-    height: 48px;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(var(--blur-overlay));
-    border-radius: 625% / 416.666667%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    z-index: 2;
-    transform: rotate(45deg);
-  }
-
-  .project-card .arrow-button .arrow-icon {
-    width: var(--icon-sm);
-    height: var(--icon-sm);
-    position: absolute;
-    top: 14px;
-    left: 6px;
-    transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                top 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                left 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                margin 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                stroke 0.1s linear;
-    transform: rotate(-45deg) !important;
-  }
-
-  .project-card .arrow-button .arrow-icon * {
-    transition: stroke 0.1s linear !important;
-  }
-
-  .project-card:hover .arrow-button {
-    background: rgb(255, 255, 255);
-    width: 56px;
-    height: 56px;
-    border-radius: 200px;
-    color: #271968;
-    transform: rotate(90deg) scale(1.1);
-  }
-
-  .project-card:hover .arrow-button .arrow-icon {
-    width: var(--icon-md);
-    height: var(--icon-md);
-    top: 50%;
-    left: 50%;
-    margin-top: -12px;
-    margin-left: -12px;
-    transform: rotate(-45deg) !important;
-  }
-
-  .project-card .project-info {
-    padding: 0.5rem 0.75rem;
-  }
-
-  .project-card .category {
-    display: block;
-    font-size: 0.6875rem;
-    font-weight: var(--font-weight-medium);
     color: var(--color-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.25rem;
-    opacity: 0.7;
+    font-size: var(--font-size-body-1);
+    line-height: 1.4;
   }
 
-  .project-card h3 {
-    font-size: var(--font-size-body-0);
-    margin: 0;
-    line-height: var(--line-height-body);
-  }
-
-  @media (max-width: 768px) {
-    .project-card .project-image-wrapper {
-      height: 200px;
+  @media (prefers-reduced-motion: reduce) {
+    .project-tile__image,
+    .project-tile__overlay,
+    .project-tile__statement,
+    .project-tile__tag {
+      transition: none;
     }
 
-    .project-card.featured .project-image-wrapper {
-      height: 280px;
+    .project-tile__tag {
+      opacity: 1;
     }
 
-    .project-overlay {
-      padding: 1.5rem;
-    }
-
-    .overlay-content {
-      padding: var(--spacing-sm);
-    }
-
-    .overlay-subtitle {
-      font-size: var(--font-size-body-0);
-      margin-bottom: var(--spacing-xs);
-    }
-
-    .overlay-body {
-      font-size: var(--font-size-body-1);
-      margin-bottom: var(--spacing-sm);
-      -webkit-line-clamp: 4;
-    }
-
-    .disciplines-list li {
-      font-size: var(--font-size-ui-xs);
-      padding: 0.1875rem 0.5rem;
-    }
-
-    .arrow-button {
-      bottom: 1rem;
-      left: 1rem;
-      width: 28px;
-      height: 42px;
-      transform: rotate(45deg);
-    }
-
-    .project-card .arrow-button .arrow-icon {
-      width: var(--icon-xs);
-      height: var(--icon-xs);
-      transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                  height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                  stroke 0.1s linear;
-      transform: rotate(-45deg) !important;
-    }
-
-    .project-card .arrow-button .arrow-icon * {
-      transition: stroke 0.1s linear !important;
-    }
-
-    .project-card:hover .arrow-button {
-      width: 44px;
-      height: 44px;
-      border-radius: 200px;
-      color: #271968;
-      transform: rotate(90deg) scale(1.1);
-    }
-
-    .project-card:hover .arrow-button .arrow-icon {
-      transform: rotate(-45deg) !important;
-    }
-
-    .project-card .project-info {
-      padding: 0.5rem 0.625rem;
-    }
-
-    .project-card .category {
-      font-size: 0.625rem;
-      margin-bottom: 0.1875rem;
-    }
-
-    .project-card h3 {
-      font-size: var(--font-size-body-0);
-      line-height: var(--line-height-body);
+    .project-tile:hover .project-tile__image {
+      opacity: 1;
+      transform: none;
     }
   }
 </style>
@@ -419,26 +265,23 @@ if (typeof project.image === 'string') {
   import { trackEvent } from '../utils/analytics';
 
   function setupProjectTracking() {
-    const projectCards = document.querySelectorAll('.project-card:not(.no-link)');
-
-    projectCards.forEach(card => {
-      card.addEventListener('click', () => {
-        const title = card.getAttribute('data-project-title');
-        const category = card.getAttribute('data-project-category');
-        const link = card.getAttribute('data-project-link');
-
+    const tiles = document.querySelectorAll('a.project-tile');
+    tiles.forEach((tile) => {
+      tile.addEventListener('click', () => {
+        const title = tile.getAttribute('data-project-title');
+        const category = tile.getAttribute('data-project-category');
+        const link = tile.getAttribute('data-project-link');
         if (title) {
           trackEvent('project_click', {
             project_title: title,
             project_category: category,
-            project_link: link
+            project_link: link,
           });
         }
       });
     });
   }
 
-  // Run on page load
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', setupProjectTracking);
   } else {

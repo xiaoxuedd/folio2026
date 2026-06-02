@@ -3,26 +3,26 @@ import { expertiseAreas } from '../data/expertise';
 import CraftAccordion from './CraftAccordion.astro';
 ---
 
-<section id="craft" class="craft">
+<section id="skills" class="craft">
   <div class="container">
-    <div data-aos="fade-up">
-      <h1>My design ingredients</h1>
-    </div>
-
     <div class="craft-grid">
       <div class="craft-left" data-aos="fade-right">
-        <p class="craft-intro">
-          A decade ago, people asked me, "What is service design?" These days, I ask myself, "What kind of service designer have I become?"
-        </p>
-        <p class="craft-intro">
-          The answer: the kind who's equally comfortable testing touchpoints with end users as mapping out multi-year transformation strategies with C-suites.
-        </p>
-        <p class="craft-intro">
-          As a food enthusiast, I view service design less like following a recipe and more like cooking in your own kitchen. You assess what you're working with, understand what your guests actually need, collaborate with your team, and combine the right ingredients at the right moment.
-        </p>
+        <h2 class="section-heading">My approach.</h2>
+        <div class="craft-intro">
+          <p>
+            A decade ago, people asked: &ldquo;What is service design?&rdquo;
+            Now the whole industry is asking a harder version: as AI reshapes how organisations operate, what does service design actually offer?
+          </p>
+          <p>
+            I find the uncertainty more interesting than the confident predictions. But one thing sits clear: service design has always worked at the place where strategy meets delivery, where what organisations intend collides with how things actually run. AI transformation is exposing exactly that gap at scale &mdash; organisations that deploy agents into workflows they never fully understood are finding out the hard way. The discipline that knows how to surface what isn&rsquo;t written down, bridge functions that don&rsquo;t naturally talk to each other, and rebuild systems around the people inside them; that work is more urgent now, not less.
+          </p>
+          <p>
+            That&rsquo;s the lens I bring into every project, and where service design&rsquo;s true value sits.
+          </p>
+        </div>
       </div>
 
-      <div class="craft-right" data-aos="fade-left">
+      <div class="craft-right" data-aos="fade-left" data-aos-delay="100">
         <CraftAccordion expertiseAreas={expertiseAreas} />
       </div>
     </div>
@@ -32,37 +32,48 @@ import CraftAccordion from './CraftAccordion.astro';
 <style>
   .craft {
     background: var(--color-bg);
-    padding: var(--spacing-md) 0 var(--spacing-lg) 0;
-    transition: background-color 0.3s ease;
-  }
-
-  .craft h1 {
-    margin-bottom: var(--spacing-md);
-    transition: color 0.3s ease;
+    padding: clamp(5rem, 12vw, 10rem) 0;
   }
 
   .craft-grid {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-lg);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-2xl);
+    align-items: start;
+  }
+
+  .section-heading {
+    font-size: clamp(2rem, 4.4vw, 3.25rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    font-weight: var(--font-weight-bold);
+    margin: 0 0 var(--gap-xl);
   }
 
   .craft-intro {
-    max-width: var(--text-width-single);
-    color: var(--color-text-light);
-    transition: color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-lg);
   }
 
-  .craft-intro:not(:last-child) {
-    margin-bottom: var(--spacing-sm);
+  .craft-intro p {
+    font-size: var(--font-size-body-0);
+    line-height: var(--line-height-body);
+    color: var(--color-text-secondary);
+    margin: 0;
   }
 
   @media (min-width: 768px) {
     .craft-grid {
-      display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: var(--spacing-xl);
+      gap: clamp(3rem, 7vw, 6rem);
       align-items: start;
+    }
+
+    .craft-left {
+      position: sticky;
+      top: 6rem;
     }
   }
 </style>

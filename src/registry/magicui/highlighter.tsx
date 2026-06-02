@@ -37,8 +37,8 @@ export function Highlighter({
 
   useEffect(() => {
     if (!elementRef.current) return;
+    const el = elementRef.current;
 
-    // Map action names to RoughNotation type names
     const typeMap: Record<string, RoughAnnotationType> = {
       "highlight": "highlight",
       "circle": "circle",
@@ -49,57 +49,64 @@ export function Highlighter({
       "underline": "underline"
     };
 
-    const annotation = annotate(elementRef.current, {
+    const makeAnnotation = (withAnimation: boolean) => annotate(el, {
       type: typeMap[action],
       color,
       strokeWidth,
-      animationDuration,
+      animationDuration: withAnimation ? animationDuration : 0,
       iterations,
       padding,
       multiline
     });
 
+    let annotation = makeAnnotation(true);
     annotationRef.current = annotation;
+    let hasShown = false;
+
+    // When the page layout shifts (e.g. an accordion above expands), the
+    // rough-notation SVG stays at its original position. Watch body height
+    // changes and reposition instantly without re-animating.
+    const bodyObserver = new ResizeObserver(() => {
+      if (!hasShown) return;
+      annotation.remove();
+      annotation = makeAnnotation(false);
+      annotationRef.current = annotation;
+      annotation.show();
+    });
+    bodyObserver.observe(document.body);
 
     if (isView) {
-      // Use IntersectionObserver to trigger animation when in view
-      const observer = new IntersectionObserver(
+      const intersectionObserver = new IntersectionObserver(
         (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting && annotationRef.current) {
-              setTimeout(() => {
-                if (annotationRef.current) {
-                  setIsAnimating(true);
-                  annotationRef.current.show();
-                }
-              }, delay);
-              observer.disconnect();
-            }
-          });
+          if (entries[0].isIntersecting) {
+            setTimeout(() => {
+              setIsAnimating(true);
+              annotation.show();
+              hasShown = true;
+            }, delay);
+            intersectionObserver.disconnect();
+          }
         },
         { threshold: 0.5 }
       );
-
-      if (elementRef.current) {
-        observer.observe(elementRef.current);
-      }
+      if (el) intersectionObserver.observe(el);
 
       return () => {
-        observer.disconnect();
-        annotationRef.current?.remove();
+        intersectionObserver.disconnect();
+        bodyObserver.disconnect();
+        annotation.remove();
       };
     } else {
-      // Show annotation with delay
       const timeoutId = setTimeout(() => {
-        if (annotationRef.current) {
-          setIsAnimating(true);
-          annotationRef.current.show();
-        }
+        setIsAnimating(true);
+        annotation.show();
+        hasShown = true;
       }, delay);
 
       return () => {
         clearTimeout(timeoutId);
-        annotationRef.current?.remove();
+        bodyObserver.disconnect();
+        annotation.remove();
       };
     }
   }, [color, action, strokeWidth, animationDuration, iterations, padding, multiline, isView, delay]);

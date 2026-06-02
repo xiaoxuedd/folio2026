@@ -1,0 +1,208 @@
+/* RadialDiagram.css
+ *
+ * All colour values reference design tokens defined in src/layouts/Layout.astro.
+ * Tokens used:
+ *   --color-bg, --color-bg-secondary, --color-text, --color-text-secondary,
+ *   --color-border, --color-pill-neutral-bg, --color-grid-mark,
+ *   --color-accent-coral, --color-accent-indigo
+ *
+ * Sizing knobs (override on the parent if needed):
+ *   --rd-grid-step       spacing between background grid marks
+ *   --rd-pill-padding-y  pill vertical padding
+ *   --rd-pill-padding-x  pill horizontal padding
+ *   --rd-pill-font-size  pill label font size
+ */
+
+.radial-diagram {
+  --rd-grid-step: 28px;
+  --rd-pill-padding-y: 6px;
+  --rd-pill-padding-x: 12px;
+  --rd-pill-font-size: 11px;
+
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  isolation: isolate;
+}
+
+/* Background panel + grid is now provided by the hero-panel wrapper that
+   surrounds both columns of the hero. The diagram is transparent on top. */
+
+.radial-diagram__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 3D ring stack. The stage owns the perspective; the rings3d box owns the
+   tilt (rotateX/rotateY written by JS) and establishes the 3D context so
+   each layer's translateZ parallaxes correctly. SVG <g> elements ignore 3D
+   transforms in Safari/WebKit, so the rings render as stacked HTML layers
+   rather than inside a single SVG. */
+.radial-diagram__stage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  perspective: 850px;
+  pointer-events: none;
+}
+
+.radial-diagram__rings3d {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+.radial-diagram__ring-layer {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+  /* Resting depth: inner (higher-index) layers sit further forward. */
+  transform: translateZ(calc(var(--depth, 0) * 16px));
+  transition: transform 0.45s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+/* Active: the whole stack lifts a little off the page, inner (topmost)
+   rings rising furthest toward the viewer. */
+.radial-diagram__rings3d.is-active .radial-diagram__ring-layer {
+  transform: translateZ(calc(var(--depth, 0) * 30px));
+}
+
+.radial-diagram__ring-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Concentric squircles. Strokes use the hairline border token; fills are
+   barely-tinted using bg-secondary at very low alpha for a soft layered
+   effect. */
+.radial-diagram__ring {
+  fill: var(--color-bg-secondary);
+  fill-opacity: 0.35;
+  stroke: var(--color-border);
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Centre dot. */
+.radial-diagram__center-dot {
+  fill: var(--color-text);
+}
+
+/* Dashed leader lines. Default opacity is muted; lines connected to the
+   hovered pill get a subtle opacity lift. Non-connected lines stay at
+   default — no dimming. */
+.radial-diagram__leader {
+  fill: none;
+  stroke: var(--color-text-secondary);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.55;
+  transition: opacity 0.12s ease;
+}
+
+.radial-diagram__leader.is-highlighted {
+  opacity: 0.7;
+}
+
+/* Pills layer. */
+.radial-diagram__pills {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  /* Don't block pointer events on the empty space — the centre hover
+     hotspot in the SVG below needs to receive them. Individual pills
+     opt back in via .radial-diagram__pill. */
+  pointer-events: none;
+}
+
+/* Anchor — owns the absolute positioning + centring on the pill's (x, y).
+   No transforms beyond translate(-50%, -50%) live here so the bob and
+   pop-in transforms below don't get clobbered. */
+.radial-diagram__pill-anchor {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+/* Bob — framer-motion writes transform: translateY(...) here, driven by
+   a shared MotionValue. The same value steers any leader line endpoint
+   that connects to this pill. */
+.radial-diagram__pill-bob {
+  will-change: transform;
+}
+
+.radial-diagram__pill {
+  /* Pills opt back into pointer events; the parent layer is transparent. */
+  pointer-events: auto;
+  padding: var(--rd-pill-padding-y) var(--rd-pill-padding-x);
+  border-radius: var(--radius-pill, 999px);
+  font-size: var(--rd-pill-font-size);
+  font-weight: var(--font-weight-semibold, 600);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  user-select: none;
+  cursor: default;
+  line-height: 1;
+  /* Subtle shadow for separation from rings beneath. */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  will-change: transform;
+  /* Snappy hover response. */
+  transition: background-color 0.12s ease, color 0.12s ease,
+    border-color 0.12s ease, box-shadow 0.12s ease, opacity 0.15s ease;
+}
+
+.radial-diagram__pill--neutral {
+  background-color: var(--color-pill-neutral-bg);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.radial-diagram__pill--coral {
+  background-color: var(--color-accent-coral);
+  color: var(--color-bg-secondary);
+  border: 1px solid var(--color-accent-coral);
+}
+
+.radial-diagram__pill--indigo {
+  background-color: var(--color-accent-indigo);
+  color: var(--color-bg-secondary);
+  border: 1px solid var(--color-accent-indigo);
+}
+
+/* Hovered pill — same subtle treatment for every pill (neutral and accent
+   alike): a small scale-up via framer-motion plus a soft shadow lift. No
+   colour, border, or text changes — the visual identity stays consistent. */
+.radial-diagram__pill.is-hovered {
+  z-index: 5;
+  box-shadow: 0 4px 12px rgba(17, 17, 17, 0.12);
+}
+
+/* Honour reduced motion: disable continuous animations. The mount-in
+   sequence is also short-circuited in the component (instant state). */
+@media (prefers-reduced-motion: reduce) {
+  .radial-diagram__leader {
+    transition: none;
+  }
+}
+
+/* Responsive: slightly tighter pill padding/text on narrow widths so the
+   composition still reads cleanly when the column is small. */
+@media (max-width: 768px) {
+  .radial-diagram {
+    --rd-grid-step: 22px;
+    --rd-pill-padding-y: 5px;
+    --rd-pill-padding-x: 10px;
+    --rd-pill-font-size: 10px;
+  }
+}

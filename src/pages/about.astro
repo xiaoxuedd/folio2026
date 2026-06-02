@@ -1,8 +1,19 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
-import ContactSection from '../components/Contact.astro';
+import AboutSidebar from '../components/AboutSidebar.astro';
+import Experience from '../components/Experience.astro';
+import ClosingStatement from '../components/ClosingStatement';
 import Footer from '../components/Footer.astro';
+
+const metrics = [
+  { number: '10+',  title: 'years experience',          description: 'designing end-to-end products and services across consultancy and in-house teams' },
+  { number: '£30M+', title: 'revenue & efficiency gains', description: 'driven through systemic service innovations' },
+  { number: '14+',  title: 'international markets',      description: 'balancing global consistency with localised execution' },
+  { number: '6+',   title: 'org transformations',        description: 'coordinating commercials, data, operations, legal & support' },
+  { number: '8M+',  title: 'users & teams',              description: 'measurable lifts in conversion, satisfaction, and efficiency' },
+  { number: '10+',  title: 'products shipped',           description: 'delivered from concept to live operation and scaled adoption' },
+];
 ---
 
 <Layout
@@ -10,6 +21,195 @@ import Footer from '../components/Footer.astro';
   description="Learn about Xiaoxue, service designer and strategist based in London."
 >
   <Navigation compact={true} />
-  <ContactSection />
+
+  <main class="about-page">
+    <div class="about-layout">
+
+      <!-- Left: sticky sidebar -->
+      <aside class="about-sidebar">
+        <AboutSidebar />
+      </aside>
+
+      <!-- Right: scrollable content -->
+      <div class="about-content">
+        <Experience />
+
+        <!-- IMPACT -->
+        <section class="impact-section" data-aos="fade-up">
+          <div class="section-label">
+            <span class="label-dot" aria-hidden="true"></span>
+            IMPACT
+          </div>
+          <h2 class="section-heading">The shape of the work.</h2>
+          <div class="metrics-grid">
+            {metrics.map((m, i) => (
+              <div class="metric-card" data-aos="fade-up" data-aos-delay={`${i * 60}`}>
+                <div class="metric-number">{m.number}</div>
+                <div class="metric-title">{m.title}</div>
+                <p class="metric-desc">{m.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <!-- PERSONAL NOTE -->
+        <section class="personal-note-section" data-aos="fade-up">
+          <div class="section-label">
+            <span class="label-dot" aria-hidden="true"></span>
+            A PERSONAL NOTE
+          </div>
+          <ClosingStatement client:load />
+        </section>
+      </div>
+
+    </div>
+  </main>
+
   <Footer />
 </Layout>
+
+<style>
+  .about-page {
+    background: var(--color-bg);
+    transition: background-color 0.3s ease;
+  }
+
+  .about-layout {
+    display: grid;
+    grid-template-columns: 340px minmax(0, 1fr);
+    gap: clamp(3rem, 6vw, 5rem);
+    align-items: start;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+  }
+
+  .about-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: clamp(7rem, 12vw, 10rem);
+    overflow-y: auto;
+  }
+
+  .about-content {
+    padding-top: clamp(5rem, 10vw, 8rem);
+    padding-bottom: var(--spacing-2xl);
+  }
+
+  /* Section labels */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    font-size: var(--font-size-ui-sm);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .label-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    flex-shrink: 0;
+  }
+
+  .section-heading {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    margin: 0 0 var(--spacing-lg);
+    transition: color 0.3s ease;
+  }
+
+  /* Simple 3×2 metrics grid */
+  .impact-section {
+    padding-top: clamp(3rem, 6vw, 5rem);
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--spacing-sm);
+  }
+
+  .metric-card {
+    padding: var(--spacing-md);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    transition: border-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .metric-card:hover {
+    border-color: color-mix(in srgb, var(--color-primary) 35%, transparent);
+    transform: translateY(-3px);
+  }
+
+  .metric-number {
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    line-height: 1;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .metric-title {
+    font-size: var(--font-size-body-1);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+    margin-bottom: var(--spacing-xs);
+    transition: color 0.3s ease;
+  }
+
+  .metric-desc {
+    font-size: var(--font-size-ui);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-body);
+    margin: 0;
+    transition: color 0.3s ease;
+  }
+
+  /* Personal note */
+  .personal-note-section {
+    padding-top: clamp(3rem, 6vw, 5rem);
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+    border-top: 1px solid var(--color-border);
+  }
+
+  /* Responsive: single column on narrow screens */
+  @media (max-width: 900px) {
+    .about-layout {
+      grid-template-columns: 1fr;
+      padding-top: clamp(6rem, 12vw, 8rem);
+    }
+
+    .about-sidebar {
+      position: static;
+      height: auto;
+      padding-top: 0;
+      overflow-y: visible;
+    }
+
+    .about-content {
+      padding-top: var(--spacing-xl);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .metrics-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

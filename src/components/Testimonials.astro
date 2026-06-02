@@ -1,0 +1,63 @@
+---
+import TestimonialCarousel from './TestimonialCarousel';
+
+// Testimonial copy lives here for now; lift to data file if it grows.
+const testimonials = [
+  {
+    quote:
+      'We are genuinely raising the bar within the business, but more importantly, the broader industry. Your passion for this unique project really shines through, and now our customers get to see and feel that too.',
+    author: 'Global RLT Programme, Director',
+  },
+  {
+    quote: 'This should be the new standard for our business.',
+    author: 'Global Leading Pharma, CEO',
+  },
+];
+---
+
+<section id="testimonials" class="testimonials-section">
+  <div class="container">
+    <header class="section-head" data-aos="fade-up">
+      <p class="section-eyebrow">In their words:</p>
+      <h2 class="section-heading">What collaborators say.</h2>
+    </header>
+
+    <div class="testimonials-stage" data-aos="fade-up">
+      <TestimonialCarousel testimonials={testimonials} client:visible />
+    </div>
+  </div>
+</section>
+
+<style>
+  .testimonials-section {
+    background: var(--color-bg);
+    padding: clamp(5rem, 12vw, 10rem) 0;
+  }
+
+  .section-head {
+    margin-bottom: var(--gap-2xl);
+    max-width: 720px;
+  }
+
+  .section-eyebrow {
+    font-size: var(--font-size-ui-sm);
+    color: var(--color-text-secondary);
+    text-transform: lowercase;
+    letter-spacing: 0.01em;
+    margin: 0 0 var(--gap-sm);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .section-heading {
+    font-size: clamp(2rem, 4.4vw, 3.25rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    font-weight: var(--font-weight-bold);
+    margin: 0;
+  }
+
+  .testimonials-stage {
+    max-width: 920px;
+  }
+</style>

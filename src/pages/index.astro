@@ -2,9 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
 import Hero from '../components/Hero.astro';
-import Craft from '../components/Craft.astro';
 import ProjectsShowcase from '../components/ProjectsShowcase.astro';
+import Craft from '../components/Craft.astro';
 import About from '../components/About.astro';
+import ContactCTA from '../components/ContactCTA.astro';
 import Footer from '../components/Footer.astro';
 import { projects } from '../data/projects';
 ---
@@ -12,8 +13,46 @@ import { projects } from '../data/projects';
 <Layout title="Design Doings - Service Design, Product & Strategy">
   <Navigation />
   <Hero />
-  <Craft />
   <ProjectsShowcase projects={projects} />
+  <Craft />
   <About />
+  <ContactCTA />
   <Footer />
 </Layout>
+
+<script>
+  import { trackEvent } from '../utils/analytics';
+
+  // Fire a one-shot section_view per home-page section as it scrolls into
+  // view. Single-page site, so this is the only way to see how far down the
+  // page people actually get (GA4's default scroll event only fires at 90%).
+  function setupSectionTracking() {
+    const sections = ['works', 'skills', 'about'];
+    const seen = new Set<string>();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const id = entry.target.id;
+          if (entry.isIntersecting && !seen.has(id)) {
+            seen.add(id);
+            trackEvent('section_view', { section: id });
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupSectionTracking);
+  } else {
+    setupSectionTracking();
+  }
+</script>

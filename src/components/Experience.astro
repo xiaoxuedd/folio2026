@@ -1,0 +1,165 @@
+---
+import { experience } from '../data/experience';
+---
+
+<section id="experience" class="experience">
+  <div class="experience-header" data-aos="fade-up">
+    <div class="section-label">
+      <span class="label-dot" aria-hidden="true"></span>
+      EXPERIENCE
+    </div>
+    <h2 class="section-heading">A decade of doing.</h2>
+    <p class="section-sub">
+      Across consultancy and in-house, working alongside end users, C-suite leaders,
+      and teams at the edge of healthcare, finance, retail and technology.
+    </p>
+  </div>
+
+  <div class="ledger" data-aos="fade-up" data-aos-delay="100">
+    {experience.map((entry) => (
+      <div class="ledger-item">
+        <div class="ledger-row">
+          <span class="ledger-role">
+            {entry.role}{entry.priorRole && <span class="ledger-prior"> / {entry.priorRole}</span>}
+          </span>
+          <span class="ledger-company-row">
+            <span class="ledger-bullet" aria-hidden="true"></span>
+            <span class="ledger-company">{entry.company}</span>
+          </span>
+          <span class="ledger-date">
+            {entry.years} · {entry.location}
+          </span>
+        </div>
+        <div hidden>
+          <ul>
+            {entry.highlights.map((highlight) => <li>{highlight}</li>)}
+          </ul>
+        </div>
+      </div>
+    ))}
+  </div>
+
+</section>
+
+<style>
+  .experience {
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  /* Section header */
+  .experience-header {
+    margin-bottom: var(--gap-xl);
+  }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    font-size: var(--font-size-ui-sm);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .label-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    flex-shrink: 0;
+  }
+
+  .section-heading {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    margin: 0 0 var(--gap-md);
+    transition: color 0.3s ease;
+  }
+
+  .section-sub {
+    font-size: var(--font-size-body-1);
+    line-height: var(--line-height-body);
+    color: var(--color-text-secondary);
+    margin: 0;
+    transition: color 0.3s ease;
+  }
+
+  /* Ledger */
+  .ledger {
+    width: 100%;
+  }
+
+  .ledger-item {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .ledger-item:last-child {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .ledger-row {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: var(--gap-sm);
+    row-gap: var(--gap-tight);
+    padding: var(--gap-md) 0;
+  }
+
+  /* Role: first row, fills remaining space */
+  .ledger-role {
+    flex: 1 1 auto;
+    font-size: var(--font-size-body-1);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+    line-height: var(--line-height-body);
+    transition: color 0.3s ease;
+  }
+
+  .ledger-prior {
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text-secondary);
+  }
+
+  /* Company row: full-width second line */
+  .ledger-company-row {
+    flex-basis: 100%;
+    display: flex;
+    align-items: center;
+    gap: var(--gap-sm);
+  }
+
+  .ledger-bullet {
+    flex: none;
+    width: 8px;
+    height: 8px;
+    background: var(--color-primary);
+    border-radius: var(--radius-full);
+  }
+
+  .ledger-company {
+    font-size: var(--font-size-ui-sm);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    transition: color 0.3s ease;
+  }
+
+  /* Date row: full-width third line */
+  .ledger-date {
+    flex-basis: 100%;
+    padding-left: calc(8px + var(--gap-sm));
+    font-size: var(--font-size-ui-sm);
+    font-variant-numeric: tabular-nums;
+    color: var(--color-text-secondary);
+    transition: color 0.3s ease;
+  }
+</style>

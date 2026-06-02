@@ -54,7 +54,7 @@ const JourneyAnimation = () => {
     <div className="journey-animation-wrapper">
       <div className="journey-animation">
         {/* Persistent layer - only visible for stages 1 & 2 */}
-        <AnimatePresence>
+        <AnimatePresence initial={false}>
           {showPersistentLayer && (
             <motion.img
               key="persistent-layer"
@@ -70,7 +70,7 @@ const JourneyAnimation = () => {
         </AnimatePresence>
 
         {/* Icons layer - only visible for stages 1 & 2 */}
-        <AnimatePresence>
+        <AnimatePresence initial={false}>
           {showPersistentLayer && (
             <motion.div
               key="icons-layer"
@@ -86,7 +86,7 @@ const JourneyAnimation = () => {
         </AnimatePresence>
 
         {/* Labels layer - stage 1 only */}
-        <AnimatePresence>
+        <AnimatePresence initial={false}>
           {stage === 1 && (
             <motion.div
               key="labels-stage1"
@@ -102,7 +102,7 @@ const JourneyAnimation = () => {
         </AnimatePresence>
 
         {/* Animated labels layer - stages 2 & 3 */}
-        <AnimatePresence>
+        <AnimatePresence initial={false}>
           {(stage === 2 || stage === 3) && (
             <motion.div
               key="animated-labels"
@@ -118,7 +118,7 @@ const JourneyAnimation = () => {
         </AnimatePresence>
 
         {/* Corner icons - stage 3 only (fade out at stage 4) */}
-        <AnimatePresence>
+        <AnimatePresence initial={false}>
           {stage === 3 && (
             <motion.div
               key="corner-icons"
@@ -134,7 +134,7 @@ const JourneyAnimation = () => {
         </AnimatePresence>
 
         {/* Changing content layers */}
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" initial={false}>
           {stage === 3 && (
             <motion.img
               key="journey-3"

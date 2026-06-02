@@ -26,7 +26,7 @@ const baseUrl = import.meta.env.BASE_URL;
 
     <div class="nav-right">
       <div class="nav-links">
-        <a href={`${baseUrl}#projects`} class="nav-link">Work</a>
+        <a href={`${baseUrl}#works`} class="nav-link">Work</a>
         <a href={`${baseUrl}about`} class="nav-link">About</a>
       </div>
 
@@ -64,7 +64,8 @@ const baseUrl = import.meta.env.BASE_URL;
 
   <div class="mobile-menu">
     <div class="mobile-menu-content">
-      <a href={`${baseUrl}#projects`} class="mobile-nav-link">Work</a>
+      <a href={`${baseUrl}#works`} class="mobile-nav-link">Works</a>
+      <a href={`${baseUrl}#skills`} class="mobile-nav-link">Skills &amp; Tools</a>
       <a href={`${baseUrl}about`} class="mobile-nav-link">About</a>
       <button class="mobile-theme-toggle" aria-label="Toggle theme" onclick="window.toggleTheme()">
         <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -110,13 +111,12 @@ const baseUrl = import.meta.env.BASE_URL;
     justify-content: space-between;
     gap: var(--gap-xl);
     padding: 0.75rem 1rem;
-    background: rgba(255, 255, 255, 0.8);
+    background: color-mix(in srgb, var(--color-bg) 80%, transparent);
     backdrop-filter: blur(var(--blur-glass));
     -webkit-backdrop-filter: blur(var(--blur-glass));
     border: 1px solid var(--color-border-alpha);
     border-radius: var(--radius-pill);
-    box-shadow: rgba(0, 0, 0, 0.07) 0px 3.5px 10px 0px,
-                rgba(0, 0, 0, 0.035) 0px 28px 80px 0px;
+    box-shadow: var(--shadow-sm);
     transition: box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
                 border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     width: 100%;
@@ -126,10 +126,9 @@ const baseUrl = import.meta.env.BASE_URL;
   }
 
   :global([data-theme="dark"]) .nav-pill {
-    background: rgba(26, 15, 46, 0.8);
-    border-color: rgba(61, 45, 95, 0.6);
-    box-shadow: rgba(255, 255, 255, 0.1) 0px 3.5px 10px 0px,
-                rgba(255, 255, 255, 0.05) 0px 28px 80px 0px;
+    background: color-mix(in srgb, var(--color-bg) 80%, transparent);
+    border-color: var(--color-border-alpha);
+    box-shadow: var(--shadow-sm);
   }
 
   .site-header.at-top .nav-pill {
@@ -225,11 +224,16 @@ const baseUrl = import.meta.env.BASE_URL;
   }
 
   .nav-link {
+    position: relative;
+    display: inline-block;
     font-size: var(--font-size-body-sm);
     font-weight: var(--font-weight-medium);
-    color: var(--color-text-secondary);
-    transition: color 0.2s ease;
+    color: var(--color-text);
+    transition: color var(--transition-fast);
     padding: 0.5rem 0;
+    /* Own compositing layer so hovering one link never re-rasterizes the
+       others through the pill's fractional scaleY transform. */
+    transform: translateZ(0);
   }
 
   .nav-link:hover {
@@ -240,28 +244,23 @@ const baseUrl = import.meta.env.BASE_URL;
     display: flex;
     align-items: center;
     gap: var(--gap-xs);
-    padding: 0.625rem 1.25rem;
-    background: linear-gradient(180deg, rgb(37, 88, 235) 0%, rgb(59, 107, 246) 100%);
-    color: white;
+    padding: 0.625rem 1.125rem;
+    background: var(--color-text);
+    color: var(--color-bg);
     font-size: var(--font-size-body-sm);
     font-weight: var(--font-weight-medium);
     border-radius: var(--radius-pill);
-    border: 1px solid rgb(37, 88, 235);
-    box-shadow: rgba(0, 0, 0, 0.17) 0px 0.27px 0.47px 0px,
-                rgba(0, 0, 0, 0.1) 0px 0.89px 1.56px 0px,
-                rgba(0, 0, 0, 0.07) 0px 4px 7px 0px;
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    border: 1px solid var(--color-text);
+    transition: opacity var(--transition-fast), transform 0.1s ease;
   }
 
   .cta-button:hover {
-    transform: translateY(-1px);
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 0.27px 0.47px 0px,
-                rgba(0, 0, 0, 0.15) 0px 0.89px 1.56px 0px,
-                rgba(0, 0, 0, 0.1) 0px 6px 10px 0px;
+    opacity: 0.85;
+    color: var(--color-bg);
   }
 
   .cta-button:active {
-    transform: translateY(0);
+    transform: scale(0.98);
   }
 
   .theme-toggle {
@@ -348,13 +347,12 @@ const baseUrl = import.meta.env.BASE_URL;
     transform: translateX(-50%);
     width: calc(100% - 3rem);
     max-width: 400px;
-    background: rgba(255, 255, 255, 0.8);
+    background: color-mix(in srgb, var(--color-bg) 80%, transparent);
     backdrop-filter: blur(var(--blur-glass));
     -webkit-backdrop-filter: blur(var(--blur-glass));
     border: 1px solid var(--color-border-alpha);
     border-radius: var(--radius-3xl);
-    box-shadow: rgba(0, 0, 0, 0.07) 0px 3.5px 10px 0px,
-                rgba(0, 0, 0, 0.035) 0px 28px 80px 0px;
+    box-shadow: var(--shadow-md);
     opacity: 0;
     visibility: hidden;
     transition: opacity var(--transition-normal), visibility var(--transition-normal), transform var(--transition-normal);
@@ -362,10 +360,9 @@ const baseUrl = import.meta.env.BASE_URL;
   }
 
   :global([data-theme="dark"]) .mobile-menu {
-    background: rgba(26, 15, 46, 0.8);
-    border-color: rgba(61, 45, 95, 0.6);
-    box-shadow: rgba(255, 255, 255, 0.1) 0px 3.5px 10px 0px,
-                rgba(255, 255, 255, 0.05) 0px 28px 80px 0px;
+    background: color-mix(in srgb, var(--color-bg) 80%, transparent);
+    border-color: var(--color-border-alpha);
+    box-shadow: var(--shadow-md);
   }
 
   .mobile-menu.open {
@@ -400,17 +397,18 @@ const baseUrl = import.meta.env.BASE_URL;
     justify-content: center;
     gap: var(--gap-xs);
     padding: 0.875rem 1rem;
-    background: var(--color-primary);
-    color: white;
+    background: var(--color-text);
+    color: var(--color-bg);
     font-size: var(--font-size-body);
     font-weight: var(--font-weight-medium);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-pill);
     margin-top: var(--spacing-xs);
-    transition: all var(--transition-fast);
+    transition: opacity var(--transition-fast);
   }
 
   .mobile-cta-button:hover {
-    background: var(--color-secondary);
+    opacity: 0.85;
+    color: var(--color-bg);
   }
 
   .mobile-theme-toggle {

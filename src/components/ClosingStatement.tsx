@@ -3,52 +3,43 @@ import { Highlighter } from '@/registry/magicui/highlighter';
 
 const ClosingStatement: React.FC = () => {
   return (
-    <div
-      className="closing-statement"
+    <p
       style={{
-        marginTop: 'var(--spacing-lg)',
-        padding: '0 var(--spacing-md)',
-        maxWidth: '900px',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        textAlign: 'center'
+        fontSize: 'clamp(1.5rem, 3vw, 2.25rem)',
+        fontWeight: 'var(--font-weight-bold)',
+        lineHeight: 1.25,
+        letterSpacing: '-0.02em',
+        color: 'var(--color-text)',
+        margin: 0,
+        transition: 'color 0.3s ease',
       }}
     >
-      <p
-        className="closing-text"
-        style={{
-          fontSize: 'var(--font-size-body-0)',
-          lineHeight: 'var(--line-height-body)',
-          color: 'var(--color-text-light)',
-          margin: 0,
-          transition: 'color 0.3s ease'
-        }}
+      I believe in{' '}
+      <Highlighter
+        action="underline"
+        color="var(--color-primary)"
+        strokeWidth={2}
+        padding={0}
+        animationDuration={600}
+        delay={400}
       >
-        I believe in{" "}
-        <Highlighter
-          action="underline"
-          color="var(--color-primary)"
-          strokeWidth={2}
-          padding={0}
-          animationDuration={600}
-          delay={800}
-        >
-          Design Doing
-        </Highlighter>
-        {" "}over{" "}
-        <Highlighter
-          action="underline"
-          color="var(--color-primary)"
-          strokeWidth={2}
-          padding={0}
-          animationDuration={600}
-          delay={1200}
-        >
-          Design Thinking
-        </Highlighter>
-        , turning insight into action and strategy into reality. Whether you're tackling a gnarly problem or exploring new possibilities, <br />I'd love to hear from you.
-      </p>
-    </div>
+        Design Doing
+      </Highlighter>
+      {' '}over{' '}
+      <Highlighter
+        action="underline"
+        color="var(--color-primary)"
+        strokeWidth={2}
+        padding={0}
+        animationDuration={600}
+        delay={800}
+      >
+        Design Thinking
+      </Highlighter>
+      {' '}— not because ideas don't matter, but an insight that never becomes
+      action is just wasted potential. So if you've got a gnarly problem or a
+      half-baked idea, let's make something happen.
+    </p>
   );
 };
 
