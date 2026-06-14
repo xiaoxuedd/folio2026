@@ -60,8 +60,8 @@ folio2026/
 
 `src/components/` mixes Astro components (page sections + icons) with React islands (interactive bits). Highlights:
 
-- **Layout/chrome:** `Navigation.astro`, `Footer.astro` (dark inverse palette, matches the CTA section)
-- **Home:** `Hero.astro` (`HeroText` + `RadialDiagram`), `ProjectsShowcase.astro` + `ProjectCard.astro` (2-up featured + 3-up grid), `Craft.astro` + `CraftAccordion.astro`, `About.astro` (scrolling client-logo marquee), `ContactCTA.astro` (scroll-driven full-screen expansion — compact dark strip that grows to fill the viewport as you scroll). `Testimonials.astro` + `TestimonialCarousel` also exist but are not currently mounted on the home page.
+- **Layout/chrome:** `Navigation.astro`, `Footer.astro` (dark inverse palette; on the home page it's nested inside the closing CTA so the page bottom is one continuous dark panel, standalone on other pages)
+- **Home:** `Hero.astro` (`HeroText` + `RadialDiagram`), `ProjectsShowcase.astro` + `ProjectCard.astro` (2-up featured + 3-up grid), `Craft.astro` + `CraftAccordion.astro`, `About.astro` (scrolling client-logo marquee), `ContactCTA.astro` (scroll-driven full-screen expansion — compact dark strip that grows to fill the viewport as you scroll, with the footer nested into its base). `Testimonials.astro` + `TestimonialCarousel` also exist but are not currently mounted on the home page.
 - **About page:** `Contact.astro`, `ProfilePhoto`, `ClosingStatement`
 - **Healthcare case study:** `ProjectNavigation`, `ChallengeDiagram`, `ChallengeGraphic`, `JourneyAnimation` (with `JourneyIcons`, `JourneyLabels`, `JourneyLabelsAnimated`, `JourneyCornerIcons`), `ImageCarousel`, `ImpactMetrics` + `GlassIcon`, `TestimonialCarousel`, `PillarNumber.astro`, `CircleTitle.astro`
 - **Icons:** `src/components/icons/*.astro`

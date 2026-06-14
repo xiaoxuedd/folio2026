@@ -1,15 +1,10 @@
 ---
-const baseUrl = import.meta.env.BASE_URL;
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
   <div class="container site-footer__row">
-    <a href={baseUrl} class="site-footer__brand">Design Doings</a>
-
     <p class="site-footer__copy">&copy; {year} Design Doings Ltd</p>
-
-    <a href={`${baseUrl}about`} class="site-footer__link">About</a>
 
     <p class="site-footer__credit">Co-crafted by Xiaoxue and her AI partner</p>
   </div>
@@ -33,16 +28,6 @@ const year = new Date().getFullYear();
     color: color-mix(in srgb, var(--color-text-inverse) 50%, transparent);
   }
 
-  .site-footer__brand {
-    color: var(--color-text-inverse);
-    font-weight: var(--font-weight-semibold);
-    font-size: var(--font-size-body-1);
-  }
-
-  .site-footer__brand:hover {
-    opacity: 0.7;
-  }
-
   .site-footer__copy,
   .site-footer__credit {
     margin: 0;
@@ -52,16 +37,6 @@ const year = new Date().getFullYear();
   .site-footer__credit {
     margin-left: auto;
     font-style: italic;
-  }
-
-  .site-footer__link {
-    color: color-mix(in srgb, var(--color-text-inverse) 50%, transparent);
-    font-weight: var(--font-weight-medium);
-  }
-
-  .site-footer__link:hover {
-    color: var(--color-text-inverse);
-    opacity: 1;
   }
 
   @media (max-width: 768px) {

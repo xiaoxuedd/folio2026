@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   AnimatePresence,
   motion,
-  useInView,
   useMotionValue,
   useReducedMotion,
 } from 'framer-motion';
@@ -33,31 +32,42 @@ const PRON_PROXIMITY_RADIUS = 150;
 const PRON_PROXIMITY_MAX_BUMP = 0.22;
 
 const HeroText: React.FC<HeroTextProps> = ({ avatarSrc, avatarAlt = 'Xiaoxue Dong' }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
   const prefersReducedMotion = useReducedMotion();
 
-  const [pronOpen, setPronOpen] = useState(false);
+  // Rest shows the "?!" chip; hovering the name (or tapping/focusing the badge)
+  // pops a two-line pronunciation card above it. `hovered` is mouse-driven with
+  // a short close delay so crossing the small gap between the name and the badge
+  // doesn't flicker it shut; `pinned` is the touch/keyboard latch.
+  const [hovered, setHovered] = useState(false);
+  const [pinned, setPinned] = useState(false);
+  const revealed = hovered || pinned;
   const pronRef = useRef<HTMLSpanElement>(null);
   const badgeRef = useRef<HTMLButtonElement>(null);
   const badgeScale = useMotionValue(1);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const prevRevealed = useRef(false);
+
+  const revealName = () => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+    setHovered(true);
+  };
+  const hideNameSoon = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setHovered(false), 90);
+  };
 
   // Live London local time, unfurled under the location on cursor proximity.
   const londonTime = useLondonTime();
   const pillStageRef = useRef<HTMLDivElement>(null);
 
-  const fadeUp = (delay: number) => ({
-    initial: prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 },
-    animate: isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 },
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const, delay: prefersReducedMotion ? 0 : delay },
-  });
-
-  const openPron = (open: boolean) => {
-    setPronOpen((prev) => {
-      if (open && !prev) trackEvent('hero_pronunciation_open');
-      return open;
-    });
-  };
+  // Fire the open event once per rest→revealed transition (hover, tap, or focus).
+  useEffect(() => {
+    if (revealed && !prevRevealed.current) trackEvent('hero_pronunciation_open');
+    prevRevealed.current = revealed;
+  }, [revealed]);
 
   // Dock-style proximity scale, driven off pointer position within the text
   // block. No-ops under reduced motion and on touch (no pointer moves fire).
@@ -74,16 +84,17 @@ const HeroText: React.FC<HeroTextProps> = ({ avatarSrc, avatarAlt = 'Xiaoxue Don
 
   const resetBadgeScale = () => badgeScale.set(1);
 
-  // Tap-to-toggle needs a way to dismiss: close on outside tap or Escape.
+  // Touch/keyboard latch: a tap or focus pins the phonetic open; dismiss on
+  // outside tap or Escape.
   useEffect(() => {
-    if (!pronOpen) return;
+    if (!pinned) return;
     const onPointerDown = (e: PointerEvent) => {
       if (pronRef.current && !pronRef.current.contains(e.target as Node)) {
-        setPronOpen(false);
+        setPinned(false);
       }
     };
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setPronOpen(false);
+      if (e.key === 'Escape') setPinned(false);
     };
     document.addEventListener('pointerdown', onPointerDown);
     document.addEventListener('keydown', onKeyDown);
@@ -91,23 +102,26 @@ const HeroText: React.FC<HeroTextProps> = ({ avatarSrc, avatarAlt = 'Xiaoxue Don
       document.removeEventListener('pointerdown', onPointerDown);
       document.removeEventListener('keydown', onKeyDown);
     };
-  }, [pronOpen]);
+  }, [pinned]);
 
   return (
     <div
-      ref={ref}
       className="hero-text-wrapper"
       onMouseMove={handlePointerMove}
       onMouseLeave={resetBadgeScale}
     >
-      <motion.p className="hero-eyebrow" {...fadeUp(0.1)}>
+      <p className="hero-eyebrow hero-rise">
         Hi,
-      </motion.p>
+      </p>
 
       <h1 className="hero-heading">
-        <motion.span className="hero-heading-line hero-heading-coral" {...fadeUp(0.2)}>
+        <span className="hero-heading-line hero-heading-coral hero-rise">
           I&rsquo;m{' '}
-          <span className="hero-name">
+          <span
+            className="hero-name"
+            onMouseEnter={revealName}
+            onMouseLeave={hideNameSoon}
+          >
             Xiaoxue
             <span className="hero-pron" ref={pronRef}>
               <motion.button
@@ -115,27 +129,25 @@ const HeroText: React.FC<HeroTextProps> = ({ avatarSrc, avatarAlt = 'Xiaoxue Don
                 type="button"
                 className="hero-pron-badge"
                 style={{ scale: prefersReducedMotion ? 1 : badgeScale }}
-                aria-label="How to pronounce Xiaoxue"
-                aria-expanded={pronOpen}
-                onMouseEnter={() => openPron(true)}
-                onMouseLeave={() => openPron(false)}
-                onFocus={() => openPron(true)}
-                onBlur={() => openPron(false)}
-                onClick={() => openPron(!pronOpen)}
+                aria-label="Xiaoxue is pronounced shiau-shweh"
+                aria-expanded={revealed}
+                onFocus={() => setPinned(true)}
+                onBlur={() => setPinned(false)}
+                onClick={() => setPinned((prev) => !prev)}
               >
                 ?!
               </motion.button>
 
               <AnimatePresence>
-                {pronOpen && (
+                {revealed && (
                   <motion.span
                     className="hero-pron-bubble"
                     role="tooltip"
                     style={{ x: '-50%' }}
-                    initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 6, scale: 0.96 }}
+                    initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 6, scale: 0.85 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 6, scale: 0.96 }}
-                    transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+                    exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 6, scale: 0.85 }}
+                    transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
                   >
                     <span className="hero-pron-bubble-label">Pronounced</span>
                     <span className="hero-pron-bubble-value">/shiau&middot;shweh/</span>
@@ -145,15 +157,15 @@ const HeroText: React.FC<HeroTextProps> = ({ avatarSrc, avatarAlt = 'Xiaoxue Don
             </span>
           </span>
           .
-        </motion.span>
+        </span>
       </h1>
 
-      <motion.p className="hero-mission" {...fadeUp(0.36)}>
+      <p className="hero-mission hero-rise" style={{ animationDelay: '0.12s' }}>
         I design services that work for people, and strategies that work for the organisations delivering them.
-      </motion.p>
+      </p>
 
       {avatarSrc && (
-        <motion.div className="hero-avatar-pill-stage" ref={pillStageRef} {...fadeUp(0.52)}>
+        <div className="hero-avatar-pill-stage hero-rise" ref={pillStageRef} style={{ animationDelay: '0.22s' }}>
           <ProximityTilt
             className="hero-avatar-pill"
             tiltRange={6}
@@ -177,7 +189,7 @@ const HeroText: React.FC<HeroTextProps> = ({ avatarSrc, avatarAlt = 'Xiaoxue Don
               </span>
             </div>
           </ProximityTilt>
-        </motion.div>
+        </div>
       )}
     </div>
   );

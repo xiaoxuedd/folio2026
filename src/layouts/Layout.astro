@@ -145,6 +145,36 @@ const websiteSchema = {
         };
       });
     </script>
+    <script is:inline>
+      // Safari's bottom rubber-band reveals the canvas (the <html> background),
+      // which is light in light mode — an ugly white strip under the always-dark
+      // footer. Flip the canvas to the footer's dark only while scrolled to the
+      // bottom, so a pull-down at the top still reveals the normal light bg.
+      (function () {
+        let maxScroll = 0;
+        let atBottom = false;
+        const measure = () => {
+          maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        };
+        const update = () => {
+          const nearBottom = maxScroll > 0 && window.scrollY >= maxScroll - 4;
+          if (nearBottom === atBottom) return;
+          atBottom = nearBottom;
+          document.documentElement.style.backgroundColor = nearBottom
+            ? 'var(--color-bg-inverse)'
+            : '';
+        };
+        window.addEventListener('scroll', update, { passive: true });
+        window.addEventListener('resize', () => { measure(); update(); }, { passive: true });
+        // Page height shifts after load (e.g. the CTA sets its wrapper height in
+        // JS) — keep maxScroll fresh via RO so the scroll path never reflows.
+        if ('ResizeObserver' in window) {
+          new ResizeObserver(() => { measure(); update(); }).observe(document.body);
+        }
+        measure();
+        update();
+      })();
+    </script>
   </body>
 </html>
 
@@ -221,7 +251,10 @@ const websiteSchema = {
     /* ============================================
        LAYOUT
        ============================================ */
-    --max-width: 1100px;
+    /* Fluid so the nav pill + content column grow smoothly on wide screens
+       instead of snapping 200px wider at a hard breakpoint. Pinned at 1100px
+       up to ~1500px viewport, then ramps to 1300px by ~1900px. */
+    --max-width: clamp(1100px, 50vw + 350px, 1300px);
 
     --text-width-single:     900px;
     --text-width-column:     500px;
@@ -600,12 +633,6 @@ const websiteSchema = {
 
     .container {
       padding: 0 var(--spacing-sm);
-    }
-  }
-
-  @media (min-width: 1600px) {
-    :root {
-      --max-width: 1300px;
     }
   }
 </style>

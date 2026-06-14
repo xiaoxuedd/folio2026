@@ -1,4 +1,5 @@
 ---
+import Footer from './Footer.astro';
 const baseUrl = import.meta.env.BASE_URL;
 const aboutHref = `${baseUrl}about`.replace(/\/\//g, '/');
 ---
@@ -54,6 +55,12 @@ const aboutHref = `${baseUrl}about`.replace(/\/\//g, '/');
         </div>
       </div>
     </div>
+
+    <!-- Footer — pinned to the panel's base, fades in as the panel expands so
+         the bottom of the page is one continuous dark section. -->
+    <div class="cta__footer" data-cta-footer>
+      <Footer />
+    </div>
   </section>
 </div>
 
@@ -71,6 +78,10 @@ const aboutHref = `${baseUrl}about`.replace(/\/\//g, '/');
        overridden before first paint via an inline style set in JS,
        but these provide a safe default if JS hasn't run yet. */
     top: 0;
+    /* Sit above the nav-fade overlay (z 998) so the light top-fade doesn't
+       wash over this dark panel when it expands to the top — but stay below
+       the nav itself (z 1000/1001). */
+    z-index: 999;
 
     background:
       radial-gradient(
@@ -159,6 +170,22 @@ const aboutHref = `${baseUrl}about`.replace(/\/\//g, '/');
   .cta__main {
     flex-shrink: 0;
     padding: clamp(1.25rem, 2.5vw, 1.75rem) 0;
+  }
+
+  /* ─── Footer, fixed to the viewport base ───────────────────────── */
+  /* Fixed (not absolute) so it locks to the viewport bottom and is immune to
+     the section's per-frame top/height updates — no shimmer. It stays inside
+     the panel in the DOM, so it still paints in the panel's stacking context
+     (below the nav) and isn't clipped by the panel's overflow. Fades in on the
+     same scroll progress as the expanded heading. `pointer-events: none` so the
+     always-present (often invisible) bar never intercepts clicks on the page. */
+  .cta__footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: var(--cta-expanded-opacity, 0);
+    pointer-events: none;
   }
 
   .cta__heading {
@@ -273,6 +300,12 @@ const aboutHref = `${baseUrl}about`.replace(/\/\//g, '/');
       pointer-events: auto !important;
     }
 
+    .cta__footer {
+      position: static;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
     .cta__button,
     .cta__button:hover,
     .cta__button:active {
@@ -360,9 +393,11 @@ const aboutHref = `${baseUrl}about`.replace(/\/\//g, '/');
       section.style.top = `${expansionPx}px`;
       section.style.height = `${H_nat}px`;
 
-      // Wrapper height = section natural height + expansion scroll range + hold time.
-      // The hold is 30% extra viewport height after full expansion.
-      const holdPx = Math.round(vh * 0.3);
+      // Wrapper height = section natural height + expansion scroll range + a
+      // short tail. The footer now lives inside the panel, so there's no
+      // separate block to scroll up to — the tail is just enough to guarantee
+      // full expansion is reachable, not the old 30vh dead-scroll hold.
+      const holdPx = Math.round(vh * 0.06);
       wrapper.style.height = `${H_nat + expansionPx + holdPx}px`;
 
       // Cache wrapper's page position (stable after layout).
@@ -377,9 +412,11 @@ const aboutHref = `${baseUrl}about`.replace(/\/\//g, '/');
       const scrollStart = wrapperTop - expansionPx;
       const progress = Math.max(0, Math.min(1, (scrollY - scrollStart) / expansionPx));
 
-      // Section grows upward: top decreases, height increases, bottom stays at vh.
+      // Section grows upward: top decreases, height increases, bottom stays
+      // pinned to the viewport bottom (height = vh − top). The footer is
+      // viewport-fixed (see CSS), so it no longer rides this edge.
       const currentTop = expansionPx * (1 - progress);
-      const currentHeight = H_nat + expansionPx * progress;
+      const currentHeight = vh - currentTop;
       section.style.top = `${currentTop}px`;
       section.style.height = `${currentHeight}px`;
 

@@ -65,7 +65,6 @@ const baseUrl = import.meta.env.BASE_URL;
   <div class="mobile-menu">
     <div class="mobile-menu-content">
       <a href={`${baseUrl}#works`} class="mobile-nav-link">Works</a>
-      <a href={`${baseUrl}#skills`} class="mobile-nav-link">Skills &amp; Tools</a>
       <a href={`${baseUrl}about`} class="mobile-nav-link">About</a>
       <button class="mobile-theme-toggle" aria-label="Toggle theme" onclick="window.toggleTheme()">
         <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -82,7 +81,8 @@ const baseUrl = import.meta.env.BASE_URL;
         <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
         </svg>
-        <span class="theme-toggle-text">Toggle theme</span>
+        <span class="theme-toggle-text theme-toggle-text--to-dark">Dark mode</span>
+        <span class="theme-toggle-text theme-toggle-text--to-light">Light mode</span>
       </button>
       <a href="https://www.linkedin.com/in/xiaoxued/" target="_blank" rel="noopener" class="mobile-cta-button">
         <LinkedInIcon width={16} height={16} />
@@ -460,6 +460,19 @@ const baseUrl = import.meta.env.BASE_URL;
     transform: rotate(0deg) scale(1);
     position: static;
     color: white;
+  }
+
+  /* Label names the mode you'll switch to — mirrors the icon swap above. */
+  .theme-toggle-text--to-light {
+    display: none;
+  }
+
+  :global([data-theme="dark"]) .theme-toggle-text--to-dark {
+    display: none;
+  }
+
+  :global([data-theme="dark"]) .theme-toggle-text--to-light {
+    display: inline;
   }
 
   @media (max-width: 768px) {

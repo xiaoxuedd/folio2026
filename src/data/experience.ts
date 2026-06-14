@@ -16,7 +16,7 @@ export const experience: ExperienceEntry[] = [
     company: 'BYND',
     role: 'Principal Lead, Service Design & Strategy',
     location: 'London, UK',
-    years: '2023 —',
+    years: '2023 — Present',
     highlights: [
       'Scaled CX transformation across 8+ markets for a pharmaceutical client, securing executive alignment and driving strategic service implementation for the commercial launch of advanced therapies.',
       'Architected a service design strategy with AI-enabled workflow capabilities, creating new propositions that generated £3m+ revenue opportunities across three industry sectors.',

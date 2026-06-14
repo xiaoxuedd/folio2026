@@ -1,3 +1,22 @@
+/* Entrance — driven by CSS, not Framer, so the hero (including the LCP heading)
+   paints straight from the server-rendered HTML instead of waiting for React +
+   Framer to download and hydrate. The heading has no animation-delay so it
+   starts painting on the first frame. */
+@keyframes hero-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.hero-rise {
+  animation: hero-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-rise {
+    animation: none;
+  }
+}
+
 .hero-text-wrapper {
   width: 100%;
   display: flex;
@@ -62,14 +81,15 @@
   line-height: 1;
 }
 
-/* The "?!" badge — small coral chip. Glass-style rounded exception (it's a
-   control, not a sharp-corner surface). Scale is driven by Framer in the TSX
-   (proximity magnetism), so keep transform out of the base rule. */
+/* The "?!" badge — small coral chip; the affordance/anchor for the card.
+   Glass-style rounded exception (it's a control, not a sharp-corner surface).
+   Proximity-magnetism scale is driven by Framer in the TSX, so keep transform
+   out of the base rule. */
 .hero-pron-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   line-height: 1;
   padding: 0.2em 0.42em;
   margin-left: 0.4em;
@@ -86,7 +106,8 @@
 }
 
 .hero-pron-badge:hover,
-.hero-pron-badge:focus-visible {
+.hero-pron-badge:focus-visible,
+.hero-pron-badge[aria-expanded="true"] {
   color: var(--color-accent-coral);
   background: var(--color-primary-alpha-light);
   border-color: var(--color-primary-alpha-medium);
@@ -94,43 +115,46 @@
   outline: none;
 }
 
-/* The pronunciation bubble — small popover centred above the badge. Fixed,
-   readable sizing (not heading-relative) and reset typography. */
+/* Two-line pronunciation card. Centred over the badge (Framer applies the
+   translateX(-50%) + scale, owning the transform) and popped above it, so it
+   expands outward from the badge rather than pushing the name to the right.
+   `transform-origin` keeps the scale-in growing up from the badge. Sizing is
+   reset (not heading-relative) via the 1rem on `.hero-pron`. */
 .hero-pron-bubble {
   position: absolute;
-  bottom: calc(100% + 0.5rem);
+  bottom: calc(100% + 0.55rem);
   left: 50%;
   transform-origin: bottom center;
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  align-items: center;
+  gap: 3px;
   white-space: nowrap;
-  padding: 0.45rem 0.7rem;
+  padding: 0.6rem 0.95rem;
   background: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   z-index: 5;
-  /* Horizontal centring (translateX(-50%)) is applied via Framer's `x` in the
-     TSX, since Framer owns this element's `transform`. */
 }
 
 .hero-pron-bubble-label {
   font-size: var(--font-size-ui-xs);
-  font-weight: var(--font-weight-regular);
-  letter-spacing: 0.01em;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--color-text-secondary);
   line-height: 1.2;
 }
 
 .hero-pron-bubble-value {
-  font-size: var(--font-size-ui);
+  font-size: 1.15rem;
   font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
+  color: var(--color-accent-coral);
   line-height: 1.2;
 }
 
-/* Little pointer at the bottom of the bubble, aimed at the badge. */
+/* Little pointer at the bottom of the card, aimed at the badge. */
 .hero-pron-bubble::after {
   content: '';
   position: absolute;
@@ -139,7 +163,6 @@
   transform: translateX(-50%);
   border: 6px solid transparent;
   border-top-color: var(--color-bg-secondary);
-  /* Nudge up 1px so the triangle overlaps the border seam cleanly. */
   margin-top: -1px;
 }
 
