@@ -61,6 +61,7 @@ export const projects: Project[] = [
     category: "E-commerce",
     image: ecommerceReturns,
     tags: ["Service Design", "Research", "Data Strategy", "Product / UX"],
+    link: "/ecommerce",
     industry: "E-commerce",
     duration: "6 months",
     scope: "6-month programme across product, operations, and finance",

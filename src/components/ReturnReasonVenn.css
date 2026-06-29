@@ -1,0 +1,147 @@
+/* ReturnReasonVenn — animated three-lobe Venn of the ideal return-reason
+   taxonomy. Token-driven; greens come from the site mint accent (--accent),
+   which flips to a brighter mint on dark, so the diagram themes for free.
+   The purple-grey lobe fills are local, with a dark-mode override. */
+
+.return-venn {
+  --rv-fill-1: #b6b4cf;
+  --rv-fill-2: #9b99bf;
+  --rv-fill-3: #817eac;
+  --rv-fill-op: 0.2;
+  --rv-fill-op-hover: 0.4;
+
+  margin: 0;
+  width: 100%;
+  max-width: 460px;
+  margin-inline: auto;
+}
+
+.return-venn__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* --- Lobes --- */
+.return-venn__circle {
+  fill-opacity: var(--rv-fill-op);
+  cursor: default;
+  transition: fill-opacity var(--transition-normal), filter var(--transition-normal);
+}
+
+.return-venn__circle:hover {
+  fill-opacity: var(--rv-fill-op-hover);
+  filter: drop-shadow(0 6px 16px rgba(28, 26, 56, 0.28));
+}
+
+.return-venn__circle--truth {
+  fill: var(--rv-fill-1);
+}
+
+.return-venn__circle--ease {
+  fill: var(--rv-fill-2);
+}
+
+.return-venn__circle--signal {
+  fill: var(--rv-fill-3);
+}
+
+/* --- Sweet spot + dot --- */
+.return-venn__sweet {
+  fill: var(--accent);
+  transition: opacity var(--transition-normal);
+}
+
+.return-venn__dot {
+  fill: var(--accent);
+}
+
+/* --- Leader + arrowhead --- */
+.return-venn__arrow {
+  stroke: var(--accent);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+
+.return-venn__arrowhead {
+  fill: var(--accent);
+}
+
+/* --- Title tag --- */
+.return-venn__tag rect {
+  fill: var(--accent);
+}
+
+.return-venn__tag-text {
+  fill: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* --- Lobe headings + questions --- */
+.return-venn__labels {
+  pointer-events: none;
+}
+
+.return-venn__title {
+  fill: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 16.5px;
+  font-weight: 500;
+  transition: fill var(--transition-normal);
+}
+
+.return-venn__question {
+  fill: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+}
+
+/* Heading lifts to the accent while its lobe is hovered. */
+.return-venn__label.is-active .return-venn__title {
+  fill: var(--accent);
+}
+
+/* --- Pairwise-overlap captions --- */
+.return-venn__overlap {
+  fill: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+}
+
+/* Dark theme — lift the lobe fills (the pale purples vanish on near-black) and
+   flip the tag text to read black on the bright mint accent. */
+[data-theme='dark'] .return-venn {
+  --rv-fill-1: #7c7aa6;
+  --rv-fill-2: #8a88b4;
+  --rv-fill-3: #9a98c2;
+  --rv-fill-op: 0.34;
+  --rv-fill-op-hover: 0.5;
+}
+
+[data-theme='dark'] .return-venn__tag-text {
+  fill: #000;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .return-venn__circle,
+  .return-venn__sweet,
+  .return-venn__title {
+    transition: none;
+  }
+}
+
+/* On narrow screens the stacked column is full width and the near-square
+   diagram becomes overwhelming. Cap it by height instead and let the width
+   follow its aspect ratio, centred. */
+@media (max-width: 768px) {
+  .return-venn__svg {
+    width: auto;
+    height: clamp(280px, 54vh, 400px);
+    max-width: 100%;
+    margin-inline: auto;
+  }
+}

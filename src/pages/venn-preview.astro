@@ -1,0 +1,56 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ReturnReasonVenn from '../components/ReturnReasonVenn';
+---
+
+<!--
+  Isolated preview for the rebuilt return-reason taxonomy Venn diagram.
+  Not linked from anywhere — a scratch route to develop the component on its own
+  before it's wired into the e-commerce case study. Safe to delete on integration.
+-->
+<Layout title="Venn preview — Xiaoxue">
+  <main class="venn-preview">
+    <div class="venn-preview__inner">
+      <p class="venn-preview__eyebrow">Component preview</p>
+      <h1>Ideal return reason taxonomy</h1>
+      <p class="venn-preview__note">
+        Scroll the diagram into view to trigger the entrance; hover a lobe for the
+        reaction.
+      </p>
+      <ReturnReasonVenn client:visible />
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .venn-preview {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  .venn-preview__inner {
+    width: 100%;
+    max-width: 640px;
+    text-align: center;
+  }
+
+  .venn-preview__eyebrow {
+    font-size: var(--font-size-ui-xs, 0.75rem);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: var(--gap-sm);
+  }
+
+  .venn-preview h1 {
+    font-size: var(--font-size-h3);
+    margin-bottom: var(--gap-sm);
+  }
+
+  .venn-preview__note {
+    color: var(--text-2);
+    margin-bottom: var(--spacing-md);
+  }
+</style>

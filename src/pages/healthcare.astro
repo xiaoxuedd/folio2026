@@ -4,6 +4,7 @@ import ProjectNavigation from '../components/ProjectNavigation';
 import { ChallengeDiagram } from '../components/ChallengeDiagram';
 import { ChallengeGraphic } from '../components/ChallengeGraphic';
 import { ImpactMetrics } from '../components/ImpactMetrics';
+import NextProjectButton from '../components/NextProjectButton';
 import PillarNumber from '../components/PillarNumber.astro';
 import CircleTitle from '../components/CircleTitle.astro';
 import Footer from '../components/Footer.astro';
@@ -352,7 +353,12 @@ const testimonials = [
 
         <!-- Footer CTA -->
         <section class="footer-cta" data-aos="fade-up">
-          <a href={baseUrl} class="btn">← Back to Home</a>
+          <NextProjectButton
+            href={`${baseUrl}ecommerce`.replace(/\/\//g, '/')}
+            projectTitle="Ecommerce"
+            accent="purple"
+            client:visible
+          />
         </section>
 
       </div>
@@ -487,17 +493,6 @@ const testimonials = [
     --color-primary:              #7B63F5;
     --color-primary-alpha-light:  rgba(123,99,245,.10);
     --color-primary-alpha-medium: rgba(123,99,245,.16);
-  }
-  /* Nav progress tracker stays mint green */
-  .project-header {
-    --color-primary:              #0A7A58;
-    --color-primary-alpha-light:  rgba(10,122,88,.08);
-    --color-primary-alpha-medium: rgba(10,122,88,.12);
-  }
-  [data-theme="dark"] .project-header {
-    --color-primary:              #24D48E;
-    --color-primary-alpha-light:  rgba(36,212,142,.10);
-    --color-primary-alpha-medium: rgba(36,212,142,.16);
   }
 </style>
 
@@ -906,7 +901,7 @@ const testimonials = [
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--spacing-xl);
-    max-width: var(--content-width-reading);
+    max-width: var(--max-width);
     margin: 0 auto;
   }
 
@@ -1102,7 +1097,10 @@ const testimonials = [
 
   /* 13. Footer CTA */
   .footer-cta {
-    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    justify-content: center;
     padding: var(--spacing-md) 0;
   }
 

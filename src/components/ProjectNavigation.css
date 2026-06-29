@@ -171,6 +171,13 @@
   color: white;
 }
 
+/* Highlighted bubbles ride the bright mint accent in dark mode — black label
+   reads better on it than white (mirrors the diagram tag text). */
+[data-theme="dark"] .progress-bubble.completed .bubble-label,
+[data-theme="dark"] .progress-bubble.active .bubble-label {
+  color: #000;
+}
+
 .bubble-label {
   font-size: var(--font-size-ui-xs);
   font-weight: var(--font-weight-medium);
@@ -328,6 +335,11 @@
   .progress-bubble.completed .bubble-label {
     background: var(--color-primary);
     color: white;
+  }
+
+  [data-theme="dark"] .progress-bubble.active .bubble-label,
+  [data-theme="dark"] .progress-bubble.completed .bubble-label {
+    color: #000;
   }
 
   /* Add small arrow to tooltip */

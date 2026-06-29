@@ -1,0 +1,406 @@
+.ijm {
+  width: 100%;
+}
+
+.ijm__header {
+  margin-bottom: 36px;
+  max-width: var(--text-width-single);
+}
+
+.ijm__eyebrow {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  margin-bottom: 12px;
+}
+
+.ijm__heading {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: var(--font-size-h3);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--color-text);
+  margin: 0 0 14px;
+}
+
+.ijm__heading em {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--color-primary);
+  font-size: 1.12em;
+}
+
+.ijm__subtext {
+  font-size: var(--font-size-body-1);
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Tile selector */
+.ijm__tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.ijm__tile {
+  text-align: left;
+  cursor: pointer;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(28, 26, 56, 0.04);
+  transition:
+    transform 0.3s cubic-bezier(0.22, 0.68, 0, 1.2),
+    box-shadow 0.3s ease,
+    border-color 0.3s ease,
+    background 0.3s ease;
+}
+
+.ijm__tile--active {
+  border-color: var(--color-primary);
+  background: var(--accent-bg);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--color-primary) 13%, transparent);
+}
+
+.ijm__tile-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ijm__tile-n {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--color-text-secondary);
+  transition: color 0.3s ease;
+}
+
+.ijm__tile--active .ijm__tile-n {
+  color: var(--color-primary);
+}
+
+.ijm__tile-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--color-primary);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.ijm__tile--active .ijm__tile-dot {
+  opacity: 1;
+}
+
+.ijm__tile-title {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+.ijm__tile-sub {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+/* Viewer frame */
+.ijm__frame {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid var(--color-border);
+  background: var(--surface);
+  box-shadow: 0 1px 2px rgba(28, 26, 56, 0.05);
+  /* Pre-measure fallback — replaced by an exact inline px height on hydration. */
+  aspect-ratio: 7734 / 2452;
+  transition: height 0.75s cubic-bezier(0.6, 0.01, 0.05, 1);
+}
+
+.ijm__wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transition: transform 0.75s cubic-bezier(0.6, 0.01, 0.05, 1);
+}
+
+/* Top panel — three crops tiled seamlessly. Also the query container the
+   annotation overlays size themselves against, so their height scales with the
+   image (not with fixed px) and they cover the same region at any width. */
+.ijm__top-panel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 7734 / 2452;
+  container-type: inline-size;
+}
+
+.ijm__segs {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.ijm__seg {
+  overflow: hidden;
+  height: 100%;
+}
+
+.ijm__seg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left top;
+  display: block;
+}
+
+/* Glass overlays — matched to the "From map to roadmap" card glass.
+   Sized in `--u` (= 1px at a 1200px-wide frame) so the box scales with the
+   image and keeps covering the same region at every width. */
+.ijm__overlay {
+  --u: calc(100cqw / 1200);
+  position: absolute;
+  background: rgba(255, 255, 255, 0.58);
+  backdrop-filter: blur(20px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: calc(18 * var(--u));
+  box-shadow:
+    0 12px 40px rgba(28, 26, 56, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  padding: calc(26 * var(--u)) calc(24 * var(--u));
+  opacity: 0;
+  transform: translateY(16px) scale(0.985);
+  pointer-events: none;
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s cubic-bezier(0.22, 0.68, 0, 1.2);
+}
+
+.ijm__overlay.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.ijm__overlay strong {
+  display: block;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  font-size: calc(18 * var(--u));
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+  margin-bottom: calc(5 * var(--u));
+}
+
+.ijm__overlay span {
+  font-size: calc(15 * var(--u));
+  line-height: 1.4;
+  color: var(--color-text-secondary);
+}
+
+/* Top-row boxes (Pre / Post purchase) share a top edge, so reserve two lines
+   of sub height on both — keeps their heights equal whether the text wraps to
+   one line or two. The bottom (Data) box is left alone. */
+.ijm__overlay--row {
+  padding: calc(21 * var(--u)) calc(24 * var(--u));
+}
+
+.ijm__overlay--row span {
+  display: block;
+  min-height: 3.5em;
+}
+
+/* Bottom panel */
+.ijm__bot-panel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16112 / 4197;
+  border-top: 1px solid var(--color-border);
+}
+
+.ijm__bot-panel>img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left top;
+  display: block;
+}
+
+/* State-3 card. Aligned to the state-2 "Data & Operation Ecosystem" overlay
+   (same left edge + width) so the two states read as one consistent layout. */
+.ijm__bot-card {
+  --s3-title-size: 20px;
+  position: absolute;
+  left: 9.75%;
+  top: 56%;
+  width: 86.25%;
+  background: rgba(255, 255, 255, 0.58);
+  backdrop-filter: blur(20px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 40px rgba(28, 26, 56, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  padding: 40px 28px;
+  opacity: 0;
+  transform: translateY(calc(-50% + 26px));
+  pointer-events: none;
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s cubic-bezier(0.22, 0.68, 0, 1.2);
+}
+
+.ijm__bot-card.is-visible {
+  opacity: 1;
+  transform: translateY(-50%);
+  transition-delay: 0.62s;
+  pointer-events: auto;
+}
+
+.ijm__bot-card-inner {
+  display: flex;
+  gap: 28px;
+  align-items: stretch;
+}
+
+.ijm__bot-text {
+  flex: 1.2;
+  max-width: 640px;
+}
+
+.ijm__s3-eyebrow {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: 9px;
+}
+
+.ijm__s3-heading {
+  display: block;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: var(--s3-title-size);
+  letter-spacing: -0.025em;
+  color: var(--color-text);
+  margin-bottom: 10px;
+}
+
+.ijm__s3-body {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.ijm__s3-uses {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+}
+
+.ijm__use-chip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.ijm__use-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background: var(--color-primary);
+  flex: none;
+}
+
+.ijm__use-title {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.ijm__use-meta {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin-left: auto;
+}
+
+/* The map images are always light, so keep these glass cards in their light
+   appearance under dark mode too — light glass with dark text — so any text
+   sitting on the white map never flips light and unreadable. */
+:global([data-theme="dark"]) .ijm__overlay,
+:global([data-theme="dark"]) .ijm__bot-card {
+  background: rgba(255, 255, 255, 0.58);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+:global([data-theme="dark"]) .ijm__overlay strong,
+:global([data-theme="dark"]) .ijm__s3-heading {
+  color: #1c1a38;
+}
+
+:global([data-theme="dark"]) .ijm__overlay span,
+:global([data-theme="dark"]) .ijm__s3-body {
+  color: #6e6b8a;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+  .ijm__frame,
+  .ijm__wrap,
+  .ijm__overlay,
+  .ijm__bot-card,
+  .ijm__tile {
+    transition: none;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ijm__tiles {
+    grid-template-columns: 1fr;
+    margin-bottom: 0;
+  }
+
+  /* Drop the map viewer on narrow screens — it's unreadable at phone width;
+     the stacked tiles carry the content instead. */
+  .ijm__frame {
+    display: none;
+  }
+
+  .ijm__bot-card-inner {
+    flex-direction: column;
+    gap: 16px;
+  }
+}

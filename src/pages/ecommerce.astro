@@ -1,0 +1,1429 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProjectNavigation from '../components/ProjectNavigation';
+import CircleTitle from '../components/CircleTitle.astro';
+import InteractiveJourneyMap from '../components/InteractiveJourneyMap';
+import ReturnVoicesCards from '../components/ReturnVoicesCards';
+import ProblemStats from '../components/ProblemStats';
+import ImpactBento, { type BentoStat } from '../components/ImpactBento';
+import NextProjectButton from '../components/NextProjectButton';
+import ReturnReasonVenn from '../components/ReturnReasonVenn';
+import PdpModuleAnatomy from '../components/PdpModuleAnatomy.astro';
+import Footer from '../components/Footer.astro';
+import { Image, getImage } from 'astro:assets';
+import { HardHat, BrainCircuit, ArrowLeftRight } from 'lucide-react';
+
+// Interactive journey map images.
+import journeyMapBottom from '../images/projects/journey-map-bottom-full.jpg';
+import journey1 from '../images/projects/return-journey-1.jpg';
+import journey2 from '../images/projects/return-journey-2.jpg';
+import journey3 from '../images/projects/return-journey-3.jpg';
+
+// Scalable-solutions module images.
+import modulePDP from '../images/projects/ecommerce-returns.jpg';
+import pdpFlowMap from '../images/projects/pdp-size-flow-map.jpg';
+
+// Statement-band backdrop — a cropped parcel image behind the opening question.
+import statementBg from '../images/projects/ecommerce-banner-2.jpg';
+
+const baseUrl = import.meta.env.BASE_URL;
+
+// --- The Problem: interactive stat callouts -------------------------------
+const problemStats = [
+  {
+    figure: 3,
+    suffix: '×',
+    label: 'higher apparel returns online than in store',
+    source: 'Industry benchmark · 2024',
+  },
+  {
+    figure: 27,
+    suffix: '%',
+    label: 'of the purchase price just to process a return\n— up to 50% of its margin',
+    source: 'Optoro · 2024 Returns Unwrapped · Nov 2024',
+  },
+  {
+    figure: 75,
+    suffix: '%',
+    label: 'of unsaleable UK returns hit landfill\n— 23M items, 750K tonnes CO₂ a year',
+    source: 'British Fashion Council / DHL / Roland Berger · Solving Fashion’s Product Returns · Mar 2023',
+  },
+];
+
+// --- The problem beneath the brief: interactive journey map ---------------
+const [seg1Img, seg2Img, seg3Img, journeyBottomImg, pdpMapImg] = await Promise.all([
+  getImage({ src: journey1, format: 'webp', quality: 85 }),
+  getImage({ src: journey2, format: 'webp', quality: 85 }),
+  getImage({ src: journey3, format: 'webp', quality: 85 }),
+  getImage({ src: journeyMapBottom, format: 'webp', quality: 82 }),
+  getImage({ src: pdpFlowMap, format: 'webp', quality: 82 }),
+]);
+
+// --- Scalable solutions ---------------------------------------------------
+const solutions = [
+  {
+    module: '01',
+    title: 'Redesigning the return signal',
+    body: '“Just unsuitable.” Technically, a reason; practically, useless. So we rebuilt the moment itself: design a return flow that collects genuinely useful data, not just what customers were willing to say, but what the business actually needed to know. We redesigned the flow, validated the language, and introduced mindful friction, improving data quality without damaging the experience.',
+    impact: '£300M of orders a year came back with a reason that told us nothing',
+  },
+  {
+    module: '02',
+    title: 'Helping customers buy right the first time',
+    body: 'I guided the team to understand the mental models behind purchase decisions: how curiosity, consideration, and confidence shift by category. We mapped those needs to a modular, category-adaptable PDP architecture tied to commercial KPIs, giving teams a system built for the best-informed purchase decision.',
+    impact: 'A £3,000 engagement ring and a £15 eyeshadow, on the same static PDP.',
+  },
+  {
+    module: '03',
+    title: 'Fix the data at the root',
+    body: 'I unpacked how that data actually moved, then redesigned the workflow so accuracy got built in upstream rather than fixed downstream, pairing the new process with AI-driven size recommendations and action cards that clarified ownership and sequencing across the 10+ teams who touched it.',
+    impact: '50+ data points behind a single pair of trainers, entered manually across different teams.',
+  },
+];
+
+// --- Impact ---------------------------------------------------------------
+const impactStats: BentoStat[] = [
+  {
+    variant: 'lead',
+    eyebrow: 'Pilot phase',
+    number: 10,
+    suffix: '%',
+    title: 'Return reduction',
+    description:
+      'The programme’s contribution to returns, measured during the 12-week pilot phase.',
+  },
+  { variant: 'side', value: '6×', title: 'Conversion uplift, with smart size-tool engagement' },
+  { variant: 'side', number: 80, suffix: '%', title: 'Reduction in manual data correction' },
+  { variant: 'wide', number: 50, suffix: '%', title: 'Improvement in data utilisation' },
+  { variant: 'wide', value: '10+', title: 'Functions trained and prepared for migration' },
+];
+
+// --- After thoughts -------------------------------------------------------
+const reflections = [
+  {
+    icon: HardHat,
+    title: 'The warehouse taught me more than any workshop.',
+    description:
+      'We didn’t just guess what the team needed; we shadowed quality checks in the warehouse and handled high-stakes VIP returns in customer service. By jumping into their daily grind and respecting their learning curves, we stopped designing <em>for</em> them and started co-creating <em>with</em> teams and functions as fellow experts. That’s how you turn tech anxiety into genuine team synergy.',
+  },
+  {
+    icon: BrainCircuit,
+    title: 'Tech can’t rescue a process nobody understands',
+    description:
+      'Before touching a single model, we had to trace exactly how data moved through the business: who entered it, where it broke down, and why the workarounds existed. Introducing AI was the easier problem. Getting 10+ teams to agree on how a size should be recorded and surfaced was the design challenge worth solving.',
+  },
+];
+---
+
+<Layout title="Happier customers, healthier business - Xiaoxue">
+  <!-- IBM Plex Mono powers the Module 02 PDP-anatomy diagram (mono "wireframe"
+       treatment). TODO: self-host via @fontsource/ibm-plex-mono to match the repo
+       convention rather than this Google Fonts link. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+
+  <ProjectNavigation client:load />
+
+  <div class="project-page">
+    <!-- 1. Context / hero -->
+    <div class="container">
+      <section id="context" class="hero-section">
+        <h1 data-aos="fade-up">Happier customers, healthier business</h1>
+        <h2 class="subtitle" data-aos="fade-up" data-aos-delay="150">
+          A cross-functional approach to one of fashion’s most expensive habits
+        </h2>
+      </section>
+    </div>
+
+    <!-- Editorial statement band — cropped parcel image behind the question -->
+    <div class="container">
+      <section class="statement-band" data-aos="fade-up" data-aos-delay="350">
+        <div class="statement-band__media">
+          <Image
+            src={statementBg}
+            alt=""
+            widths={[768, 1280, 1920]}
+            sizes="100vw"
+            format="webp"
+            quality={70}
+          />
+        </div>
+        <div class="statement-band__scrim" aria-hidden="true"></div>
+        <p class="statement">
+          When was the last time you returned something bought online?
+        </p>
+      </section>
+    </div>
+
+    <!-- 2. The problem / the goal -->
+    <div class="container">
+      <section id="challenge" class="problem-section" data-aos="fade-up">
+        <h2 class="problem-heading">Background</h2>
+        <p class="problem-lead">
+          Fashion retail has a returns problem that’s only getting harder to ignore. Online
+          shoppers do something in-store customers never could: order three sizes, keep the one
+          that fits, send the rest back, a habit the industry calls <em>bracketing</em>.
+          Multiply that across an industry, and the bill comes due twice.
+          <strong>Once in dollars,</strong> processing a single return can erase up to half its
+          profit margin. <strong>And once in carbon,</strong> millions of garments are tried
+          on, sent back, and burned or buried every year, simply because the size guess didn’t
+          land.
+        </p>
+        <div class="problem-grid">
+          <ProblemStats stats={problemStats} client:visible />
+          <aside
+            class="quote-flip"
+            tabindex="0"
+            aria-label="Two sides of the same problem — hover, tap, or focus to flip"
+          >
+            <div class="quote-flip__inner">
+              <div class="quote-flip__face quote-flip__front">
+                <span class="quote-flip-affordance" aria-hidden="true">
+                  <ArrowLeftRight size={20} strokeWidth={1.75} />
+                </span>
+                <span class="eyebrow">Customer side</span>
+                <p class="quote-flip__prose">
+                  You can’t try it on, you can’t feel the fabric, and the size guide is lying to
+                  you. Ordering multiples isn’t abuse, it’s the only sensible response to a system
+                  that hasn’t solved the basics yet.
+                </p>
+              </div>
+              <div class="quote-flip__face quote-flip__back">
+                <span class="quote-flip-affordance" aria-hidden="true">
+                  <ArrowLeftRight size={20} strokeWidth={1.75} />
+                </span>
+                <span class="eyebrow">Business side</span>
+                <p class="quote-flip__back-body">
+                  Free returns were a promise made to earn trust in a competitive market, now
+                  they’re honoured as default, whether it converts or not. For a luxury retailer,
+                  that math is quietly brutal.
+                </p>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- Role & mandate -->
+      <section class="info-section" data-aos="fade-up">
+        <div class="info-column">
+          <CircleTitle text="Role & Responsibility" circleId="1" />
+          <p><strong>Client:</strong> Net-A-Porter</p>
+          <p><strong>Sector:</strong> Luxury Fashion E-commerce</p>
+          <p><strong>Duration:</strong> 6–12 months</p>
+          <p><strong>Role:</strong> Service Design Lead</p>
+        </div>
+        <div class="info-column">
+          <CircleTitle text="My Mandate" circleId="2" />
+          <p>
+            <strong>The brief from the CFO was direct: reduce return rates by 40% within the coming
+            quarter.</strong>
+          </p>
+          <p>
+            My mandate was to give the business a holistic view of returns, surfacing where the
+            real opportunity lived, across both business and design, end to end, and to build the
+            programme that would let teams actually own and act on it.
+          </p>
+        </div>
+      </section>
+
+      <!-- 3. The problem beneath the brief (returns map + three cards) -->
+      <section id="execution" class="beneath-section" data-aos="fade-up">
+        <header class="section-head">
+          <span class="eyebrow">Unpack the challenge</span>
+          <h2>The problem beneath the brief</h2>
+          <p class="section-intro">
+            The CFO’s target was clear. What wasn’t clear was where to start, because the business
+            had never agreed on what the problem actually was. That disagreement was the real
+            challenge. Not the returns themselves, but an organisation that couldn’t act on a
+            problem it hadn’t defined together. That’s what I was actually there to solve.
+          </p>
+        </header>
+
+        <ReturnVoicesCards client:visible />
+
+        <InteractiveJourneyMap
+          seg1={{ src: seg1Img.src, srcset: seg1Img.srcSet.attribute }}
+          seg2={{ src: seg2Img.src, srcset: seg2Img.srcSet.attribute }}
+          seg3={{ src: seg3Img.src, srcset: seg3Img.srcSet.attribute }}
+          bottomSrc={journeyBottomImg.src}
+          client:visible
+        />
+      </section>
+    </div>
+
+    <!-- 4. Scalable solutions (surface band, alternating rows) -->
+    <section class="solutions-section" data-aos="fade-up">
+      <div class="container">
+        <h2 class="solutions-heading">Scalable solutions</h2>
+        {
+          solutions.map((solution, index) => (
+            <article
+              class:list={['solution-row', { 'solution-row--reverse': index % 2 === 1 }]}
+              data-aos="fade-up"
+            >
+              <div
+                class:list={['solution-media', {
+                  'solution-media--svg': solution.module === '01',
+                  'solution-media--pdp': solution.module === '02',
+                  'solution-media--flow': solution.module === '03',
+                }]}
+                data-pma-window={solution.module === '02' ? '' : undefined}
+              >
+                {solution.module === '01' ? (
+                  <ReturnReasonVenn client:visible />
+                ) : solution.module === '02' ? (
+                  <div class="pma-window__pan">
+                    <div class="pma-window__scale">
+                      <PdpModuleAnatomy density="Standard" />
+                    </div>
+                  </div>
+                ) : solution.module === '03' ? (
+                  <div class="sfz-stage">
+                    <img class="sfz-map" src={pdpMapImg.src} alt="Size and fit data-flow map across teams and tooling" loading="lazy" />
+                    <div class="sfz-vignette" aria-hidden="true" />
+                    {/* Crisp "Product measurements" detail — faithful reproduction
+                        of the case-study artifact; colours are part of that artwork. */}
+                    <div class="sfz-groupwrap" aria-hidden="true">
+                      <div class="sfz-group">
+                        <div class="sfz-cards">
+                          <div class="sfz-card">
+                            <span class="sfz-bulb">💡</span>
+                            <div class="sfz-card-title">Knowledge sharing</div>
+                            <div class="sfz-card-body">Share Size and Fit relevant information with DC measurement team to help streamline the process</div>
+                          </div>
+                          <div class="sfz-card">
+                            <span class="sfz-bulb">💡</span>
+                            <div class="sfz-card-title">Simplification</div>
+                            <div class="sfz-card-body">Simplify measurements and guidelines for different categories</div>
+                          </div>
+                          <div class="sfz-card">
+                            <span class="sfz-bulb">💡</span>
+                            <div class="sfz-card-title">DC Collaboration</div>
+                            <div class="sfz-card-body">Distribution centre coordination and efficiency (e.g. Shared worklists between DCs)</div>
+                          </div>
+                        </div>
+                        <div class="sfz-init">
+                          <div class="sfz-init-main"><span>Initiatives:</span> Refine valuable size information</div>
+                          <div class="sfz-init-owner"><span>Owner:</span> EXP, DC &amp; PO</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <Image
+                    src={modulePDP}
+                    alt={solution.title}
+                    widths={[480, 768, 1024]}
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    format="webp"
+                    quality={80}
+                  />
+                )}
+              </div>
+              <div class="solution-body">
+                <span class="eyebrow">Workstream {solution.module}</span>
+                <h4>{solution.title}</h4>
+                <p>{solution.body}</p>
+                <div class="key-impact">
+                  <span class="key-impact__label">Key insight</span>
+                  <span class="key-impact__value">{solution.impact}</span>
+                </div>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- 5. Impact (always-dark, full-bleed bento) -->
+    <section id="impact" class="impact-section" data-aos="fade-up">
+      <div class="container">
+        <h2 class="impact-heading">Impact</h2>
+        <ImpactBento stats={impactStats} client:visible />
+      </div>
+    </section>
+
+    <!-- 6. After thoughts -->
+    <div class="container">
+      <section id="reflection" class="reflections-section" data-aos="fade-up">
+        <h2>Afterthoughts</h2>
+        <div class="reflections-grid">
+          {
+            reflections.map((reflection) => {
+              const Icon = reflection.icon;
+              return (
+                <div class="reflection-card">
+                  <div class="reflection-icon">
+                    <Icon size={24} strokeWidth={1.75} />
+                  </div>
+                  <h3>{reflection.title}</h3>
+                  <p set:html={reflection.description} />
+                </div>
+              );
+            })
+          }
+        </div>
+      </section>
+
+      <!-- Footer CTA -->
+      <section class="footer-cta" data-aos="fade-up">
+        <NextProjectButton
+          href={`${baseUrl}healthcare`.replace(/\/\//g, '/')}
+          projectTitle="Healthcare"
+          accent="mint"
+          client:visible
+        />
+      </section>
+    </div>
+  </div>
+
+  <Footer />
+</Layout>
+
+<script>
+  import { trackEvent } from '../utils/analytics';
+
+  // One-shot scroll-depth milestones for this case study (aggregate only).
+  function setupReadDepthTracking() {
+    const milestones = [25, 50, 75, 100];
+    const fired = new Set<number>();
+    let ticking = false;
+
+    const check = () => {
+      const doc = document.documentElement;
+      const scrollable = doc.scrollHeight - window.innerHeight;
+      if (scrollable <= 0) return;
+      const percent = (window.pageYOffset / scrollable) * 100;
+
+      milestones.forEach((m) => {
+        if (percent >= m && !fired.has(m)) {
+          fired.add(m);
+          trackEvent('case_study_scroll', { project: 'ecommerce', depth: m });
+        }
+      });
+
+      if (fired.size === milestones.length) {
+        window.removeEventListener('scroll', onScroll);
+      }
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          check();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    check();
+  }
+
+  // Animate the hand-drawn circle titles on scroll (mirrors healthcare.astro).
+  function setupCircleTitleAnimations() {
+    const circleTitles = document.querySelectorAll('.circle-title[data-circle-id]');
+
+    circleTitles.forEach((title) => {
+      const path = title.querySelector('.circle-path') as SVGPathElement;
+      if (!path) return;
+
+      const pathLength = 470;
+      path.style.strokeDasharray = `${pathLength}`;
+      path.style.strokeDashoffset = `${pathLength}`;
+
+      const handleScroll = () => {
+        const rect = title.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        const startTrigger = windowHeight * 0.85;
+        const endTrigger = windowHeight * 0.75;
+
+        let progress = 0;
+        if (rect.top <= startTrigger && rect.top >= endTrigger) {
+          const totalDistance = startTrigger - endTrigger;
+          const currentDistance = startTrigger - rect.top;
+          progress = Math.max(0, Math.min(1, currentDistance / totalDistance));
+        } else if (rect.top > startTrigger) {
+          progress = 0;
+        } else {
+          progress = 1;
+        }
+
+        const offset = pathLength * (1 - progress);
+        path.style.strokeDashoffset = `${offset}`;
+        path.style.transition = 'stroke-dashoffset 0.3s ease-out';
+      };
+
+      handleScroll();
+
+      let ticking = false;
+      const scrollHandler = () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            handleScroll();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      };
+
+      window.addEventListener('scroll', scrollHandler, { passive: true });
+      window.addEventListener('resize', handleScroll);
+    });
+  }
+
+  // Subtle parallax on the opening statement image.
+  function setupStatementParallax() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const band = document.querySelector('.statement-band');
+    const media = document.querySelector<HTMLElement>('.statement-band__media');
+    if (!band || !media) return;
+
+    // Media is inset -12% top/bottom (24% extra height) — drift within that.
+    const MAX_SHIFT = 0.1; // fraction of band height
+    let ticking = false;
+
+    const update = () => {
+      const rect = band.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // progress: 0 when band enters from bottom, 1 when it leaves at top.
+      const progress = (vh - rect.top) / (vh + rect.height);
+      const clamped = Math.max(0, Math.min(1, progress));
+      const shift = (clamped - 0.5) * 2 * MAX_SHIFT * rect.height;
+      media.style.transform = `translate3d(0, ${shift}px, 0)`;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          update();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', update);
+  }
+
+  // Module 02 windowed diagram: scale the fixed-width PdpModuleAnatomy to the media
+  // box width and expose its vertical overflow as a CSS var the pan keyframes travel.
+  function setupPmaWindow(box: HTMLElement) {
+    const scale = box.querySelector<HTMLElement>('.pma-window__scale');
+    if (!scale) return;
+    const fit = () => {
+      scale.style.transform = 'none';
+      const naturalW = scale.offsetWidth;
+      const naturalH = scale.offsetHeight;
+      if (!naturalW) return;
+      const k = box.clientWidth / naturalW;
+      scale.style.transform = `scale(${k})`;
+      const dist = Math.max(0, naturalH * k - box.clientHeight);
+      box.style.setProperty('--pma-pan-distance', `${dist}px`);
+    };
+    fit();
+    if (typeof ResizeObserver !== 'undefined') new ResizeObserver(fit).observe(box);
+    else window.addEventListener('resize', fit);
+    if (document.fonts?.ready) document.fonts.ready.then(fit);
+  }
+
+  // Opening question: split into words and reveal them in a rising stagger when
+  // the band scrolls in. Progressive enhancement — plain text stays visible if
+  // this never runs; reduced-motion shows everything at once.
+  function setupStatementReveal() {
+    const el = document.querySelector<HTMLElement>('.statement');
+    if (!el || el.dataset.revealed === 'true') return;
+    el.dataset.revealed = 'true';
+
+    const words = (el.textContent ?? '').trim().split(/\s+/);
+    el.textContent = '';
+    // The band image fades up via AOS: 350ms delay + 800ms duration ≈ 1.15s to
+    // fully land. Hold the words until then so the text is clearly the last
+    // thing in — titles → image → text.
+    const BASE_DELAY = 1.35;
+    words.forEach((word, i) => {
+      const span = document.createElement('span');
+      span.className = 'statement__word';
+      span.textContent = word;
+      span.style.transitionDelay = `${BASE_DELAY + i * 0.06}s`;
+      el.appendChild(span);
+      if (i < words.length - 1) el.appendChild(document.createTextNode(' '));
+    });
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.classList.add('is-revealed');
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            el.classList.add('is-revealed');
+            io.disconnect();
+          }
+        });
+      },
+      { threshold: 0.35 }
+    );
+    io.observe(el);
+  }
+
+  // Touch-only flip card: hover/focus-within can't flip back on touch, so on
+  // devices without a hover-capable pointer we drive the flip by tap — tap to
+  // flip, tap again to flip back, tap outside (or Escape) to reset.
+  function setupQuoteFlip() {
+    const card = document.querySelector<HTMLElement>('.quote-flip');
+    if (!card) return;
+    if (window.matchMedia('(hover: hover)').matches) return;
+
+    card.addEventListener('click', () => {
+      card.classList.toggle('is-flipped');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!card.contains(e.target as Node)) card.classList.remove('is-flipped');
+    });
+
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') card.classList.remove('is-flipped');
+    });
+  }
+
+  function init() {
+    setupReadDepthTracking();
+    setupCircleTitleAnimations();
+    setupStatementParallax();
+    setupStatementReveal();
+    setupQuoteFlip();
+    document.querySelectorAll<HTMLElement>('[data-pma-window]').forEach(setupPmaWindow);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  setTimeout(setupCircleTitleAnimations, 500);
+  setTimeout(setupCircleTitleAnimations, 1000);
+</script>
+
+<style>
+  .project-page {
+    background: var(--color-bg);
+    padding-top: 80px;
+  }
+
+  /* Shared eyebrow label — mint, uppercase, tracked. */
+  .eyebrow {
+    display: inline-block;
+    font-size: var(--font-size-ui-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  /* 1. Hero */
+  .hero-section {
+    padding: var(--spacing-lg) 0 var(--spacing-md);
+  }
+
+  .hero-section h1 {
+    margin: 0 0 var(--spacing-sm);
+    max-width: var(--content-width-reading);
+    font-size: var(--font-size-h0);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--letter-spacing-tight);
+    line-height: var(--line-height-hero);
+  }
+
+  .hero-section .subtitle {
+    font-size: var(--font-size-h1);
+    font-weight: var(--font-weight-regular);
+    color: var(--color-primary);
+    max-width: var(--content-width-reading);
+    margin: 0;
+    line-height: var(--line-height-headings);
+  }
+
+  /* Opening statement — cropped parcel image, bound to content width. */
+  .statement-band {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    min-height: clamp(300px, 39vh, 485px);
+    margin: var(--spacing-md) 0;
+    border-radius: var(--radius-lg);
+  }
+
+  /* Parallax layer — taller than the band so it can drift on scroll. */
+  .statement-band__media {
+    position: absolute;
+    inset: -12% 0;
+    will-change: transform;
+  }
+
+  .statement-band__media :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+  }
+
+  /* Scrim for legibility — derived from the inverse background token. */
+  .statement-band__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-bg-inverse) 45%, transparent),
+      color-mix(in srgb, var(--color-bg-inverse) 72%, transparent)
+    );
+  }
+
+  :global([data-theme="light"]) .statement-band__scrim {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-bg-inverse) 30%, transparent),
+      color-mix(in srgb, var(--color-bg-inverse) 55%, transparent)
+    );
+  }
+
+  .statement {
+    position: relative;
+    z-index: 1;
+    font-family: 'Manrope', sans-serif;
+    font-size: clamp(1.4rem, 2.6vw, 2.1rem);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.25;
+    letter-spacing: var(--letter-spacing-tight);
+    color: var(--color-text-inverse);
+    text-align: center;
+    max-width: 30ch;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+    text-wrap: balance;
+  }
+
+  /* Engagement reveal — words rise + fade in sequence when the band scrolls
+     into view (split into spans by setupStatementReveal). Falls back to plain,
+     fully-visible text with no JS or under reduced motion. */
+  /* Words are injected at runtime (setupStatementReveal → document.createElement),
+     so they never receive Astro's scoped data-astro-cid attribute — the word
+     rules must be :global to match them. Anchored under .statement (which IS in
+     the template, so it carries the scope) to stay contained. */
+  .statement :global(.statement__word) {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.6em);
+    transition:
+      opacity 0.6s ease,
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .statement.is-revealed :global(.statement__word) {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .statement :global(.statement__word) {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+
+  /* 2. Problem / goal */
+  .problem-section {
+    margin: var(--spacing-md) 0;
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: var(--spacing-lg);
+    align-items: center;
+  }
+
+  .problem-heading {
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .problem-lead {
+    font-size: var(--font-size-body-1);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-body);
+    margin: 0 0 var(--spacing-md);
+    max-width: var(--text-width-single);
+  }
+
+  .problem-lead em {
+    font-style: italic;
+    color: var(--color-text);
+  }
+
+  .problem-lead strong {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+  }
+
+  /* Flip card — front shows the quote, back reveals what it cost. */
+  .quote-flip {
+    perspective: 1400px;
+    border-radius: var(--radius-lg);
+    outline: none;
+  }
+
+  .quote-flip__inner {
+    position: relative;
+    width: 100%;
+    min-height: 280px;
+    height: 100%;
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    transform-style: preserve-3d;
+  }
+
+  /* Mouse / trackpad: hover to flip. Gated on (hover: hover) so touch devices
+     don't latch on the first tap — they use the .is-flipped tap toggle below. */
+  @media (hover: hover) {
+    .quote-flip:hover .quote-flip__inner {
+      transform: rotateY(180deg);
+    }
+  }
+
+  /* Keyboard focus and touch-tap (JS-driven) flip. */
+  .quote-flip:focus-visible .quote-flip__inner,
+  .quote-flip.is-flipped .quote-flip__inner {
+    transform: rotateY(180deg);
+  }
+
+  .quote-flip__face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--spacing-lg) var(--spacing-md) var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--surface-2);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .quote-flip:focus-visible .quote-flip__face {
+    box-shadow: 0 0 0 2px var(--color-primary);
+  }
+
+  .quote-flip__back {
+    transform: rotateY(180deg);
+    background: var(--accent-bg);
+    border-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
+  }
+
+  .quote-flip__prose {
+    margin: 0;
+    font-size: var(--font-size-body-1);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-body);
+  }
+
+  /* Flip affordance — a small swap icon leading each face, hinting the card
+     has two sides. It rides the flip with the card, and is tinted to match
+     the face it sits on: purple on the grey/purple customer side, mint on
+     the business side. */
+  .quote-flip-affordance {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--color-primary) 12%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
+    color: var(--color-primary);
+  }
+
+  /* Customer side sits on the grey/purple surface card — go tonal purple. */
+  .quote-flip__front .quote-flip-affordance {
+    background: color-mix(in srgb, var(--project) 12%, var(--surface));
+    border-color: color-mix(in srgb, var(--project) 30%, transparent);
+    color: var(--project);
+  }
+
+  .quote-flip__front .eyebrow {
+    color: var(--project);
+  }
+
+  .quote-flip__back-body {
+    margin: 0;
+    font-size: var(--font-size-body-1);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-body);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .quote-flip__inner {
+      transition: none;
+    }
+  }
+
+  /* Role & mandate */
+  .info-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+    margin: var(--spacing-lg) 0;
+  }
+
+  /* Nudge the column content in from the section edge so the hand-drawn
+     CircleTitle has breathing room and the copy aligns under it. */
+  .info-column {
+    padding-top: var(--spacing-sm);
+    padding-left: var(--spacing-xs);
+  }
+
+  .info-column p {
+    margin-bottom: var(--spacing-xs);
+    font-size: var(--font-size-body-1);
+    color: var(--color-text-secondary);
+    max-width: var(--text-width-column);
+  }
+
+  .info-column p strong {
+    color: var(--color-text);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .info-column ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    max-width: var(--text-width-column);
+  }
+
+  .info-column li {
+    margin-bottom: var(--spacing-xs);
+    font-size: var(--font-size-body-1);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-body);
+  }
+
+  /* 3. The problem beneath the brief */
+  .beneath-section {
+    margin: var(--spacing-lg) 0;
+  }
+
+  .beneath-section .section-head {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .beneath-section .eyebrow {
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .beneath-section h2 {
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .section-intro {
+    font-size: var(--font-size-body-1);
+    color: var(--color-text-secondary);
+    max-width: var(--text-width-single);
+    margin: 0;
+    line-height: var(--line-height-body);
+  }
+
+  /* 4. Scalable solutions */
+  .solutions-section {
+    background: var(--surface);
+    padding: var(--spacing-xl) 0;
+    margin: var(--spacing-md) 0 0;
+  }
+
+  .solutions-heading {
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .solution-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .solution-row:last-child {
+    margin-bottom: 0;
+  }
+
+  .solution-row--reverse .solution-media {
+    order: 2;
+  }
+
+  .solution-media {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    aspect-ratio: 4 / 3;
+    background: var(--surface-2);
+  }
+
+  .solution-media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Module 02 — windowed PDP Module Anatomy diagram. .solution-media supplies the
+     4:3 frame + clipping; these layers scale the (fixed-width) diagram to the box
+     width (set by the inline script) and slowly pan it top → bottom → top. */
+  .solution-media--pdp {
+    background: var(--surface);
+    /* Slightly taller than the shared 4/3 so the windowed diagram has more
+       vertical room. */
+    aspect-ratio: 4 / 3.5;
+  }
+
+  .solution-media--pdp :global(.pma) {
+    border-radius: 0; /* the media frame already provides the rounding */
+  }
+
+  .pma-window__pan {
+    width: max-content;
+    animation: pma-pan 16s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  .pma-window__scale {
+    width: max-content;
+    transform-origin: top left;
+  }
+
+  /* Stop the pan so the diagram can be inspected. */
+  .solution-media--pdp:hover .pma-window__pan {
+    animation-play-state: paused;
+  }
+
+  @keyframes pma-pan {
+    0%,
+    12% {
+      transform: translateY(0);
+    }
+    44%,
+    60% {
+      transform: translateY(calc(var(--pma-pan-distance, 0px) * -1));
+    }
+    92%,
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pma-window__pan {
+      animation: none;
+      transform: none;
+    }
+  }
+
+  .solution-body h4 {
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .solution-body p {
+    font-size: var(--font-size-body-1);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-body);
+    margin: 0 0 var(--spacing-md);
+    max-width: 48ch;
+  }
+
+  .key-impact {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--accent-bg);
+    border-left: 3px solid var(--color-primary);
+    border-radius: var(--radius-sm);
+  }
+
+  .key-impact__label {
+    font-size: var(--font-size-ui-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+  }
+
+  .key-impact__value {
+    font-family: 'Manrope', sans-serif;
+    font-size: var(--font-size-body-0);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text);
+  }
+
+  /* 5. Impact — always-dark, full-bleed. No top margin so the dark band butts
+     straight onto the Solutions band above (no page-bg seam between them). */
+  .impact-section {
+    background: var(--color-bg-inverse);
+    padding: var(--spacing-xl) 0;
+    margin: 0 0 var(--spacing-md);
+  }
+
+  .impact-heading {
+    text-align: center;
+    color: var(--color-text-inverse);
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  /* 6. After thoughts */
+  .reflections-section {
+    margin: var(--spacing-lg) 0;
+  }
+
+  .reflections-section h2 {
+    margin-bottom: var(--spacing-lg);
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .reflections-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+  }
+
+  .reflection-card {
+    position: relative;
+    padding: var(--spacing-md);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    transition: all 0.7s ease;
+    overflow: hidden;
+  }
+
+  .reflection-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 128px;
+    height: 128px;
+    background: var(--color-primary);
+    opacity: 0.08;
+    filter: blur(48px);
+    transition: all 0.7s ease;
+    pointer-events: none;
+  }
+
+  .reflection-card:nth-child(2)::after {
+    left: 0;
+    right: auto;
+  }
+
+  .reflection-card:nth-child(3)::after {
+    top: auto;
+    bottom: 0;
+  }
+
+  .reflection-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px var(--color-primary-alpha-medium);
+  }
+
+  .reflection-card:hover::after {
+    opacity: 0.18;
+    width: 200px;
+    height: 200px;
+  }
+
+  .reflection-icon {
+    position: relative;
+    z-index: 1;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    background: var(--surface-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-primary);
+  }
+
+  .reflection-card h3 {
+    position: relative;
+    z-index: 1;
+    font-size: var(--font-size-body-0);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.4;
+  }
+
+  .reflection-card p {
+    position: relative;
+    z-index: 1;
+    font-size: var(--font-size-body-1);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-body);
+  }
+
+  /* Footer CTA */
+  .footer-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    justify-content: center;
+    padding: var(--spacing-lg) 0;
+  }
+
+  /* Module 01 — built-from-scratch Venn diagram (ReturnReasonVenn island).
+     Auto height (the SVG is taller than 3/4, so a fixed portrait box would crop
+     it); the diagram centres in the surface-2 frame with breathing room. */
+  .solution-media--svg {
+    aspect-ratio: auto;
+    display: grid;
+    place-items: center;
+    padding: var(--spacing-lg) var(--spacing-md);
+    background: transparent;
+    border-color: transparent;
+  }
+
+  .solution-media--svg :global(.return-venn) {
+    max-width: 100%;
+  }
+
+  /* Module 03 — ambient "focus pull" on the size-&-fit data-flow map.
+     The crisp detail is a faithful reproduction of the case-study artifact,
+     built on a fixed 728×540 design grid. `--u` (a container-query unit)
+     scales every design pixel to the real column width, so it stays sharp
+     and correctly laid out at any size. */
+  .solution-media--flow {
+    position: relative;
+    container-type: inline-size;
+    --u: calc(100cqw / 728);
+    /* Original "focus pull" proportions (728×540 landscape). The map fills
+       the frame with `cover` so there are no pillarbox bars; the card is
+       width-scaled (--u) and fills the frame like the source design. */
+    aspect-ratio: 728 / 540;
+    overflow: hidden;
+    background: #e6e7f5;
+  }
+
+  @keyframes dollyHybrid {
+    0%, 9%    { transform: scale(1); filter: brightness(1); }
+    27%       { transform: scale(2.15); filter: brightness(0.95); }
+    72%       { transform: scale(2.15); filter: brightness(0.95); }
+    90%, 100% { transform: scale(1); filter: brightness(1); }
+  }
+
+  @keyframes crispReveal {
+    0%, 10%   { opacity: 0; transform: scale(0.60); }
+    24%, 72%  { opacity: 1; transform: scale(0.63); }
+    85%, 100% { opacity: 0; transform: scale(0.60); }
+  }
+
+  @keyframes vigHybrid {
+    0%, 8%    { opacity: 0; }
+    20%, 74%  { opacity: 0.3; }
+    90%, 100% { opacity: 0; }
+  }
+
+  .sfz-stage {
+    position: absolute;
+    inset: 0;
+  }
+
+  .solution-media--flow .sfz-map {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 45%;
+    transform-origin: 48% 45%;
+    will-change: transform, filter;
+    animation: dollyHybrid 11.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+
+  .sfz-vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse 56% 50% at 50% 50%, transparent 36%, rgba(18, 20, 36, 0.5) 100%);
+    animation: vigHybrid 11.2s ease-in-out infinite;
+  }
+
+  .sfz-groupwrap {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* The crisp "Product measurements" detail card. */
+  .sfz-group {
+    flex: none;
+    width: calc(1120 * var(--u));
+    background: rgba(252, 248, 230, 0.95);
+    backdrop-filter: blur(calc(30 * var(--u)));
+    -webkit-backdrop-filter: blur(calc(30 * var(--u)));
+    border: calc(2 * var(--u)) solid rgba(240, 230, 178, 0.85);
+    border-radius: calc(30 * var(--u));
+    padding: calc(46 * var(--u)) calc(40 * var(--u)) calc(44 * var(--u));
+    display: flex;
+    flex-direction: column;
+    gap: calc(34 * var(--u));
+    box-shadow: 0 calc(30 * var(--u)) calc(60 * var(--u)) rgba(20, 30, 24, 0.28);
+    transform-origin: center;
+    will-change: transform, opacity;
+    animation: crispReveal 11.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+
+  .sfz-cards {
+    display: flex;
+    gap: calc(28 * var(--u));
+  }
+
+  .sfz-card {
+    position: relative;
+    flex: 1;
+    background: #e9f4ee;
+    border: calc(3 * var(--u)) solid #6fb291;
+    border-radius: calc(26 * var(--u));
+    padding: calc(34 * var(--u)) calc(30 * var(--u));
+    text-align: center;
+  }
+
+  .sfz-bulb {
+    position: absolute;
+    top: calc(-22 * var(--u));
+    right: calc(28 * var(--u));
+    width: calc(62 * var(--u));
+    height: calc(62 * var(--u));
+    border-radius: 50%;
+    background: #fff;
+    border: calc(5 * var(--u)) solid #6fb291;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(30 * var(--u));
+  }
+
+  .sfz-card-title {
+    font-family: 'Manrope', sans-serif;
+    font-size: calc(30 * var(--u));
+    font-weight: 700;
+    color: #1f2a25;
+    margin-bottom: calc(18 * var(--u));
+  }
+
+  .sfz-card-body {
+    font-size: calc(26 * var(--u));
+    line-height: 1.45;
+    color: #2a332e;
+  }
+
+  .sfz-init {
+    text-align: center;
+    padding-top: calc(2 * var(--u));
+  }
+
+  .sfz-init-main {
+    font-family: 'Manrope', sans-serif;
+    font-size: calc(32 * var(--u));
+    font-weight: 700;
+    color: #1f2a25;
+  }
+
+  .sfz-init-main span {
+    color: #3c7d5c;
+  }
+
+  .sfz-init-owner {
+    font-size: calc(25 * var(--u));
+    color: #5a6862;
+    margin-top: calc(12 * var(--u));
+  }
+
+  .sfz-init-owner span {
+    font-weight: 600;
+    color: #3a4540;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .solution-media--flow .sfz-map { animation: none; }
+    .sfz-vignette { animation: none; opacity: 0; }
+    .sfz-group { animation: none; opacity: 1; transform: scale(0.63); }
+  }
+
+  /* Responsive */
+  @media (max-width: 968px) {
+    .problem-grid,
+    .info-section,
+    .solution-row {
+      grid-template-columns: 1fr;
+    }
+
+    .problem-grid,
+    .info-section {
+      gap: var(--spacing-lg);
+    }
+
+    .solution-row--reverse .solution-media {
+      order: 0;
+    }
+
+    .reflections-grid {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-sm);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero-section {
+      padding: var(--spacing-md) 0;
+    }
+
+    .statement-band,
+    .solutions-section,
+    .impact-section {
+      padding: var(--spacing-lg) 0;
+    }
+  }
+</style>

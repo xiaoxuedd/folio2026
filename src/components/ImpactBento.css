@@ -1,0 +1,190 @@
+/* ImpactBento — bento grid that lives inside the always-dark Impact band.
+   Theme-independent: everything derives from the design-system inverse tokens
+   (the same approach ContactCTA uses), so no colours are hardcoded here.
+   Local aliases below are just readable names for token-derived values. */
+
+.impact-bento {
+  --bento-mint:     var(--color-accent-inverse);
+  --bento-card:     color-mix(in srgb, var(--color-text-inverse) 4%, transparent);
+  --bento-border:   color-mix(in srgb, var(--color-text-inverse) 10%, transparent);
+  --bento-text:     var(--color-text-inverse);
+  --bento-text-dim: color-mix(in srgb, var(--color-text-inverse) 60%, transparent);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  max-width: var(--content-width-reading);
+  margin: 0 auto;
+}
+
+.impact-bento__top {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: var(--spacing-md);
+}
+
+.impact-bento__side {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+.impact-bento__bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+.impact-card {
+  position: relative;
+  padding: var(--spacing-md);
+  background: var(--bento-card);
+  border: 1px solid var(--bento-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: border-color 0.4s ease, transform 0.4s ease;
+}
+
+.impact-card:hover {
+  border-color: color-mix(in srgb, var(--bento-mint) 40%, transparent);
+  transform: translateY(-4px);
+}
+
+.impact-card--lead {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--spacing-lg);
+}
+
+/* Soft mint corner glow behind the headline figure. */
+.impact-card__glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 220px;
+  height: 220px;
+  background: var(--bento-mint);
+  opacity: 0.14;
+  filter: blur(64px);
+  pointer-events: none;
+}
+
+.impact-card--side {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--gap-xs);
+}
+
+.impact-card--wide {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-md);
+}
+
+.impact-card__eyebrow {
+  position: relative;
+  font-family: 'Inter', sans-serif;
+  font-size: var(--font-size-ui-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bento-mint);
+  margin-bottom: var(--gap-sm);
+}
+
+.impact-card__figure {
+  position: relative;
+  font-family: 'Manrope', sans-serif;
+  font-weight: var(--font-weight-regular);
+  line-height: 1;
+  color: var(--bento-mint);
+  font-feature-settings: 'tnum' 1;
+}
+
+.impact-card__figure--lead {
+  font-size: clamp(3.5rem, 8vw, 5.5rem);
+  margin-bottom: var(--gap-md);
+}
+
+.impact-card--side .impact-card__figure {
+  font-size: var(--font-size-h2);
+}
+
+.impact-card__figure--inline {
+  font-size: var(--font-size-h3);
+  flex-shrink: 0;
+}
+
+.impact-card__title {
+  position: relative;
+  font-family: 'Manrope', sans-serif;
+  font-size: var(--font-size-h4);
+  font-weight: var(--font-weight-semibold);
+  color: var(--bento-text);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.impact-card__desc {
+  position: relative;
+  font-size: var(--font-size-body-1);
+  color: var(--bento-text-dim);
+  line-height: var(--line-height-body);
+  margin: var(--gap-md) 0 0;
+  max-width: 38ch;
+}
+
+.impact-card__label {
+  font-family: 'Inter', sans-serif;
+  font-size: var(--font-size-ui-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bento-text-dim);
+  line-height: 1.4;
+}
+
+.impact-card--side .impact-card__label,
+.impact-card--wide .impact-card__label {
+  color: var(--bento-text);
+}
+
+@media (max-width: 768px) {
+  .impact-bento__top,
+  .impact-bento__bottom {
+    grid-template-columns: 1fr;
+  }
+
+  /* On mobile every card adopts the --side treatment: a centred vertical stack
+     with the figure (at the --side size) sitting above its label, so the bento
+     reads as one uniform list rather than three different card shapes. */
+  .impact-card--wide {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    justify-content: center;
+    gap: var(--gap-xs);
+  }
+
+  .impact-card--lead {
+    padding: var(--spacing-md);
+    gap: var(--gap-xs);
+  }
+
+  .impact-card__figure--lead,
+  .impact-card__figure--inline {
+    font-size: var(--font-size-h2);
+    margin-bottom: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .impact-card {
+    transition: none;
+  }
+  .impact-card:hover {
+    transform: none;
+  }
+}

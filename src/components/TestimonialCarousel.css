@@ -5,9 +5,11 @@
 
 .testimonial-slideshow {
   position: relative;
-  min-height: 180px;
+  /* Hold a stable height so swapping the short and long quote doesn't shift
+     the layout; the quote is centred within that space. */
+  min-height: 240px;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
 }
 

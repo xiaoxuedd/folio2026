@@ -1,0 +1,62 @@
+/* NextProjectButton — pill CTA whose right edge expands on hover to reveal a
+   rotating circular work/briefcase icon. Token-driven; mint accent circle. */
+
+.next-project-cta {
+  display: inline-block;
+  text-decoration: none;
+  background-color: color-mix(in srgb, var(--cta-accent, var(--accent)) 12%, transparent);
+  border-radius: var(--radius-pill);
+  padding: 4px;
+  overflow: hidden;
+}
+
+.next-project-cta:hover {
+  background-color: color-mix(in srgb, var(--cta-accent, var(--accent)) 18%, transparent);
+}
+
+.next-project-cta__inner {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-text);
+  border-radius: var(--radius-pill);
+  padding: 0.875rem 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.next-project-cta__text {
+  font-size: var(--font-size-ui-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-bg);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.next-project-cta__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background-color: var(--cta-accent, var(--accent));
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  margin-top: -22px;
+}
+
+.next-project-cta__icon svg {
+  color: var(--color-text-inverse);
+}
+
+@media (max-width: 768px) {
+  .next-project-cta {
+    width: 100%;
+  }
+
+  .next-project-cta__inner {
+    justify-content: center;
+  }
+}

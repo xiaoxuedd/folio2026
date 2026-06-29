@@ -1,0 +1,425 @@
+---
+/**
+ * PdpModuleAnatomy
+ * ────────────────
+ * Editorial information-graphic that diagrams the module structure of a luxury
+ * mobile Product Detail Page. Two columns, flush top AND bottom:
+ *   • Left  — three reference PDP screenshots (Fine Jewellery / Beauty / Footwear)
+ *             in tall framed cards.
+ *   • Right — a "module stack": twelve PDP modules drawn as category-coloured
+ *             bars whose HEIGHT encodes each module's relative vertical footprint
+ *             on screen, grouped into three page phases.
+ *
+ * Built from the `design_handoff_pdp_module_anatomy` handoff. Presentational with no
+ * JS state — the one bit of interactivity is a CSS-only hover on each module bar that
+ * scales it up slightly + adds a shadow, so it reads as lifting off the page. Still a
+ * pure Astro component (no island). Mono "technical wireframe" treatment in IBM Plex
+ * Mono throughout (the previous Cormorant display title was dropped in the handoff
+ * update — this is now mono-only).
+ *
+ * Cross-column alignment: both columns open with an identical title row (same
+ * baseline) and are sized to the SAME height, flush at the bottom. Rather than
+ * hard-coding the handoff's measured frame height (858px) + scale, we let CSS do
+ * it: the grid stretches both columns to the taller one (the stack), and the left
+ * image frame is `flex:1`, so the frame bottom auto-aligns with the last bar's
+ * bottom for BOTH density variants. The 38px left spacer matches the height of the
+ * first group header, aligning the frame top with the first (Nav) bar's top.
+ *
+ * Colour / type: wired to the site's global design tokens (see Layout.astro), so the
+ * diagram themes with the rest of the site. The palette is declared as `.pma`-scoped
+ * CSS vars that map to the tokens; light-mode values are identical to the original
+ * artifact. A `[data-theme="dark"]` override keeps a few bar labels legible where a
+ * token flips the "wrong" way (e.g. `--text-3` is light in light mode but DARK in dark
+ * mode, so service/discovery labels would otherwise go dark-on-dark). The discovery bar
+ * (#45426A) is the one diagram colour with no global token. Type is a bespoke tracked-mono
+ * scale (9–14px): the small annotations sit below the site's 12px floor and everything uses
+ * an uppercase mono treatment, so it's centralised as `--pma-*` vars rather than inherited.
+ * Dark rendering wasn't verifiable in-browser here (sandbox).
+ *
+ * Props:
+ *   • accent  — colour of the group index-range labels (default: the `--accent` token,
+ *               so it themes; pass a literal to override).
+ *   • density — 'Standard' | 'Compact'; scales bar heights (×0.7) and row gaps.
+ */
+import { Image } from 'astro:assets';
+import pdpFjw from '../images/projects/pdp-fjw.png';
+import pdpMakeup from '../images/projects/pdp-makeup.png';
+import pdpTrainer from '../images/projects/pdp-trainer.png';
+
+interface Props {
+  accent?: string;
+  density?: 'Standard' | 'Compact';
+}
+
+const { accent = 'var(--accent)', density = 'Standard' } = Astro.props;
+
+// Bar-height + row-gap scaling (matches the handoff formula). The ×1.34 fit factor
+// is what makes the stack tall enough to reach the reference image height.
+const scale = (density === 'Compact' ? 0.7 : 1) * 1.34;
+const rowGap = density === 'Compact' ? 5 : 7;
+
+// Category → bar background + label ("ink") colour. Values live in `.pma`-scoped
+// CSS vars (see <style>) so they map to global tokens and theme with dark mode.
+const CATS = {
+  primary: { color: 'var(--pma-cat-primary)', text: 'var(--pma-cat-primary-ink)' },
+  selector: { color: 'var(--pma-cat-selector)', text: 'var(--pma-cat-selector-ink)' },
+  trust: { color: 'var(--pma-cat-trust)', text: 'var(--pma-cat-trust-ink)' },
+  service: { color: 'var(--pma-cat-service)', text: 'var(--pma-cat-service-ink)' },
+  discovery: { color: 'var(--pma-cat-discovery)', text: 'var(--pma-cat-discovery-ink)' },
+} as const;
+
+type Category = keyof typeof CATS;
+
+interface RawModule {
+  n: string;
+  cat: Category;
+  fp: number;
+}
+interface RawGroup {
+  label: string;
+  modules: RawModule[];
+}
+
+// Index is assigned sequentially top-to-bottom across all groups.
+// fp = footprint, drives bar height in px before density scaling.
+const RAW: RawGroup[] = [
+  {
+    label: 'Conversion Core',
+    modules: [
+      { n: 'Nav', cat: 'primary', fp: 18 },
+      { n: 'Gallery', cat: 'primary', fp: 120 },
+      { n: 'Overview', cat: 'selector', fp: 16 },
+      { n: 'Detail', cat: 'primary', fp: 40 },
+      { n: 'Colour Selector', cat: 'selector', fp: 30 },
+      { n: 'Size Selector', cat: 'selector', fp: 28 },
+      { n: 'Actions', cat: 'primary', fp: 46 },
+    ],
+  },
+  {
+    label: 'Trust & Detail',
+    modules: [
+      { n: 'Message', cat: 'trust', fp: 34 },
+      { n: 'Additional Detail', cat: 'discovery', fp: 44 },
+      { n: 'Service', cat: 'service', fp: 34 },
+    ],
+  },
+  {
+    label: 'Discovery',
+    modules: [
+      { n: 'Upsell', cat: 'discovery', fp: 62 },
+      { n: 'Cross-sell', cat: 'discovery', fp: 56 },
+    ],
+  },
+];
+
+// Derive display values: zero-padded indices, group ranges, scaled bar heights.
+// The final module drops its row gap so the stack bottom is exactly the last bar.
+const totalModules = RAW.reduce((sum, g) => sum + g.modules.length, 0);
+const pad = (x: number) => String(x).padStart(2, '0');
+let i = 0;
+const groups = RAW.map((g, gi) => {
+  const start = i + 1;
+  const modules = g.modules.map((m) => {
+    i++;
+    const c = CATS[m.cat];
+    return {
+      idx: pad(i),
+      name: m.n,
+      color: c.color,
+      text: c.text,
+      bandH: Math.max(Math.round(m.fp * scale), 8),
+      mb: i === totalModules ? 0 : rowGap,
+    };
+  });
+  return {
+    label: g.label,
+    range: `${pad(start)}–${pad(i)}`,
+    first: gi === 0,
+    modules,
+  };
+});
+
+const refs = [
+  { img: pdpFjw, alt: 'Fine Jewellery' },
+  { img: pdpMakeup, alt: 'Beauty' },
+  { img: pdpTrainer, alt: 'Footwear' },
+];
+---
+
+<div class="pma">
+  <div class="pma__grid">
+    <!-- ═══ LEFT: REFERENCE PDPs ═══ -->
+    <div class="pma__refs">
+      <div class="pma__titlerow">
+        <div class="pma__eyebrow">Reference &mdash; PDPs</div>
+      </div>
+      <!-- Spacer = height of the right column's first group header, so the first
+           image's top aligns with the first (Nav) bar's top. -->
+      <div class="pma__spacer"></div>
+      <div class="pma__refs-row">
+        {
+          refs.map((r) => (
+            <div class="pma__ref-card">
+              <div class="pma__ref-frame">
+                <Image src={r.img} alt={r.alt} width={304} densities={[1, 2]} class="pma__ref-img" />
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- ═══ DIVIDER ═══ -->
+    <div class="pma__divider"></div>
+
+    <!-- ═══ RIGHT: MODULE STACK ═══ -->
+    <div class="pma__anatomy">
+      <div class="pma__titlerow">
+        <div class="pma__eyebrow">The Stack &mdash; 12 Modules</div>
+      </div>
+
+      <!-- groups -->
+      {
+        groups.map((g) => (
+          <>
+            <div class:list={['pma__group-head', { 'pma__group-head--first': g.first }]}>
+              <span class="pma__group-label">{g.label}</span>
+              <span class="pma__group-range" style={`color:${accent}`}>{g.range}</span>
+            </div>
+            {
+              g.modules.map((m) => (
+                <div class="pma__row" style={`margin-bottom:${m.mb}px`}>
+                  <div class="pma__idx">{m.idx}</div>
+                  <div class="pma__bar" style={`height:${m.bandH}px; background:${m.color}`}>
+                    <span class="pma__bar-label" style={`color:${m.text}`}>{m.name}</span>
+                  </div>
+                </div>
+              ))
+            }
+          </>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Wireframe artifact wired to the site's global tokens. All magic values are
+     centralised in the var block below; light-mode values match the original
+     handoff exactly. The dark override fixes labels that a token flip would push
+     dark-on-dark. */
+  .pma {
+    /* ── Palette → global tokens (Layout.astro). ── */
+    --pma-panel: var(--surface);
+    --pma-card: var(--bg);
+    --pma-line: var(--border);
+    --pma-ink: var(--text);
+    --pma-muted: var(--text-3);
+    --pma-shadow-rgb: 28, 26, 56;
+
+    /* category bar background + label ("ink") */
+    --pma-cat-primary: var(--text);
+    --pma-cat-primary-ink: var(--surface);
+    --pma-cat-selector: var(--text-2);
+    --pma-cat-selector-ink: var(--bg);
+    --pma-cat-trust: var(--accent);
+    --pma-cat-trust-ink: var(--bg);
+    --pma-cat-service: var(--text-3);
+    --pma-cat-service-ink: var(--bg);
+    --pma-cat-discovery: #45426a; /* deep purple-grey — no global token */
+    --pma-cat-discovery-ink: var(--surface-2);
+
+    /* ── Type — bespoke tracked-mono scale; small annotations sit below the site's
+       12px floor, so it's centralised here rather than inherited. ── */
+    --pma-font: 'IBM Plex Mono', 'Courier New', monospace;
+    --pma-fs-label: 9px; /* eyebrows, index numbers, range — small annotations */
+    --pma-fs-group: 13px; /* group section labels */
+    --pma-fs-bar: 14px; /* module bar labels — the readable content */
+    --pma-track-eyebrow: 2.5px;
+    --pma-track-group: 2px;
+    --pma-track-bar: 1.5px;
+    --pma-track-range: 1px;
+    --pma-track-idx: 0.5px;
+
+    background: var(--pma-panel);
+    padding: 44px 44px 52px;
+    font-family: var(--pma-font);
+    color: var(--pma-ink);
+    border-radius: var(--radius-lg);
+  }
+
+  /* Dark mode: tokens that flip the "wrong" way for this diagram — keep these
+     labels light so they don't vanish on their (now-dark) bars, and deepen the lift
+     shadow so it reads on the dark panel. */
+  :global([data-theme='dark']) .pma {
+    --pma-cat-service-ink: var(--text);
+    --pma-cat-discovery-ink: var(--text);
+    --pma-shadow-rgb: 0, 0, 0;
+  }
+
+  .pma__grid {
+    display: grid;
+    grid-template-columns: max-content 1px 376px;
+    gap: 0 36px;
+    /* stretch (the grid default) keeps both columns the same height so the
+       image frames bottom-align with the module stack. */
+    align-items: stretch;
+  }
+
+  /* ── Shared title row (left + right, on the same baseline) ── */
+  .pma__titlerow {
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--pma-ink);
+  }
+
+  .pma__eyebrow {
+    font-size: var(--pma-fs-label);
+    letter-spacing: var(--pma-track-eyebrow);
+    color: var(--pma-muted);
+    text-transform: uppercase;
+  }
+
+  /* ── Left: reference PDPs ── */
+  .pma__refs {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pma__spacer {
+    height: 38px;
+    flex-shrink: 0;
+  }
+
+  .pma__refs-row {
+    display: flex;
+    gap: 12px;
+    align-items: stretch;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .pma__ref-card {
+    width: 152px;
+    flex-shrink: 0;
+  }
+
+  .pma__ref-frame {
+    position: relative;
+    height: 100%;
+    border: 1px solid var(--pma-line);
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--pma-card);
+    box-shadow: 0 6px 22px rgba(var(--pma-shadow-rgb), 0.1);
+  }
+
+  /* Top-pinned and absolute so the tall PDP capture doesn't dictate frame height
+     — the frame fills the stretched column and crops the screenshot's overflow. */
+  .pma__ref-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ── Divider ── */
+  .pma__divider {
+    align-self: stretch;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      var(--pma-line) 7%,
+      var(--pma-line) 93%,
+      transparent
+    );
+  }
+
+  /* ── Right: module stack ── */
+  .pma__anatomy {
+    min-width: 0;
+  }
+
+  .pma__group-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 1px solid var(--pma-line);
+    padding: 13px 0 11px;
+  }
+
+  .pma__group-head--first {
+    border-top: none;
+    padding-top: 16px;
+  }
+
+  .pma__group-label {
+    font-size: var(--pma-fs-group);
+    letter-spacing: var(--pma-track-group);
+    text-transform: uppercase;
+    color: var(--pma-ink);
+    flex-shrink: 0;
+  }
+
+  .pma__group-range {
+    font-size: var(--pma-fs-label);
+    letter-spacing: var(--pma-track-range);
+    flex-shrink: 0;
+    padding-left: 8px;
+  }
+
+  .pma__row {
+    display: flex;
+    align-items: center;
+  }
+
+  .pma__idx {
+    width: 28px;
+    flex-shrink: 0;
+    text-align: right;
+    padding-right: 10px;
+    font-size: var(--pma-fs-label);
+    color: var(--pma-muted);
+    letter-spacing: var(--pma-track-idx);
+  }
+
+  .pma__bar {
+    flex: 1;
+    min-width: 0;
+    min-height: 15px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    padding: 0 11px;
+  }
+
+  .pma__bar-label {
+    font-size: var(--pma-fs-bar);
+    letter-spacing: var(--pma-track-bar);
+    text-transform: uppercase;
+  }
+
+  /* A bit of life: every module bar lifts off the page on hover — a slight scale-up
+     + soft shadow (no positional move). CSS-only, so the component stays a pure static
+     island. Gated on motion preference. */
+  .pma__bar {
+    transition:
+      transform 0.28s cubic-bezier(0.22, 0.68, 0, 1.2),
+      box-shadow 0.28s ease;
+  }
+
+  .pma__bar:hover {
+    transform: scale(1.04);
+    box-shadow: 0 7px 20px rgba(var(--pma-shadow-rgb), 0.24);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pma__bar {
+      transition: none;
+    }
+    .pma__bar:hover {
+      transform: none;
+    }
+  }
+</style>

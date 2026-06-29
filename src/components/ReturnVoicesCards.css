@@ -1,0 +1,284 @@
+/*
+  ReturnVoicesCards.css
+  ─────────────────────
+  Co-located styles for the fanned stakeholder cards. Fully token-driven: the
+  local --rvc-* vars below alias the site's design tokens so the card internals
+  read cleanly while still flipping with the theme. The only explicit dark-mode
+  override is the lifted-card shadow (tinted shadows don't read on near-black).
+*/
+
+.rvc {
+  /* Token aliases — keep card internals legible; all derive from Layout tokens. */
+  --rvc-surface:     var(--surface);
+  --rvc-border:      var(--color-border);
+  --rvc-text-1:      var(--color-text);
+  --rvc-text-2:      var(--color-text-secondary);
+  --rvc-text-3:      color-mix(in srgb, var(--color-text-secondary) 65%, var(--color-bg));
+  --rvc-shadow-rest: var(--shadow-sm);
+  --rvc-shadow-front: 0 24px 60px rgba(28, 26, 56, 0.14);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  width: 100%;
+  margin: var(--spacing-md) 0 var(--spacing-lg);
+}
+
+/* ── Header (mirrors the journey map's .ijm__header — left-aligned, plain
+   uppercase eyebrow). ── */
+.rvc__header {
+  align-self: flex-start;
+  max-width: 680px;
+  text-align: left;
+}
+
+.rvc__eyebrow {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+/* ── Stage ── */
+.rvc__stage {
+  position: relative;
+  width: 100%;
+  max-width: 1240px;
+  /* Pre-hydration fallback; JS sizes this exactly to the tallest card on mount. */
+  height: 300px;
+}
+
+/* ── Card ── */
+.rvc__card {
+  /* Per-card hue, assigned by :nth-child below, drives the icon + tag — but
+     only on the fronted (hovered) card. Resting cards stay neutral grey so the
+     fronted one's colour reads as a clear focal pop. --rvc-fg-hue / -tint-strong
+     hold the hue derivatives; they're swapped in on .is-front (and always, in
+     the stacked mobile layout, where there's no hover). The mixes resolve
+     against --surface / --text so every hue — including the bright gold — stays
+     legible in either theme. */
+  --rvc-hue: var(--color-primary);
+  --rvc-tint: color-mix(in srgb, var(--color-text-secondary) 12%, var(--surface));
+  --rvc-fg: var(--color-text-secondary);
+  --rvc-tint-strong: color-mix(in srgb, var(--rvc-hue) 26%, var(--surface));
+  --rvc-fg-hue: color-mix(in srgb, var(--rvc-hue) 70%, var(--text));
+
+  position: absolute;
+  top: 50px;
+  width: 300px;
+  background: var(--rvc-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--rvc-border);
+  padding: 22px 24px 26px;
+  cursor: pointer;
+  transform-origin: center bottom;
+  transition:
+    transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, box-shadow;
+  box-shadow: var(--rvc-shadow-rest);
+}
+
+/* Per-card hues — three brand accents (indigo, gold, mint) dealt across the six
+   so no two neighbours share one. Indigo = --project, mint = --accent (theme),
+   gold = --color-gold. */
+.rvc__card:nth-child(1) { --rvc-hue: var(--project); }       /* Risk — indigo */
+.rvc__card:nth-child(2) { --rvc-hue: var(--color-gold); }    /* Legal — gold */
+.rvc__card:nth-child(3) { --rvc-hue: var(--color-primary); } /* CRM — mint */
+.rvc__card:nth-child(4) { --rvc-hue: var(--project); }       /* Customer Service — indigo */
+.rvc__card:nth-child(5) { --rvc-hue: var(--color-gold); }    /* Warehouse — gold */
+.rvc__card:nth-child(6) { --rvc-hue: var(--color-primary); } /* Merch & Buying — mint */
+
+/* Dim layer over resting cards — clears on the fronted card. */
+.rvc__card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--color-bg) 60%, transparent);
+  transition: opacity 0.38s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.rvc__card.is-front::before {
+  opacity: 0;
+}
+
+/* Fronted card blooms into its per-card hue (icon svg + tag text). */
+.rvc__card.is-front {
+  --rvc-fg: var(--rvc-fg-hue);
+}
+
+/* ── Card internals ── */
+.rvc__card-header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.rvc__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--rvc-tint);
+  transition: background 0.3s ease;
+}
+
+.rvc__icon svg {
+  color: var(--rvc-fg);
+}
+
+.rvc__card.is-front .rvc__icon {
+  background: var(--rvc-tint-strong);
+}
+
+.rvc__tag {
+  font-size: var(--font-size-ui-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: var(--radius-xs);
+  align-self: flex-start;
+  margin-top: 2px;
+  background: var(--rvc-tint);
+  color: var(--rvc-fg);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.rvc__card.is-front .rvc__tag {
+  background: var(--rvc-tint-strong);
+}
+
+.rvc__role {
+  position: relative;
+  z-index: 2;
+  font-family: 'Manrope', sans-serif;
+  font-size: var(--font-size-h5);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+  line-height: 1.1;
+  color: var(--rvc-text-2);
+  transition: color 0.3s ease;
+}
+
+.rvc__card.is-front .rvc__role {
+  color: var(--rvc-text-1);
+}
+
+/* The inline role copy lives inside the header for the stacked layout only;
+   in the fan layout the standalone .rvc__role below the header is shown. */
+.rvc__role--inline {
+  display: none;
+}
+
+.rvc__quote {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  font-size: var(--font-size-body-xs);
+  font-style: italic;
+  color: var(--rvc-text-2);
+  line-height: 1.65;
+}
+
+/* ── Hint ── */
+.rvc__hint {
+  font-size: var(--font-size-ui-xs);
+  color: var(--rvc-text-3);
+  letter-spacing: 0.04em;
+}
+
+/* ── Stacked (mobile) layout — JS adds this class below 768px ── */
+.rvc__stage--stacked {
+  height: auto;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.rvc__stage--stacked .rvc__card {
+  position: relative;
+  top: auto;
+  left: auto;
+  width: 100%;
+  transform: none;
+  box-shadow: var(--rvc-shadow-rest);
+  /* No hover on mobile — every card shows its full hue. */
+  --rvc-fg: var(--rvc-fg-hue);
+  /* Condensed: tighter padding so the stacked list stays compact. */
+  padding: 14px 16px;
+  cursor: default;
+}
+
+/* Everything is readable when stacked — no dim layer. */
+.rvc__stage--stacked .rvc__card::before {
+  opacity: 0;
+}
+
+.rvc__stage--stacked .rvc__tag {
+  background: var(--rvc-tint-strong);
+  margin-top: 0;
+}
+
+/* Mobile header: hide the icon and put the role in its place, tag stays right. */
+.rvc__stage--stacked .rvc__card-header {
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+.rvc__stage--stacked .rvc__icon {
+  display: none;
+}
+
+/* Role styling for the stacked layout (applies to whichever role is shown). */
+.rvc__stage--stacked .rvc__role {
+  color: var(--rvc-text-1);
+  font-size: var(--font-size-h6);
+  margin-bottom: 6px;
+}
+
+/* Show the inline role (in the header), hide the standalone one below it. */
+.rvc__stage--stacked .rvc__role:not(.rvc__role--inline) {
+  display: none;
+}
+
+.rvc__stage--stacked .rvc__role--inline {
+  display: block;
+  margin-bottom: 0;
+}
+
+.rvc__stage--stacked .rvc__quote {
+  line-height: 1.45;
+}
+
+/* ── Dark mode — tokens flip automatically; only the lifted shadow needs help. */
+:global([data-theme='dark']) .rvc {
+  --rvc-shadow-front: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .rvc__card {
+    transition: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .rvc__hint {
+    display: none;
+  }
+}

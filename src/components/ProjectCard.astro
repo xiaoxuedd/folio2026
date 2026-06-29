@@ -118,8 +118,10 @@ const imageSizes = featured
     transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  .project-tile:hover .project-tile__image {
-    transform: scale(1.04);
+  @media (hover: hover) {
+    .project-tile:hover .project-tile__image {
+      transform: scale(1.04);
+    }
   }
 
   /* Glass status pill — rounded form is an intentional exception to the sharp grid. */
@@ -144,8 +146,10 @@ const imageSizes = featured
     transition: opacity var(--transition-normal);
   }
 
-  .project-tile:hover .project-tile__tag {
-    opacity: 1;
+  @media (hover: hover) {
+    .project-tile:hover .project-tile__tag {
+      opacity: 1;
+    }
   }
 
   .project-tile__overlay {
@@ -169,8 +173,10 @@ const imageSizes = featured
     pointer-events: none;
   }
 
-  .project-tile:hover .project-tile__overlay {
-    opacity: 1;
+  @media (hover: hover) {
+    .project-tile:hover .project-tile__overlay {
+      opacity: 1;
+    }
   }
 
   :global([data-theme="dark"]) .project-tile__overlay {
@@ -207,9 +213,11 @@ const imageSizes = featured
     overflow: hidden;
   }
 
-  .project-tile:hover .project-tile__tagline,
-  .project-tile:hover .project-tile__statement {
-    transform: translateY(0);
+  @media (hover: hover) {
+    .project-tile:hover .project-tile__tagline,
+    .project-tile:hover .project-tile__statement {
+      transform: translateY(0);
+    }
   }
 
   :global([data-theme="dark"]) .project-tile__tagline,
@@ -231,8 +239,10 @@ const imageSizes = featured
     transition: color var(--transition-fast);
   }
 
-  .project-tile--linked:hover .project-tile__title {
-    color: var(--color-primary);
+  @media (hover: hover) {
+    .project-tile--linked:hover .project-tile__title {
+      color: var(--color-primary);
+    }
   }
 
   .project-tile__sub {

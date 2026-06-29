@@ -1,0 +1,85 @@
+/* ProblemStats — stat callouts under The Problem lead paragraph.
+   Figure counts up on scroll-in; hover/focus reveals the source. */
+
+.problem-stats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.problem-stat {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  column-gap: var(--gap-lg);
+  row-gap: 2px;
+  padding: var(--gap-sm) var(--gap-md) var(--gap-sm) var(--gap-lg);
+  border-left: 3px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  cursor: default;
+  outline: none;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.problem-stat:hover,
+.problem-stat:focus-visible {
+  background: var(--accent-bg);
+  border-left-color: var(--color-primary);
+}
+
+.problem-stat__figure {
+  grid-row: span 2;
+  align-self: center;
+  font-family: 'Manrope', sans-serif;
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-regular);
+  line-height: 1;
+  color: var(--color-primary);
+  font-feature-settings: 'tnum' 1;
+  min-width: 2.6em;
+}
+
+.problem-stat__label {
+  font-size: var(--font-size-body-1);
+  color: var(--color-text);
+  line-height: 1.4;
+  white-space: pre-line;
+}
+
+/* Source sits dim and revealed on hover/focus. */
+.problem-stat__source {
+  font-size: var(--font-size-ui-xs);
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary);
+  opacity: 0;
+  transform: translateY(-2px);
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.problem-stat:hover .problem-stat__source,
+.problem-stat:focus-visible .problem-stat__source {
+  opacity: 0.85;
+  transform: translateY(0);
+}
+
+@media (max-width: 480px) {
+  .problem-stat {
+    grid-template-columns: 1fr;
+    column-gap: 0;
+  }
+  .problem-stat__figure {
+    grid-row: auto;
+    margin-bottom: 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .problem-stat,
+  .problem-stat__source {
+    transition: none;
+  }
+}
