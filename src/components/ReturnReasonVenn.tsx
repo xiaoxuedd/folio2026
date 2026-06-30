@@ -91,8 +91,6 @@ const SWEET_SPOT_D =
   'c-17.652 -18.888 -30.662 -42.167 -37.219 -68.02 ' +
   'c11.927 -2.92 24.392 -4.468 37.219 -4.468 z';
 
-const DOT = { x: 297, y: 470 };
-
 // Leader from the title tag toward the three-way centre — a single gentle bow
 // that stays entirely RIGHT of the centred "Honest & selectable" caption, then
 // points down-left at the dot from above (the "red arrow" routing). Because the
@@ -119,8 +117,12 @@ export default function ReturnReasonVenn({ className }: { className?: string }) 
   const reduceMotion = useReducedMotion();
   const [hovered, setHovered] = useState<string | null>(null);
 
-  // Shared viewport config: animate once when the diagram scrolls into view.
-  const viewport = { once: true, amount: 0.4 } as const;
+  // This island hydrates `client:visible`, so by the time it mounts it's already
+  // on screen — we reveal on mount (Framer plays initial→animate once) rather than
+  // via `whileInView`. A `whileInView` observer stacked on top of Astro's hydration
+  // observer raced with hydration latency: on slower machines the reveal could
+  // silently never fire, leaving the diagram stuck at its hidden initial state
+  // (only the always-on 0.6-opacity sweet leaf showed). Mounting === in view here.
 
   // Under reduced motion we skip the offset start so everything renders settled.
   const rest = reduceMotion;
@@ -143,10 +145,9 @@ export default function ReturnReasonVenn({ className }: { className?: string }) 
               className={`return-venn__circle return-venn__circle--${lobe.key}`}
               style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
               initial={rest ? false : { opacity: 0, scale: 0.4 }}
-              whileInView={
+              animate={
                 rest ? undefined : { opacity: 1, scale: 1, transition: { ...SPRING, delay: 0.1 + i * 0.16 } }
               }
-              viewport={viewport}
               transition={{ type: 'spring', stiffness: 320, damping: 26 }}
               whileHover={
                 rest
@@ -159,26 +160,13 @@ export default function ReturnReasonVenn({ className }: { className?: string }) 
           ))}
         </g>
 
-        {/* Three-way sweet spot + convergence dot. */}
+        {/* Three-way sweet spot leaf. */}
         <motion.path
           d={SWEET_SPOT_D}
           className="return-venn__sweet"
           initial={rest ? false : { opacity: 0 }}
-          whileInView={rest ? undefined : { opacity: 1 }}
-          viewport={viewport}
-          transition={{ duration: 0.5, delay: 0.55 }}
           animate={{ opacity: hovered ? 0.95 : 0.6 }}
-        />
-        <motion.circle
-          cx={DOT.x}
-          cy={DOT.y}
-          r={4}
-          className="return-venn__dot"
-          style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
-          initial={rest ? false : { scale: 0, opacity: 0 }}
-          whileInView={rest ? undefined : { scale: 1, opacity: 1 }}
-          viewport={viewport}
-          transition={{ ...SPRING, delay: 0.65 }}
+          transition={{ duration: 0.5, delay: hovered === null ? 0.55 : 0 }}
         />
 
         {/* Leader from the title tag into the convergence. The line draws on,
@@ -188,16 +176,14 @@ export default function ReturnReasonVenn({ className }: { className?: string }) 
           className="return-venn__arrow"
           fill="none"
           initial={rest ? false : { pathLength: 0, opacity: 0 }}
-          whileInView={rest ? undefined : { pathLength: 1, opacity: 1 }}
-          viewport={viewport}
+          animate={rest ? undefined : { pathLength: 1, opacity: 1 }}
           transition={{ duration: 0.85, delay: 0.7, ease: 'easeInOut' }}
         />
         <motion.path
           d={HEAD_D}
           className="return-venn__arrowhead"
           initial={rest ? false : { opacity: 0 }}
-          whileInView={rest ? undefined : { opacity: 1 }}
-          viewport={viewport}
+          animate={rest ? undefined : { opacity: 1 }}
           transition={{ duration: 0.25, delay: 1.45 }}
         />
 
@@ -206,8 +192,7 @@ export default function ReturnReasonVenn({ className }: { className?: string }) 
         <motion.g
           className="return-venn__labels"
           initial={rest ? false : { opacity: 0 }}
-          whileInView={rest ? undefined : { opacity: 1 }}
-          viewport={viewport}
+          animate={rest ? undefined : { opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
           {/* Title tag */}

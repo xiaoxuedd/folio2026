@@ -47,14 +47,10 @@
   fill: var(--rv-fill-3);
 }
 
-/* --- Sweet spot + dot --- */
+/* --- Sweet spot --- */
 .return-venn__sweet {
   fill: var(--accent);
   transition: opacity var(--transition-normal);
-}
-
-.return-venn__dot {
-  fill: var(--accent);
 }
 
 /* --- Leader + arrowhead --- */
