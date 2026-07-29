@@ -224,6 +224,23 @@ const websiteSchema = {
     --color-text-inverse:   #F0EFF8;
     --color-accent-inverse: #24D48E;
 
+    /* Frosted-glass tile overlay (ProjectCard hover) — theme-independent, like
+       the inverse set above. It's a light frost panel over an arbitrary photo,
+       so contrast has to come from the FILL, not the theme or the blur:
+       --frost-fill over worst-case black composites ≥8:1 against --frost-heading.
+       Don't drop the alpha below .72 (AAA) / .60 (AA) — blur may be reduced or
+       unsupported without breaking contrast, alpha may not.
+       Glow tints stay ≤.14 and peak in the corners, away from the text block;
+       a light tint only raises backdrop lightness, so dark text stays safe. */
+    --frost-fill:        rgba(248,248,252,.74);  /* surface @74% */
+    --frost-heading:     #1C1A38;                /* = --text (light theme) */
+    --frost-body:        #353354;
+    --frost-glow-mint:   rgba(36,212,142,.14);
+    --frost-glow-violet: rgba(91,60,238,.12);
+    --frost-chip-bg:     rgba(255,255,255,.80);
+    --frost-chip-text:   #054528;                /* mint-900, ≥9:1 on chip bg */
+    --frost-blur:        14px;
+
     /* Hero diagram surfaces */
     --color-pill-neutral-bg: var(--surface-2);
     --color-grid-mark:       var(--border);

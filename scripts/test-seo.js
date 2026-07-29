@@ -233,7 +233,7 @@ try {
   try {
     statSync(DIST_DIR);
   } catch (e) {
-    console.log(`${colors.red}Error: dist/ folder not found. Run 'npm run build' first.${colors.reset}`);
+    console.log(`${colors.red}Error: dist/ folder not found. Run 'pnpm run build' first.${colors.reset}`);
     process.exit(1);
   }
 

@@ -1,8 +1,9 @@
 name: SEO & Performance Tests
 
+# PR-only: pushes to main are covered by the same tests inside deploy.yml,
+# where they gate the deployment. Triggering on push here too would just build
+# the site a second time in parallel.
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -12,12 +13,14 @@ jobs:
     name: Run Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
+      # Keep pinned in sync with deploy.yml, package.json and .nvmrc.
       - name: Install and build
-        uses: withastro/action@v5
+        uses: withastro/action@v6
         with:
-          package-manager: pnpm@11
+          package-manager: pnpm@11.17.0
+          node-version: 24
 
       - name: Run SEO tests
         run: pnpm run test:seo
@@ -44,3 +47,7 @@ jobs:
 
       - name: Run performance tests
         run: pnpm run test:performance
+
+      - name: Preview server log
+        if: failure()
+        run: cat preview.log || true

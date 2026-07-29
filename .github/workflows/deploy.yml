@@ -19,11 +19,49 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout your repository using git
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
+
+      # pnpm + Node are pinned so a bump in the action's defaults can't quietly
+      # change what gets built. Keep in sync with package.json `packageManager`
+      # and .nvmrc.
       - name: Install, build, and upload your site
-        uses: withastro/action@v5
+        uses: withastro/action@v6
         with:
-          package-manager: pnpm@11
+          package-manager: pnpm@11.17.0
+          node-version: 24
+
+      # Tests live here rather than in a parallel workflow so they gate the
+      # deploy. The Pages artifact is already uploaded by the step above, but
+      # `deploy` needs this job — a failure here means nothing goes live.
+      - name: Run SEO tests
+        run: pnpm run test:seo
+
+      - name: Start preview server
+        run: pnpm preview > preview.log 2>&1 &
+        env:
+          HOST: localhost
+          PORT: 4321
+
+      - name: Wait for server to be ready
+        run: |
+          echo "Waiting for server to start..."
+          for i in {1..30}; do
+            if curl -fs http://localhost:4321 > /dev/null; then
+              echo "Server is ready!"
+              exit 0
+            fi
+            echo "Waiting... ($i/30)"
+            sleep 2
+          done
+          echo "Server failed to start"
+          exit 1
+
+      - name: Run performance tests
+        run: pnpm run test:performance
+
+      - name: Preview server log
+        if: failure()
+        run: cat preview.log || true
 
   deploy:
     needs: build
@@ -34,4 +72,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

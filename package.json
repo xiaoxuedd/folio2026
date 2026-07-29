@@ -2,6 +2,10 @@
   "name": "xiaoxue-portfolio",
   "type": "module",
   "version": "1.0.0",
+  "packageManager": "pnpm@11.17.0",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -11,7 +15,7 @@
     "test:links": "node scripts/test-links.js",
     "test:seo": "node scripts/test-seo.js",
     "test:performance": "node scripts/test-performance.js",
-    "test": "npm run build && npm run test:seo"
+    "test": "pnpm run build && pnpm run test:seo"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

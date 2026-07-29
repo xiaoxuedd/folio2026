@@ -23,7 +23,7 @@ console.log(`${colors.blue}║  Performance Test Suite               ║${colors
 console.log(`${colors.blue}╚════════════════════════════════════════╝${colors.reset}\n`);
 
 console.log(`${colors.yellow}Note: This test requires the dev server to be running.${colors.reset}`);
-console.log(`${colors.yellow}Run 'npm run dev' in another terminal first.${colors.reset}\n`);
+console.log(`${colors.yellow}Run 'pnpm run preview' in another terminal first.${colors.reset}\n`);
 
 async function testPageLoad(url) {
   const startTime = Date.now();
@@ -86,7 +86,7 @@ async function runTests() {
         runs.push(result);
       } else {
         console.log(`${colors.red}✗ Failed: ${result.error}${colors.reset}`);
-        console.log(`${colors.yellow}Make sure dev server is running: npm run dev${colors.reset}\n`);
+        console.log(`${colors.yellow}Make sure dev server is running: pnpm run preview${colors.reset}\n`);
         return;
       }
 
@@ -156,7 +156,7 @@ async function checkServer() {
 
   if (!serverRunning) {
     console.log(`${colors.red}✗ Dev server not running at ${BASE_URL}${colors.reset}`);
-    console.log(`${colors.yellow}Start it with: npm run dev${colors.reset}\n`);
+    console.log(`${colors.yellow}Start it with: pnpm run preview${colors.reset}\n`);
     process.exit(1);
   }
 

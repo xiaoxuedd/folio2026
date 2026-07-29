@@ -2,7 +2,7 @@
 /**
  * Link checker — starts the preview server, crawls all pages for broken links,
  * then shuts the server down.
- * Run via: npm run test:links (build first with npm run build)
+ * Run via: pnpm run test:links (build first with pnpm run build)
  */
 
 import { spawn } from 'child_process';

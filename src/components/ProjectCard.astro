@@ -68,7 +68,9 @@ const imageSizes = featured
 
     {project.category && <span class="project-tile__tag">{statusTag}</span>}
 
-    <div class="project-tile__overlay">
+    <div class="project-tile__overlay"></div>
+
+    <div class="project-tile__copy">
       {project.overlaySubtitle && <p class="project-tile__tagline">{project.overlaySubtitle}</p>}
       {project.overlayBody && <p class="project-tile__statement">{project.overlayBody}</p>}
     </div>
@@ -90,6 +92,13 @@ const imageSizes = featured
        image's intrinsic width pins the track and the grid overflows on
        narrow screens (looks like it won't resize live). */
     min-width: 0;
+
+    /* Reveal motion, local to the tile: ease-out-quint feel at 450ms. No token
+       matches (--transition-normal overshoots, --transition-slow is linear ease),
+       and the frost/copy stagger needs a shared duration. */
+    --tile-reveal-dur: 0.45s;
+    --tile-reveal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --tile-copy-delay: 0.06s;
   }
 
   .project-tile--linked {
@@ -100,7 +109,7 @@ const imageSizes = featured
     position: relative;
     aspect-ratio: 4 / 5;
     overflow: hidden;
-    background: var(--color-bg-secondary);
+    background: var(--surface-2);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
   }
@@ -124,105 +133,113 @@ const imageSizes = featured
     }
   }
 
-  /* Glass status pill — rounded form is an intentional exception to the sharp grid. */
+  /* Glass status pill — rounded form is an intentional exception to the sharp
+     grid. Always visible (it labels the tile, so it can't be hover-gated). */
   .project-tile__tag {
     position: absolute;
     top: var(--gap-lg);
     left: var(--gap-lg);
-    z-index: 2;
+    z-index: 3;
     padding: 6px 14px;
     border-radius: var(--radius-full);
-    background: color-mix(in srgb, var(--color-bg) 45%, transparent);
-    backdrop-filter: blur(var(--blur-glass));
-    -webkit-backdrop-filter: blur(var(--blur-glass));
-    border: 1px solid color-mix(in srgb, var(--color-text) 12%, transparent);
-    color: var(--color-text);
+    background: var(--frost-chip-bg);
+    backdrop-filter: blur(var(--blur-menu));
+    -webkit-backdrop-filter: blur(var(--blur-menu));
+    border: 1px solid color-mix(in srgb, var(--frost-heading) 10%, transparent);
+    color: var(--frost-chip-text);
     font-size: var(--font-size-ui-xs);
     font-weight: var(--font-weight-semibold);
     text-transform: uppercase;
     letter-spacing: 0.12em;
     line-height: 1;
-    opacity: 0;
-    transition: opacity var(--transition-normal);
   }
 
-  @media (hover: hover) {
-    .project-tile:hover .project-tile__tag {
-      opacity: 1;
-    }
-  }
-
+  /* Frost + corner glow. Contrast comes from --frost-fill, not the blur, so
+     this degrades safely where backdrop-filter is unsupported. */
   .project-tile__overlay {
     position: absolute;
     inset: 0;
     z-index: 1;
+    pointer-events: none;
+    backdrop-filter: blur(var(--frost-blur)) saturate(1.35);
+    -webkit-backdrop-filter: blur(var(--frost-blur)) saturate(1.35);
+    background:
+      radial-gradient(circle at 12% 8%, var(--frost-glow-mint), transparent 52%),
+      radial-gradient(circle at 90% 96%, var(--frost-glow-violet), transparent 55%),
+      var(--frost-fill);
+    opacity: 0;
+    transition: opacity var(--tile-reveal-dur) var(--tile-reveal-ease);
+  }
+
+  /* Text layer is separate from the frost so it can stagger in behind it. */
+  .project-tile__copy {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--gap-sm);
+    gap: var(--gap-md);
     padding: calc(var(--gap-lg) + var(--gap-xl)) var(--gap-xl) var(--gap-xl);
     text-align: center;
-    background: color-mix(
-      in srgb,
-      color-mix(in srgb, var(--color-primary) 18%, var(--color-bg)) 92%,
-      transparent
-    );
     opacity: 0;
-    transition: opacity var(--transition-normal);
-    pointer-events: none;
+    transform: translateY(14px);
+    transition:
+      opacity var(--tile-reveal-dur) var(--tile-reveal-ease) var(--tile-copy-delay),
+      transform var(--tile-reveal-dur) var(--tile-reveal-ease) var(--tile-copy-delay);
+  }
+
+  /* Keyboard focus mirrors hover — the copy is never hover-only. */
+  .project-tile:focus-visible .project-tile__overlay,
+  .project-tile:focus-within .project-tile__overlay,
+  .project-tile:focus-visible .project-tile__copy,
+  .project-tile:focus-within .project-tile__copy {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   @media (hover: hover) {
-    .project-tile:hover .project-tile__overlay {
+    .project-tile:hover .project-tile__overlay,
+    .project-tile:hover .project-tile__copy {
       opacity: 1;
+      transform: translateY(0);
     }
   }
 
-  :global([data-theme="dark"]) .project-tile__overlay {
-    background: color-mix(
-      in srgb,
-      color-mix(in srgb, var(--color-primary) 18%, var(--color-text)) 92%,
-      transparent
-    );
+  /* Touch: no hover state to enter, so the copy is shown by default rather
+     than left unreachable. */
+  @media (hover: none) {
+    .project-tile__overlay,
+    .project-tile__copy {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   .project-tile__tagline {
     margin: 0;
     flex-shrink: 0;
-    color: var(--color-text);
-    font-size: var(--font-size-body-0);
-    font-weight: var(--font-weight-semibold);
-    line-height: var(--line-height-body);
-    transform: translateY(8px);
-    transition: transform var(--transition-normal);
+    color: var(--frost-heading);
+    font-size: var(--font-size-h5);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-headings);
+    letter-spacing: -0.02em;
   }
 
   .project-tile__statement {
     margin: 0;
     flex-shrink: 1;
     min-height: 0;
-    color: var(--color-text);
-    font-size: var(--font-size-body-1);
+    color: var(--frost-body);
+    font-size: var(--font-size-body-xs);
+    font-weight: var(--font-weight-regular);
     line-height: var(--line-height-body);
-    transform: translateY(8px);
-    transition: transform var(--transition-normal);
     display: -webkit-box;
     -webkit-line-clamp: 10;
     -webkit-box-orient: vertical;
     overflow: hidden;
-  }
-
-  @media (hover: hover) {
-    .project-tile:hover .project-tile__tagline,
-    .project-tile:hover .project-tile__statement {
-      transform: translateY(0);
-    }
-  }
-
-  :global([data-theme="dark"]) .project-tile__tagline,
-  :global([data-theme="dark"]) .project-tile__statement {
-    color: var(--color-bg);
   }
 
   .project-tile__meta {
@@ -253,19 +270,18 @@ const imageSizes = featured
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .project-tile__image,
+    /* Plain short fade, no drift and no stagger. */
     .project-tile__overlay,
-    .project-tile__statement,
-    .project-tile__tag {
+    .project-tile__copy {
+      transition: opacity 0.2s linear;
+      transform: none;
+    }
+
+    .project-tile__image {
       transition: none;
     }
 
-    .project-tile__tag {
-      opacity: 1;
-    }
-
     .project-tile:hover .project-tile__image {
-      opacity: 1;
       transform: none;
     }
   }

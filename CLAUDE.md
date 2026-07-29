@@ -8,7 +8,7 @@ This file covers the non-obvious bits — conventions, visual rules, and gotchas
 
 ## Tech stack
 
-- **Astro 4** (`output: 'static'`, `inlineStylesheets: 'always'`) + `@astrojs/react` + **React 19**. **TypeScript** strict; type errors fail `npm run build`.
+- **Astro 4** (`output: 'static'`, `inlineStylesheets: 'always'`) + `@astrojs/react` + **React 19**. **TypeScript** strict; type errors fail `pnpm run build`.
 - **Sharp** image service → responsive WebP/AVIF.
 - Motion: **AOS** (init in `Layout.astro`, opts in `src/config/aos.ts`), **Framer Motion**, **GSAP**, **rough-notation**.
 - **Lucide React** icons in `.tsx`; Astro icons in `src/components/icons/*.astro`.
@@ -71,11 +71,11 @@ Section anchors used by `Navigation`: `#works` (ProjectsShowcase), `#about` (Abo
 
 | Command | Purpose |
 | --- | --- |
-| `npm run dev` | Dev server at <http://localhost:4321> |
-| `npm run build` | `astro check` + `astro build`. **Type errors fail the build.** |
-| `npm run preview` | Serve production build locally |
-| `npm run test` | `build` + `test:seo` |
-| `npm run test:seo` / `test:performance` | Smoke tests in `scripts/` |
+| `pnpm run dev` | Dev server at <http://localhost:4321> |
+| `pnpm run build` | `astro check` + `astro build`. **Type errors fail the build.** |
+| `pnpm run preview` | Serve production build locally |
+| `pnpm run test` | `build` + `test:seo` |
+| `pnpm run test:seo` / `test:performance` | Smoke tests in `scripts/` |
 
 Deployed via GitHub Pages workflow (`.github/workflows/`). Custom domain in `public/CNAME`; `astro.config.mjs` uses `site: 'https://designdoings.com'`, `base: '/'`.
 
